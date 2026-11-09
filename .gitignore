@@ -1,0 +1,12 @@
+.tools/
+**/bin/
+**/obj/
+**/node_modules/
+**/dist/
+**/.angular/
+artifacts/
+*.user
+*.suo
+.env
+.env.*
+!.env.example

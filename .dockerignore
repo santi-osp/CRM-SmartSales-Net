@@ -1,0 +1,15 @@
+.git
+.tools
+artifacts
+docs
+tests
+src/Web
+**/bin
+**/obj
+**/node_modules
+**/dist
+**/.angular
+**/*.user
+**/*.suo
+.env
+.env.*

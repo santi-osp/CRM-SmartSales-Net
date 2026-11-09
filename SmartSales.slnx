@@ -1,0 +1,16 @@
+<Solution>
+  <Folder Name="/src/" />
+  <Folder Name="/src/Contacts/">
+    <Project Path="src/Contacts/SmartSales.Contacts.Api/SmartSales.Contacts.Api.csproj" />
+  </Folder>
+  <Folder Name="/src/Sales/">
+    <Project Path="src/Sales/SmartSales.Sales.Api/SmartSales.Sales.Api.csproj" />
+  </Folder>
+  <Folder Name="/tests/" />
+  <Folder Name="/tests/Contacts.IntegrationTests/">
+    <Project Path="tests/Contacts.IntegrationTests/SmartSales.Contacts.IntegrationTests.csproj" />
+  </Folder>
+  <Folder Name="/tests/Sales.IntegrationTests/">
+    <Project Path="tests/Sales.IntegrationTests/SmartSales.Sales.IntegrationTests.csproj" />
+  </Folder>
+</Solution>
