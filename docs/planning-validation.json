@@ -1,0 +1,34 @@
+{
+  "architecture": "ARCH-001 v1",
+  "date": "2026-11-08 America/Bogota",
+  "status": "PASS_DOCUMENTATION_ONLY",
+  "sourceItems": 67,
+  "types": {
+    "Epic": 2,
+    "Feature": 7,
+    "User Story": 15,
+    "Task": 30,
+    "Test Case": 13
+  },
+  "stories": 15,
+  "activeScenariosPreserved": 40,
+  "activeScenariosInRoadmap": 40,
+  "markdownFilesChecked": 17,
+  "brokenLocalLinks": [],
+  "encodingErrors": [],
+  "unbalancedFences": [],
+  "snapshotSha256": "93caa55c80b16a542b45459d979e19f7ae84cd49eda3b67d88fdb37f0f043e48",
+  "approval": "pending",
+  "applicationCodeCreated": false,
+  "applicationBuildOrTestsExecuted": false,
+  "azureWorkItemsModifiedInThisPhase": false,
+  "externalGates": [
+    "G-01",
+    "G-02",
+    "G-03",
+    "G-04"
+  ],
+  "descriptionListItemsPreserved": 117,
+  "finalLocalLinksRechecked": true,
+  "originalBriefPreserved": true
+}

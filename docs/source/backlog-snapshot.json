@@ -1,0 +1,2150 @@
+{
+  "asOf": "2026-11-08 America/Bogota",
+  "organization": "https://dev.azure.com/mengrau",
+  "project": "CRM SmartSales .Net",
+  "purpose": "Read-only functional baseline for ARCH-001 v1; not implementation evidence",
+  "items": [
+    {
+      "id": 120,
+      "rev": 2,
+      "fields": {
+        "System.WorkItemType": "Epic",
+        "System.State": "New",
+        "System.Title": "[EP01] CRM compacto",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Entregable universitario pendiente de implementación. El usuario confirmó que puede adaptar el laboratorio a .NET y Angular. Una sola organización comercial, moneda COP y zona horaria America/Bogota. Dos roles fijos: Administrador y Comercial. Estimaciones, responsables e iteraciones quedan pendientes de planificación del equipo. </p><p>Dos microservicios .NET: Contacts API (autenticación, cuentas precargadas y contactos) y Sales API (oportunidades, seguimientos, interacciones e indicadores). Un frontend Angular. Una instancia Amazon RDS PostgreSQL con bases de datos y usuarios separados por servicio; relaciones entre dominios validadas por contratos HTTP, sin consultas SQL cruzadas. Servicios desplegables y escalables por separado. </p><ul><li>MVP: login, contactos, oportunidades, Kanban, agenda, historial manual y dashboard. </li><li>Interfaz Angular cuidada, adaptable y con datos ficticios reproducibles. </li><li>Fuera del MVP: WhatsApp real, scoring, CRUD de usuarios, recuperación de contraseña, MFA, multiempresa, importaciones y analítica avanzada. </li><li>Prioridad comercial manual Alta/Media/Baja; sin dependencia de scoring. </li><li>El proyecto Basic conserva su contenido como archivo; los elementos nuevos tienen identificadores propios y trazabilidad. </li><li>La tarea original #7 carece de padre y descripción de alcance: se excluye de ejecución y se registra en el mapa de migración. </li> </ul><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/1\">#1 [SCRUM-5] [PBI 100] Gestionar acceso, prospectos y clientes</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/8\">#8 [SCRUM-6] [PBI 300] Gestionar WhatsApp y seguimientos</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/9\">#9 [SCRUM-7] [PBI 200] Gestionar oportunidades en el pipeline</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/10\">#10 [SCRUM-8] [PBI 400] Priorizar oportunidades y consultar indicadores</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/7\">#7 [SCRUM-4] Subtarea 2.1</a> </li> </ul><h3>Mapa de reestructuración de los 119 elementos originales </h3><table><tr><th>Origen</th><th>Destino lógico</th><th>Decisión</th></tr><tr><td>#1 [SCRUM-5] [PBI 100] Gestionar acceso, prospectos y clientes </td><td>EP01, FE01 </td><td>Adaptado/consolidado </td></tr><tr><td>#2 [SCRUM-9] [PBI 102] Crear, editar, activar o desactivar usuarios y asignarles un rol </td><td>HU01 </td><td>Adaptación parcial: roles fijos; CRUD usuarios aplazado </td></tr><tr><td>#3 [TC-SCRUM-9-01] Crear un usuario con información válida </td><td>HU01 </td><td>Escenario retirado: CRUD usuarios o responsable editable en seguimientos </td></tr><tr><td>#4 [TC-SCRUM-9-02] Rechazar un correo duplicado </td><td>HU01 </td><td>Escenario retirado: CRUD usuarios o responsable editable en seguimientos </td></tr><tr><td>#5 [TC-SCRUM-9-03] Desactivar un usuario </td><td>HU01 </td><td>Escenario retirado: CRUD usuarios o responsable editable en seguimientos </td></tr><tr><td>#6 [TC-SCRUM-9-04] Impedir la gestión sin autorización </td><td>TC-HU01 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#7 [SCRUM-4] Subtarea 2.1 </td><td>EP01 </td><td>Excluido: sin padre ni descripción de alcance </td></tr><tr><td>#8 [SCRUM-6] [PBI 300] Gestionar WhatsApp y seguimientos </td><td>EP01, FE03, FE07 </td><td>Adaptado/consolidado </td></tr><tr><td>#9 [SCRUM-7] [PBI 200] Gestionar oportunidades en el pipeline </td><td>EP01, FE02 </td><td>Adaptado/consolidado </td></tr><tr><td>#10 [SCRUM-8] [PBI 400] Priorizar oportunidades y consultar indicadores </td><td>EP01, FE03, FE07 </td><td>Adaptado/consolidado </td></tr><tr><td>#11 [SCRUM-10] [PBI 101] Iniciar sesión y visualizar únicamente las funciones permitidas por mi rol </td><td>HU01 </td><td>Adaptado/consolidado </td></tr><tr><td>#12 [SCRUM-11] [PBI 103] Registrar un prospecto o cliente con sus datos de contacto y canal de origen </td><td>HU02 </td><td>Adaptado/consolidado </td></tr><tr><td>#13 [SCRUM-12] [PBI 201] Crear una oportunidad asociada a un prospecto o cliente </td><td>HU03 </td><td>Adaptado/consolidado </td></tr><tr><td>#14 [SCRUM-13] [PBI 104] Buscar, actualizar y consultar una ficha comercial de prospectos y clientes </td><td>HU02 </td><td>Adaptado/consolidado </td></tr><tr><td>#15 [SCRUM-14] [PBI 202] Asignar o reasignar un vendedor responsable a una oportunidad </td><td>HU03 </td><td>Adaptado/consolidado </td></tr><tr><td>#16 [SCRUM-15] [PBI 301] Vincular un canal empresarial de WhatsApp al CRM </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#17 [SCRUM-16] [PBI 204] Cerrar una oportunidad como ganada o perdida y registrar su resultado </td><td>HU04 </td><td>Adaptado/consolidado </td></tr><tr><td>#18 [SCRUM-17] [PBI 203] Visualizar y mover oportunidades entre las etapas de un tablero Kanban </td><td>HU04 </td><td>Adaptado/consolidado </td></tr><tr><td>#19 [SCRUM-18] [PBI 304] Programar un próximo seguimiento con fecha, hora, prioridad y responsable </td><td>HU05 </td><td>Adaptado/consolidado </td></tr><tr><td>#20 [SCRUM-19] [PBI 302] Enviar y recibir mensajes de texto de WhatsApp desde la ficha del cliente </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#21 [SCRUM-20] [PBI 303] Asociar una conversación de WhatsApp con un prospecto, cliente y oportunidad </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#22 [SCRUM-21] [PBI 401] Visualizar un Lead Score calculado mediante reglas para cada oportunidad </td><td>HU15 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#23 [SCRUM-22] [PBI 305] Consultar una agenda con seguimientos vencidos, de hoy y próximos </td><td>HU05 </td><td>Adaptado/consolidado </td></tr><tr><td>#24 [SCRUM-23] [PBI 306] Registrar manualmente una interacción realizada por llamada, correo o reunión </td><td>HU06 </td><td>Adaptado/consolidado </td></tr><tr><td>#25 [SCRUM-24] [PBI 402] Visualizar y filtrar oportunidades por prioridad alta, media o baja </td><td>HU03 </td><td>Adaptado/consolidado </td></tr><tr><td>#26 [SCRUM-25] [PBI 403] Consultar un dashboard con indicadores básicos y embudo de ventas </td><td>HU07 </td><td>Adaptado/consolidado </td></tr><tr><td>#27 [SCRUM-26] [PBI 404] Filtrar el dashboard por periodo y vendedor </td><td>HU07 </td><td>Adaptado/consolidado </td></tr><tr><td>#28 [SCRUM-27] Implementar movimiento y actualización de oportunidades </td><td>HU04-T02 </td><td>Adaptado/consolidado </td></tr><tr><td>#29 [SCRUM-28] Construir vista del tablero Kanban </td><td>HU04-T02 </td><td>Adaptado/consolidado </td></tr><tr><td>#30 [SCRUM-29] Definir etapas y reglas del tablero Kanban </td><td>HU04-T01 </td><td>Adaptado/consolidado </td></tr><tr><td>#31 [SCRUM-30] Configurar canal WhatsApp Business </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#32 [SCRUM-31] Validar tablero y transiciones </td><td>HU04-T03 </td><td>Adaptado/consolidado </td></tr><tr><td>#33 [SCRUM-32] Implementar conexión y webhook de WhatsApp </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#34 [SCRUM-33] Probar conexión, errores y reintentos </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#35 [SCRUM-34] Persistir configuración y estado del canal </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#36 [SCRUM-35] Implementar envío de mensajes de texto </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#37 [SCRUM-36] Implementar recepción mediante webhook </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#38 [SCRUM-37] Persistir mensajes y estados </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#39 [SCRUM-38] Definir reglas de asociación de conversaciones </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#40 [SCRUM-39] Integrar conversación en la ficha del cliente </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#41 [SCRUM-40] Construir selección y visualización de asociaciones </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#42 [SCRUM-41] Implementar relación conversación-entidades </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#43 [SCRUM-42] Definir reglas y fórmula del Lead Score </td><td>HU15 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#44 [SCRUM-43] Persistir y exponer el puntaje </td><td>HU15 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#45 [SCRUM-44] Implementar cálculo del Lead Score </td><td>HU15 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#46 [SCRUM-45] Probar asociaciones y casos límite </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#47 [SCRUM-46] Validar reglas y resultados del scoring </td><td>HU15 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#48 [SCRUM-47] Definir indicadores y embudo de ventas </td><td>HU07-T01 </td><td>Adaptado/consolidado </td></tr><tr><td>#49 [SCRUM-48] Implementar consultas agregadas del dashboard </td><td>HU07-T01 </td><td>Adaptado/consolidado </td></tr><tr><td>#50 [SCRUM-49] Validar dashboard con datos de prueba </td><td>HU07-T02 </td><td>Adaptado/consolidado </td></tr><tr><td>#51 [SCRUM-50] Construir tarjetas y gráficos del dashboard </td><td>HU07-T02 </td><td>Adaptado/consolidado </td></tr><tr><td>#52 [TC-SCRUM-10-01] Iniciar sesión con credenciales válidas </td><td>TC-HU01 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#53 [TC-SCRUM-10-02] Rechazar credenciales inválidas </td><td>TC-HU01 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#54 [TC-SCRUM-10-03] Rechazar el ingreso de un usuario inactivo </td><td>TC-HU01 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#55 [TC-SCRUM-10-04] Bloquear una función no autorizada </td><td>TC-HU01 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#56 [TC-SCRUM-11-01] Registrar un prospecto válido </td><td>TC-HU02 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#57 [TC-SCRUM-11-02] Registrar un cliente con teléfono como único contacto </td><td>TC-HU02 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#58 [TC-SCRUM-11-03] Rechazar un registro sin información de contacto </td><td>TC-HU02 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#59 [TC-SCRUM-11-04] Advertir un posible duplicado </td><td>TC-HU02 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#60 [TC-SCRUM-12-01] Crear una oportunidad válida </td><td>TC-HU03 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#61 [TC-SCRUM-12-02] Rechazar una oportunidad sin contacto asociado </td><td>TC-HU03 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#62 [TC-SCRUM-12-03] Rechazar un valor negativo </td><td>TC-HU03 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#63 [TC-SCRUM-12-04] Rechazar un responsable inactivo </td><td>TC-HU03 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#64 [TC-SCRUM-13-01] Buscar contactos por coincidencia parcial </td><td>TC-HU02 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#65 [TC-SCRUM-13-02] Consultar una ficha comercial </td><td>TC-HU02 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#66 [TC-SCRUM-13-03] Actualizar datos válidos </td><td>TC-HU02 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#67 [TC-SCRUM-13-04] Rechazar una actualización inválida </td><td>TC-HU02 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#68 [TC-SCRUM-14-01] Asignar un responsable activo </td><td>TC-HU03 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#69 [TC-SCRUM-14-02] Reasignar una oportunidad </td><td>TC-HU03 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#70 [TC-SCRUM-14-03] Rechazar un responsable inactivo </td><td>TC-HU03 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#71 [TC-SCRUM-14-04] Impedir la reasignación sin permiso </td><td>TC-HU03 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#72 [TC-SCRUM-15-01] Vincular un canal con credenciales válidas </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#73 [TC-SCRUM-15-02] Rechazar credenciales inválidas </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#74 [TC-SCRUM-15-03] Validar el webhook </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#75 [TC-SCRUM-15-04] Impedir cambios sin permiso </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#76 [TC-SCRUM-16-01] Cerrar una oportunidad como ganada </td><td>TC-HU04 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#77 [TC-SCRUM-16-02] Cerrar una oportunidad como perdida </td><td>TC-HU04 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#78 [TC-SCRUM-16-03] Exigir motivo para una pérdida </td><td>TC-HU04 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#79 [TC-SCRUM-16-04] Impedir cerrar nuevamente una oportunidad </td><td>TC-HU04 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#80 [TC-SCRUM-17-01] Visualizar oportunidades por etapa </td><td>TC-HU04 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#81 [TC-SCRUM-17-02] Mover una oportunidad a una etapa permitida </td><td>TC-HU04 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#82 [TC-SCRUM-17-03] Rechazar una transición no permitida </td><td>TC-HU04 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#83 [TC-SCRUM-17-04] Recuperarse de un error de actualización </td><td>TC-HU04 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#84 [TC-SCRUM-18-01] Crear un seguimiento válido </td><td>TC-HU05 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#85 [TC-SCRUM-18-02] Rechazar un seguimiento sin asociación </td><td>TC-HU05 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#86 [TC-SCRUM-18-03] Rechazar un responsable inactivo </td><td>HU05 </td><td>Escenario retirado: CRUD usuarios o responsable editable en seguimientos </td></tr><tr><td>#87 [TC-SCRUM-18-04] Conservar la fecha y hora de negocio </td><td>TC-HU05 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#88 [TC-SCRUM-19-01] Enviar un mensaje de texto </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#89 [TC-SCRUM-19-02] Recibir un mensaje de texto </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#90 [TC-SCRUM-19-03] Rechazar un mensaje vacío </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#91 [TC-SCRUM-19-04] Informar un fallo de entrega </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#92 [TC-SCRUM-20-01] Asociar automáticamente por teléfono </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#93 [TC-SCRUM-20-02] Asociar manualmente una conversación </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#94 [TC-SCRUM-20-03] Rechazar una oportunidad de otro contacto </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#95 [TC-SCRUM-20-04] Solicitar decisión ante números duplicados </td><td>HU14 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#96 [TC-SCRUM-21-01] Calcular el puntaje con datos completos </td><td>HU15 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#97 [TC-SCRUM-21-02] Recalcular después de un cambio relevante </td><td>HU15 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#98 [TC-SCRUM-21-03] Calcular con datos incompletos </td><td>HU15 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#99 [TC-SCRUM-21-04] Restringir la consulta </td><td>HU15 </td><td>Fuera del MVP; referencia de alcance posterior </td></tr><tr><td>#100 [TC-SCRUM-22-01] Clasificar seguimientos pendientes </td><td>TC-HU05 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#101 [TC-SCRUM-22-02] Ordenar por urgencia </td><td>TC-HU05 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#102 [TC-SCRUM-22-03] Abrir la entidad relacionada </td><td>TC-HU05 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#103 [TC-SCRUM-22-04] Excluir seguimientos finalizados </td><td>TC-HU05 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#104 [TC-SCRUM-23-01] Registrar una interacción válida </td><td>TC-HU06 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#105 [TC-SCRUM-23-02] Registrar una interacción para una oportunidad </td><td>TC-HU06 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#106 [TC-SCRUM-23-03] Rechazar una interacción sin relación </td><td>TC-HU06 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#107 [TC-SCRUM-23-04] Rechazar una fecha futura </td><td>TC-HU06 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#108 [TC-SCRUM-24-01] Mostrar la prioridad de cada oportunidad </td><td>TC-HU03 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#109 [TC-SCRUM-24-02] No encontrar coincidencias </td><td>TC-HU03 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#110 [TC-SCRUM-24-03] Limpiar el filtro </td><td>TC-HU03 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#111 [TC-SCRUM-25-01] Consultar indicadores con datos disponibles </td><td>TC-HU07 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#112 [TC-SCRUM-25-02] Mantener consistencia entre indicador y embudo </td><td>TC-HU07 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#113 [TC-SCRUM-25-03] Mostrar un dashboard sin datos </td><td>TC-HU07 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#114 [TC-SCRUM-25-04] Actualizar los indicadores </td><td>TC-HU07 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#115 [TC-SCRUM-26-01] Filtrar por periodo </td><td>TC-HU07 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#116 [TC-SCRUM-26-02] Filtrar por vendedor </td><td>TC-HU07 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#117 [TC-SCRUM-26-03] Combinar periodo y vendedor </td><td>TC-HU07 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#118 [TC-SCRUM-26-04] Rechazar un rango inválido </td><td>TC-HU07 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr><tr><td>#119 [TC-SCRUM-26-05] Limpiar los filtros </td><td>TC-HU07 </td><td>Escenario revisado y consolidado en prueba de aceptación </td></tr></table>",
+        "System.Tags": "EP01; MVP; Producto; SS-MVP-20261108"
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/122"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/128"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/125"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/123"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/124"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/7"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/8"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/1"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/10"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/9"
+        }
+      ]
+    },
+    {
+      "id": 121,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Epic",
+        "System.State": "New",
+        "System.Title": "[EP02] Entrega de microservicios y CI/CD en AWS",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Entregable universitario pendiente de implementación. El usuario confirmó que puede adaptar el laboratorio a .NET y Angular. Una sola organización comercial, moneda COP y zona horaria America/Bogota. Dos roles fijos: Administrador y Comercial. Estimaciones, responsables e iteraciones quedan pendientes de planificación del equipo. </p><p>Dos microservicios .NET: Contacts API (autenticación, cuentas precargadas y contactos) y Sales API (oportunidades, seguimientos, interacciones e indicadores). Un frontend Angular. Una instancia Amazon RDS PostgreSQL con bases de datos y usuarios separados por servicio; relaciones entre dominios validadas por contratos HTTP, sin consultas SQL cruzadas. Servicios desplegables y escalables por separado. </p><p>Demostrar contenedores, RDS, despliegue independiente, CI/CD, rollback y evidencias académicas. La guía privada del curso 181128 se contrastará antes de implementar infraestructura; no se afirma haber verificado su rúbrica exacta. </p><h3>Fuentes verificadas </h3><ul><li><a href=\"https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_PostgreSQL.html\">RDS PostgreSQL</a> </li><li><a href=\"https://www.npgsql.org/efcore/\">EF Core Npgsql</a> </li><li><a href=\"https://docs.aws.amazon.com/codepipeline/latest/userguide/action-reference-ECSbluegreen.html\">CodePipeline y ECS blue/green</a> </li><li><a href=\"https://learn.microsoft.com/en-us/azure/devops/boards/work-items/guidance/agile-process?view=azure-devops\">Agile Azure Boards</a> </li> </ul>",
+        "System.Tags": "AWS; EP02; MVP; SS-MVP-20261108"
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/126"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/127"
+        }
+      ]
+    },
+    {
+      "id": 122,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Feature",
+        "System.State": "New",
+        "System.Title": "[FE01] Acceso y contactos",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Dos roles y fichas unificadas. </p><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/1\">#1 [SCRUM-5] [PBI 100] Gestionar acceso, prospectos y clientes</a> </li> </ul>",
+        "System.Tags": "FE01; MVP; SS-MVP-20261108",
+        "System.Parent": 120
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/132"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/120"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/129"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/1"
+        }
+      ]
+    },
+    {
+      "id": 123,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Feature",
+        "System.State": "New",
+        "System.Title": "[FE02] Pipeline de oportunidades",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Prioridad manual, Kanban y cierre comercial. </p><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/9\">#9 [SCRUM-7] [PBI 200] Gestionar oportunidades en el pipeline</a> </li> </ul>",
+        "System.Tags": "FE02; MVP; SS-MVP-20261108",
+        "System.Parent": 120
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/138"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/135"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/120"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/9"
+        }
+      ]
+    },
+    {
+      "id": 124,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Feature",
+        "System.State": "New",
+        "System.Title": "[FE03] Seguimientos e indicadores",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Agenda, historial manual y dashboard. </p><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/8\">#8 [SCRUM-6] [PBI 300] Gestionar WhatsApp y seguimientos</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/10\">#10 [SCRUM-8] [PBI 400] Priorizar oportunidades y consultar indicadores</a> </li> </ul>",
+        "System.Tags": "FE03; MVP; SS-MVP-20261108",
+        "System.Parent": 120
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/142"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/148"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/145"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/120"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/8"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/10"
+        }
+      ]
+    },
+    {
+      "id": 125,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Feature",
+        "System.State": "New",
+        "System.Title": "[FE04] Experiencia visual y demostración",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Interfaz consistente y datos ficticios. </p>",
+        "System.Tags": "FE04; MVP; SS-MVP-20261108",
+        "System.Parent": 120
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/151"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/120"
+        }
+      ]
+    },
+    {
+      "id": 126,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Feature",
+        "System.State": "New",
+        "System.Title": "[FE05] Arquitectura, RDS y contenedores",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Dos APIs, PostgreSQL y contenedores independientes. </p>",
+        "System.Tags": "FE05; MVP; SS-MVP-20261108",
+        "System.Parent": 121
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/121"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/158"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/154"
+        }
+      ]
+    },
+    {
+      "id": 127,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Feature",
+        "System.State": "New",
+        "System.Title": "[FE06] Despliegue, pipeline y evidencias",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>ECS, ALB, ECR, CloudWatch y CI/CD con rollback. </p>",
+        "System.Tags": "FE06; MVP; SS-MVP-20261108",
+        "System.Parent": 121
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/169"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/161"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/165"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/121"
+        }
+      ]
+    },
+    {
+      "id": 128,
+      "rev": 2,
+      "fields": {
+        "System.WorkItemType": "Feature",
+        "System.State": "Removed",
+        "System.Title": "[FE07] Mejoras posteriores fuera del entregable",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>WhatsApp y scoring aplazados. Removed excluye este alcance del backlog activo; no representa trabajo implementado. </p><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/8\">#8 [SCRUM-6] [PBI 300] Gestionar WhatsApp y seguimientos</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/10\">#10 [SCRUM-8] [PBI 400] Priorizar oportunidades y consultar indicadores</a> </li> </ul>",
+        "System.Tags": "FE07; Fuera-MVP; SS-MVP-20261108",
+        "System.Parent": 120
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/172"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/120"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/173"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/10"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/8"
+        }
+      ]
+    },
+    {
+      "id": 129,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.State": "New",
+        "System.Title": "[HU01] Acceder al CRM con dos roles y cuentas de demostración",
+        "Microsoft.VSTS.Common.Priority": 1,
+        "System.Description": "<p>Como usuario, quiero iniciar y cerrar sesión según mi rol, para proteger la información. </p><h3>Alcance </h3><ul><li>Roles fijos Administrador y Comercial y cuentas de prueba precargadas. El CRUD de usuarios de #2 queda fuera del MVP. </li><li>Correo y contraseña, hash de contraseñas y validación de cuenta activa; autorización tanto en Angular como en ambas APIs. </li><li>CRM comercial compartido. Solo Administrador reasigna oportunidades; Comercial las crea a su nombre. Cerrar sesión elimina la sesión local y vuelve a proteger las rutas. </li> </ul><h3>Finalización </h3><ul><li>Criterios verificados con evidencia y cambios vinculados a esta HU. </li><li>Pruebas pertinentes de reglas y errores; revisión del equipo antes de cerrar. </li><li>Estado New: planificación, sin implementación ni pruebas ejecutadas. </li> </ul><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/11\">#11 [SCRUM-10] [PBI 101] Iniciar sesión y visualizar únicamente las funciones permitidas por mi rol</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/2\">#2 [SCRUM-9] [PBI 102] Crear, editar, activar o desactivar usuarios y asignarles un rol</a> </li> </ul>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<p><strong>Acceso y salida</strong><br>Dado credenciales válidas y cuenta activa<br>Cuando inicia sesión y luego sale<br>Entonces accede según su rol y debe autenticarse nuevamente para entrar. </p><p><strong>Credenciales inválidas</strong><br>Dado credenciales incorrectas o cuenta inactiva<br>Cuando intenta ingresar<br>Entonces se rechaza con mensaje genérico sin revelar si el correo existe. </p><p><strong>Permisos</strong><br>Dado un Comercial autenticado<br>Cuando intenta reasignar por interfaz o API<br>Entonces la API lo deniega sin modificar datos y Angular solo muestra opciones autorizadas. </p>",
+        "System.Tags": "HU01; MVP; Producto; SS-MVP-20261108",
+        "System.Parent": 122
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/131"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/151"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/122"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/142"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/130"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/135"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/154"
+        },
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/174"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/145"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/2"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/11"
+        }
+      ]
+    },
+    {
+      "id": 130,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Implementar autenticación y permisos en ambas APIs",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Precargar cuentas, validar estado, hash y contrato de sesión; proteger endpoints. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU01-T01; MVP; SS-MVP-20261108",
+        "System.Parent": 129
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/129"
+        }
+      ]
+    },
+    {
+      "id": 131,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Construir login y navegación protegida Angular",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Formulario, cierre de sesión, rutas y mensajes; verificar permisos. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU01-T02; MVP; SS-MVP-20261108",
+        "System.Parent": 129
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/129"
+        }
+      ]
+    },
+    {
+      "id": 132,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.State": "New",
+        "System.Title": "[HU02] Registrar, buscar y actualizar prospectos y clientes",
+        "Microsoft.VSTS.Common.Priority": 1,
+        "System.Description": "<p>Como Comercial, quiero gestionar una ficha unificada de contactos, para mantener la información comercial en una sola sección. </p><h3>Alcance </h3><ul><li>Listado con búsqueda por nombre/correo/teléfono, creación, detalle y edición. </li><li>Nombre y tipo Prospecto/Cliente obligatorios; correo o teléfono obligatorio; origen de catálogo fijo. Advertir duplicados normalizados. </li><li>Actualizar conserva relaciones e historial. Sin eliminación física ni importación masiva. </li> </ul><h3>Finalización </h3><ul><li>Criterios verificados con evidencia y cambios vinculados a esta HU. </li><li>Pruebas pertinentes de reglas y errores; revisión del equipo antes de cerrar. </li><li>Estado New: planificación, sin implementación ni pruebas ejecutadas. </li> </ul><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/12\">#12 [SCRUM-11] [PBI 103] Registrar un prospecto o cliente con sus datos de contacto y canal de origen</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/14\">#14 [SCRUM-13] [PBI 104] Buscar, actualizar y consultar una ficha comercial de prospectos y clientes</a> </li> </ul>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<p><strong>Crear y buscar</strong><br>Dado datos válidos con al menos un medio de contacto<br>Cuando guarda y busca por coincidencia parcial<br>Entonces el contacto persiste y se encuentra sin distinguir mayúsculas. </p><p><strong>Validar y advertir</strong><br>Dado datos incompletos o coincidentes con otro contacto<br>Cuando intenta guardar<br>Entonces bloquea la información incompleta y advierte el posible duplicado antes de confirmarlo. </p><p><strong>Conservar relaciones</strong><br>Dado un contacto con historial y oportunidades<br>Cuando actualiza datos válidos<br>Entonces la ficha cambia y conserva sus relaciones. </p>",
+        "System.Tags": "HU02; MVP; Producto; SS-MVP-20261108",
+        "System.Parent": 122
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/135"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/154"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/133"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/134"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/142"
+        },
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/175"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/158"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/122"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/145"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/14"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/12"
+        }
+      ]
+    },
+    {
+      "id": 133,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Implementar contactos y validaciones en Contacts API",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Persistencia, búsqueda, actualización y pruebas de datos inválidos y duplicados. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU02-T01; MVP; SS-MVP-20261108",
+        "System.Parent": 132
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/132"
+        }
+      ]
+    },
+    {
+      "id": 134,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Construir listado, formulario y detalle Angular",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Sección unificada con búsqueda, edición y estados de carga, vacío y error. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU02-T02; MVP; SS-MVP-20261108",
+        "System.Parent": 132
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/132"
+        }
+      ]
+    },
+    {
+      "id": 135,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.State": "New",
+        "System.Title": "[HU03] Crear y editar oportunidades con responsable y prioridad manual",
+        "Microsoft.VSTS.Common.Priority": 1,
+        "System.Description": "<p>Como Comercial, quiero registrar oportunidades de un contacto, para organizar ventas con una prioridad comprensible. </p><h3>Alcance </h3><ul><li>Título, contacto existente, monto COP no negativo, fecha esperada, responsable activo y prioridad Alta/Media/Baja (Media predeterminada). </li><li>Etapa inicial Nuevo. Comercial es responsable de lo que crea; Administrador puede elegir y cambiar responsable de oportunidades abiertas. Conservar autor/fecha de reasignación. </li><li>Filtros por responsable y prioridad. Validar referencias mediante API; un fallo no deja oportunidades incompletas. </li> </ul><h3>Finalización </h3><ul><li>Criterios verificados con evidencia y cambios vinculados a esta HU. </li><li>Pruebas pertinentes de reglas y errores; revisión del equipo antes de cerrar. </li><li>Estado New: planificación, sin implementación ni pruebas ejecutadas. </li> </ul><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/13\">#13 [SCRUM-12] [PBI 201] Crear una oportunidad asociada a un prospecto o cliente</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/15\">#15 [SCRUM-14] [PBI 202] Asignar o reasignar un vendedor responsable a una oportunidad</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/25\">#25 [SCRUM-24] [PBI 402] Visualizar y filtrar oportunidades por prioridad alta, media o baja</a> </li> </ul>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<p><strong>Crear</strong><br>Dado un contacto y usuario activos<br>Cuando registra datos válidos<br>Entonces inicia en Nuevo con responsable activo y prioridad manual. </p><p><strong>Validaciones</strong><br>Dado monto negativo, contacto inexistente o responsable inactivo<br>Cuando intenta guardar<br>Entonces se rechaza sin persistir datos incompletos. </p><p><strong>Reasignar y filtrar</strong><br>Dado un Administrador y oportunidades abiertas<br>Cuando reasigna y filtra por responsable y prioridad<br>Entonces registra autor/fecha y muestra solo coincidencias; limpiar restaura resultados. </p>",
+        "System.Tags": "HU03; MVP; Producto; SS-MVP-20261108",
+        "System.Parent": 123
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/129"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/158"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/138"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/137"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/136"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/132"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/123"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/148"
+        },
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/176"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/15"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/25"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/13"
+        }
+      ]
+    },
+    {
+      "id": 136,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Implementar oportunidades, asignación y prioridad en Sales API",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Validar referencias, permisos y datos; conservar trazabilidad de reasignación. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU03-T01; MVP; SS-MVP-20261108",
+        "System.Parent": 135
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/135"
+        }
+      ]
+    },
+    {
+      "id": 137,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Construir formulario y filtros de oportunidades Angular",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Crear, editar y mostrar prioridad manual; limitar reasignación al Administrador. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU03-T02; MVP; SS-MVP-20261108",
+        "System.Parent": 135
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/135"
+        }
+      ]
+    },
+    {
+      "id": 138,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.State": "New",
+        "System.Title": "[HU04] Gestionar el Kanban y cerrar oportunidades ganadas o perdidas",
+        "Microsoft.VSTS.Common.Priority": 1,
+        "System.Description": "<p>Como Comercial, quiero mover y cerrar oportunidades, para demostrar el ciclo comercial completo. </p><h3>Alcance </h3><ul><li>Columnas activas fijas Nuevo, En contacto y Propuesta. Avanzar o retroceder entre ellas; cierre por acción explícita. </li><li>Tarjetas con contacto, monto, responsable y prioridad. Ganada requiere monto final no negativo; Perdida requiere motivo. </li><li>Conservar autor, fecha y resultado. Cerradas fuera del tablero activo; sin reapertura ni configuración dinámica de etapas. </li> </ul><h3>Finalización </h3><ul><li>Criterios verificados con evidencia y cambios vinculados a esta HU. </li><li>Pruebas pertinentes de reglas y errores; revisión del equipo antes de cerrar. </li><li>Estado New: planificación, sin implementación ni pruebas ejecutadas. </li> </ul><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/18\">#18 [SCRUM-17] [PBI 203] Visualizar y mover oportunidades entre las etapas de un tablero Kanban</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/17\">#17 [SCRUM-16] [PBI 204] Cerrar una oportunidad como ganada o perdida y registrar su resultado</a> </li> </ul>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<p><strong>Persistir movimiento</strong><br>Dado una oportunidad abierta<br>Cuando la mueve a otra etapa activa y recarga<br>Entonces aparece una sola vez en su etapa persistida. </p><p><strong>Fallo de movimiento</strong><br>Dado un error al actualizar<br>Cuando Angular recibe el fallo<br>Entonces informa el error y conserva o recupera la etapa persistida. </p><p><strong>Cerrar</strong><br>Dado una oportunidad abierta<br>Cuando confirma Ganada con monto o Perdida con motivo<br>Entonces guarda resultado, autor y fecha y sale del tablero activo. </p><p><strong>Rechazar cierre</strong><br>Dado una perdida sin motivo o una oportunidad cerrada<br>Cuando intenta cerrar<br>Entonces se rechaza sin modificar los datos. </p>",
+        "System.Tags": "HU04; MVP; Producto; SS-MVP-20261108",
+        "System.Parent": 123
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/123"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/141"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/135"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/140"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/169"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/139"
+        },
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/177"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/17"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/18"
+        }
+      ]
+    },
+    {
+      "id": 139,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Implementar etapas y cierre en Sales API",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Reglas fijas, autor/fecha y validaciones de cierre. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/30\">#30 [SCRUM-29] Definir etapas y reglas del tablero Kanban</a> </li> </ul>",
+        "System.Tags": "HU04-T01; MVP; SS-MVP-20261108",
+        "System.Parent": 138
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/138"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/30"
+        }
+      ]
+    },
+    {
+      "id": 140,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Construir Kanban Angular y conectar movimientos y cierre",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Tarjetas, movimiento, modal y recuperación ante fallos. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/28\">#28 [SCRUM-27] Implementar movimiento y actualización de oportunidades</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/29\">#29 [SCRUM-28] Construir vista del tablero Kanban</a> </li> </ul>",
+        "System.Tags": "HU04-T02; MVP; SS-MVP-20261108",
+        "System.Parent": 138
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/138"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/28"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/29"
+        }
+      ]
+    },
+    {
+      "id": 141,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Verificar tablero y resultados de cierre",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Probar transiciones, persistencia, fallos y ambos resultados; adjuntar evidencia. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/32\">#32 [SCRUM-31] Validar tablero y transiciones</a> </li> </ul>",
+        "System.Tags": "HU04-T03; MVP; SS-MVP-20261108",
+        "System.Parent": 138
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/138"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/32"
+        }
+      ]
+    },
+    {
+      "id": 142,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.State": "New",
+        "System.Title": "[HU05] Programar y completar seguimientos desde una agenda",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Como Comercial, quiero consultar y completar seguimientos, para evitar olvidar el siguiente contacto. </p><h3>Alcance </h3><ul><li>Asunto, fecha/hora, contacto obligatorio y oportunidad opcional del mismo contacto. Responsable: usuario actual; estados Pendiente y Completado. </li><li>Guardar UTC y mostrar America/Bogota. Vencidos: antes de ahora; Hoy: desde ahora hasta fin del día; Próximos: desde el día siguiente. Categorías sin solapamiento, orden ascendente. </li><li>Cada usuario ve los propios; Administrador puede consultar todos. Completar conserva historial y retira de pendientes. Sin recordatorios externos. </li> </ul><h3>Finalización </h3><ul><li>Criterios verificados con evidencia y cambios vinculados a esta HU. </li><li>Pruebas pertinentes de reglas y errores; revisión del equipo antes de cerrar. </li><li>Estado New: planificación, sin implementación ni pruebas ejecutadas. </li> </ul><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/19\">#19 [SCRUM-18] [PBI 304] Programar un próximo seguimiento con fecha, hora, prioridad y responsable</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/23\">#23 [SCRUM-22] [PBI 305] Consultar una agenda con seguimientos vencidos, de hoy y próximos</a> </li> </ul>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<p><strong>Programar</strong><br>Dado un contacto y oportunidad opcional coherente<br>Cuando guarda asunto y fecha/hora válidos<br>Entonces queda Pendiente con el usuario actual como responsable. </p><p><strong>Validar relación</strong><br>Dado una fecha inválida u oportunidad de otro contacto<br>Cuando intenta guardar<br>Entonces se rechaza con un mensaje que identifica el dato a corregir. </p><p><strong>Clasificar</strong><br>Dado pendientes en distintos instantes<br>Cuando abre la agenda en America/Bogota<br>Entonces cada registro aparece una vez en la categoría correcta y dentro del alcance autorizado. </p><p><strong>Completar</strong><br>Dado un seguimiento pendiente<br>Cuando lo completa<br>Entonces desaparece de pendientes y conserva referencias y fecha de finalización. </p>",
+        "System.Tags": "HU05; MVP; Producto; SS-MVP-20261108",
+        "System.Parent": 124
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/124"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/143"
+        },
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/178"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/132"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/144"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/129"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/169"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/23"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/19"
+        }
+      ]
+    },
+    {
+      "id": 143,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Implementar seguimientos y agenda en Sales API",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Validar asociaciones, UTC y permisos; probar categorías sin solapamientos. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU05-T01; MVP; SS-MVP-20261108",
+        "System.Parent": 142
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/142"
+        }
+      ]
+    },
+    {
+      "id": 144,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Construir agenda y formulario Angular",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Alta, clasificación, apertura de ficha y finalización; verificar límites de fecha. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU05-T02; MVP; SS-MVP-20261108",
+        "System.Parent": 142
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/142"
+        }
+      ]
+    },
+    {
+      "id": 145,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.State": "New",
+        "System.Title": "[HU06] Registrar interacciones manuales y consultar el historial",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Como Comercial, quiero registrar llamadas, correos y reuniones, para mostrar la evolución del contacto sin mensajería externa. </p><h3>Alcance </h3><ul><li>Tipo Llamada/Correo/Reunión, fecha/hora, resumen obligatorio, autor y contacto; oportunidad opcional del mismo contacto. </li><li>Historial descendente visible en contacto y oportunidad; datos de actividad en Sales API. </li><li>Solo actividades ya realizadas: rechazar fechas futuras. La ficha mantiene la información del contacto si falla la consulta de actividad. </li> </ul><h3>Finalización </h3><ul><li>Criterios verificados con evidencia y cambios vinculados a esta HU. </li><li>Pruebas pertinentes de reglas y errores; revisión del equipo antes de cerrar. </li><li>Estado New: planificación, sin implementación ni pruebas ejecutadas. </li> </ul><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/24\">#24 [SCRUM-23] [PBI 306] Registrar manualmente una interacción realizada por llamada, correo o reunión</a> </li> </ul>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<p><strong>Registrar</strong><br>Dado una actividad realizada con contacto y resumen<br>Cuando guarda la interacción<br>Entonces conserva autor/fecha y aparece en el historial. </p><p><strong>Relacionar</strong><br>Dado una oportunidad del contacto<br>Cuando asocia la actividad<br>Entonces se consulta desde ambas fichas sin duplicar el registro. </p><p><strong>Rechazar errores</strong><br>Dado fecha futura, resumen vacío u oportunidad de otro contacto<br>Cuando intenta guardar<br>Entonces rechaza y no crea una actividad incompleta. </p>",
+        "System.Tags": "HU06; MVP; Producto; SS-MVP-20261108",
+        "System.Parent": 124
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/124"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/169"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/146"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/129"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/132"
+        },
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/179"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/147"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/24"
+        }
+      ]
+    },
+    {
+      "id": 146,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Implementar interacciones e historial en Sales API",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Validar fechas y referencias, conservar autor y exponer historial. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU06-T01; MVP; SS-MVP-20261108",
+        "System.Parent": 145
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/145"
+        }
+      ]
+    },
+    {
+      "id": 147,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Integrar formulario e historial Angular",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Línea temporal con estados de carga/error parcial y validación de asociaciones. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU06-T02; MVP; SS-MVP-20261108",
+        "System.Parent": 145
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/145"
+        }
+      ]
+    },
+    {
+      "id": 148,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.State": "New",
+        "System.Title": "[HU07] Consultar un dashboard comercial con filtros simples",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Como usuario, quiero consultar indicadores de oportunidades, para entender el estado de ventas con datos consistentes. </p><h3>Alcance </h3><ul><li>Tarjetas: abiertas, ganadas, perdidas y monto estimado de abiertas; gráfico por etapa. Mismo acceso comercial compartido del MVP. </li><li>Filtros por responsable y fecha de creación, inclusiva según America/Bogota y claramente etiquetada. Aplicar a todos los componentes. </li><li>Agregados en Sales API y montos COP; ceros y vacío útil cuando no hay datos. Sin scoring, exportación ni almacén analítico. </li> </ul><h3>Finalización </h3><ul><li>Criterios verificados con evidencia y cambios vinculados a esta HU. </li><li>Pruebas pertinentes de reglas y errores; revisión del equipo antes de cerrar. </li><li>Estado New: planificación, sin implementación ni pruebas ejecutadas. </li> </ul><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/26\">#26 [SCRUM-25] [PBI 403] Consultar un dashboard con indicadores básicos y embudo de ventas</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/27\">#27 [SCRUM-26] [PBI 404] Filtrar el dashboard por periodo y vendedor</a> </li> </ul>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<p><strong>Totales consistentes</strong><br>Dado un conjunto conocido de oportunidades<br>Cuando consulta indicadores y gráfico<br>Entonces coinciden con los datos de prueba sin duplicados. </p><p><strong>Filtros comunes</strong><br>Dado responsable y rango válido de fecha de creación<br>Cuando aplica y limpia filtros<br>Entonces todos los componentes usan la misma intersección y restauran el alcance inicial. </p><p><strong>Vacíos y fechas</strong><br>Dado un filtro sin resultados o rango invertido<br>Cuando consulta<br>Entonces muestra ceros y vacío para el primer caso y exige corregir el rango para el segundo. </p>",
+        "System.Tags": "HU07; MVP; Producto; SS-MVP-20261108",
+        "System.Parent": 124
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/150"
+        },
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/180"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/135"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/149"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/169"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/124"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/26"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/27"
+        }
+      ]
+    },
+    {
+      "id": 149,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Implementar agregados y filtros en Sales API",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Definir fórmulas y validar con datos conocidos y límites de zona horaria. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/48\">#48 [SCRUM-47] Definir indicadores y embudo de ventas</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/49\">#49 [SCRUM-48] Implementar consultas agregadas del dashboard</a> </li> </ul>",
+        "System.Tags": "HU07-T01; MVP; SS-MVP-20261108",
+        "System.Parent": 148
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/148"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/49"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/48"
+        }
+      ]
+    },
+    {
+      "id": 150,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Construir y verificar tarjetas y gráfico Angular",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Filtros visibles, presentación coherente y comprobación de totales. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/50\">#50 [SCRUM-49] Validar dashboard con datos de prueba</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/51\">#51 [SCRUM-50] Construir tarjetas y gráficos del dashboard</a> </li> </ul>",
+        "System.Tags": "HU07-T02; MVP; SS-MVP-20261108",
+        "System.Parent": 148
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/148"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/51"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/50"
+        }
+      ]
+    },
+    {
+      "id": 151,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.State": "New",
+        "System.Title": "[HU08] Presentar una interfaz consistente y datos de demostración",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Como evaluador, quiero recorrer una interfaz cuidada con datos ficticios, para entender el valor del CRM durante una demostración breve. </p><h3>Alcance </h3><ul><li>Navegación: Dashboard, Contactos, Pipeline y Agenda; fichas coherentes de contacto y oportunidad. </li><li>Sistema visual de tipografía, espaciado, colores y componentes; español y foco de teclado visible. </li><li>Datos idempotentes: dos roles, al menos ocho contactos, oportunidades en cada etapa y ambos resultados, seguimientos vencidos/de hoy/próximos e interacciones. </li><li>Solo datos ficticios; credenciales de demostración para el evaluador fuera del repositorio público. </li> </ul><h3>Finalización </h3><ul><li>Criterios verificados con evidencia y cambios vinculados a esta HU. </li><li>Pruebas pertinentes de reglas y errores; revisión del equipo antes de cerrar. </li><li>Estado New: planificación, sin implementación ni pruebas ejecutadas. </li> </ul>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<p><strong>Diseño adaptable</strong><br>Dado pantallas de 1440 px y 390 px de ancho<br>Cuando recorre las secciones<br>Entonces no hay solapamientos y el Kanban permite desplazamiento horizontal dentro de su contenedor. </p><p><strong>Estados útiles</strong><br>Dado una consulta en carga, vacía o fallida<br>Cuando se presenta la vista<br>Entonces muestra progreso, vacío con acción o error recuperable. </p><p><strong>Datos reproducibles</strong><br>Dado una base de demostración limpia<br>Cuando prepara datos dos veces<br>Entonces obtiene el mismo conjunto coherente sin duplicados y puede completar el flujo comercial. </p>",
+        "System.Tags": "HU08; MVP; Producto; SS-MVP-20261108",
+        "System.Parent": 125
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/153"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/152"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/125"
+        },
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/181"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/129"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/169"
+        }
+      ]
+    },
+    {
+      "id": 152,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Definir y aplicar el sistema visual Angular",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Navegación y componentes compartidos; revisar móvil, escritorio y teclado. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU08-T01; MVP; SS-MVP-20261108",
+        "System.Parent": 151
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/151"
+        }
+      ]
+    },
+    {
+      "id": 153,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Preparar datos ficticios y recorrido de demostración",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Seeds idempotentes por servicio y guion de acceso, contacto, venta, actividad y cierre. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU08-T02; MVP; SS-MVP-20261108",
+        "System.Parent": 151
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/151"
+        }
+      ]
+    },
+    {
+      "id": 154,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.State": "New",
+        "System.Title": "[HU09] Definir dos microservicios y persistencia PostgreSQL en RDS",
+        "Microsoft.VSTS.Common.Priority": 1,
+        "System.Description": "<p>Como equipo, quiero definir límites y persistencia, para construir un alcance pequeño compatible con AWS Academy. </p><h3>Alcance </h3><ul><li>Dos microservicios .NET: Contacts API (autenticación, cuentas precargadas y contactos) y Sales API (oportunidades, seguimientos, interacciones e indicadores). Un frontend Angular. Una instancia Amazon RDS PostgreSQL con bases de datos y usuarios separados por servicio; relaciones entre dominios validadas por contratos HTTP, sin consultas SQL cruzadas. Servicios desplegables y escalables por separado. </li><li>PostgreSQL con EF Core/Npgsql; confirmar versión y tamaño permitidos en la cuenta antes de aprovisionar. </li><li>Contratos HTTP, autenticación, timeouts, errores y migraciones independientes. Cada servicio solo accede a su propia base. </li><li>Contrastar guía privada 181128 y permisos. Stack .NET/Angular autorizado; preparar línea base monolítica mínima y comparación si la rúbrica la exige. </li><li>RDS privado, acceso solo desde servicios, TLS y credenciales externas al código. La instancia compartida es una simplificación académica y un punto compartido de fallo que debe documentarse. </li> </ul><h3>Finalización </h3><ul><li>Criterios verificados con evidencia y cambios vinculados a esta HU. </li><li>Pruebas pertinentes de reglas y errores; revisión del equipo antes de cerrar. </li><li>Estado New: planificación, sin implementación ni pruebas ejecutadas. </li> </ul>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<p><strong>Límites verificables</strong><br>Dado entidades y funcionalidades del MVP<br>Cuando revisa contratos y diseño<br>Entonces cada dato tiene un único propietario y las APIs se compilan, migran y despliegan independientemente. </p><p><strong>Persistencia</strong><br>Dado RDS y usuarios de servicio configurados<br>Cuando cada API migra, guarda y consulta con su usuario<br>Entonces los datos sobreviven a reinicios y un usuario no accede a la base del otro servicio. </p><p><strong>Alineación académica</strong><br>Dado guía 181128 y permisos disponibles<br>Cuando completa la matriz requisito-evidencia<br>Entonces registra servicios exigidos, restricciones y si necesita una línea base monolítica. </p>",
+        "System.Tags": "AWS; HU09; MVP; SS-MVP-20261108",
+        "System.Parent": 126
+      },
+      "relations": [
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/182"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/132"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/161"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/155"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/157"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/158"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/126"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/156"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/129"
+        }
+      ]
+    },
+    {
+      "id": 155,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Documentar arquitectura, contratos y propiedad de datos",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Diagrama de dos APIs, Angular y RDS; autenticación, timeouts y fallos parciales. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU09-T01; MVP; SS-MVP-20261108",
+        "System.Parent": 154
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/154"
+        }
+      ]
+    },
+    {
+      "id": 156,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Preparar RDS PostgreSQL y migraciones independientes",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Validar motor/versión, bases y usuarios separados, red privada, TLS y EF Core/Npgsql. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU09-T02; MVP; SS-MVP-20261108",
+        "System.Parent": 154
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/154"
+        }
+      ]
+    },
+    {
+      "id": 157,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Contrastar backlog con rúbrica y permisos del curso 181128",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Identificar requisitos obligatorios y evidencia; decidir si requiere línea base monolítica. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU09-T03; MVP; SS-MVP-20261108",
+        "System.Parent": 154
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/154"
+        }
+      ]
+    },
+    {
+      "id": 158,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.State": "New",
+        "System.Title": "[HU10] Empaquetar componentes y publicar imágenes versionadas en ECR",
+        "Microsoft.VSTS.Common.Priority": 1,
+        "System.Description": "<p>Como equipo, quiero ejecutar componentes en contenedores, para preparar despliegues reproducibles e independientes. </p><h3>Alcance </h3><ul><li>Contenedores Linux separados para Contacts API, Sales API y frontend Angular estático; configuración externa. </li><li>Construcciones reproducibles, health checks y ejecución local integrada con PostgreSQL compatible. Imágenes ECR por componente identificadas por commit/digest. </li><li>Monorepo con carpetas y builds por componente; servicios independientes, sin fusionarlos en un único contenedor. </li> </ul><h3>Finalización </h3><ul><li>Criterios verificados con evidencia y cambios vinculados a esta HU. </li><li>Pruebas pertinentes de reglas y errores; revisión del equipo antes de cerrar. </li><li>Estado New: planificación, sin implementación ni pruebas ejecutadas. </li> </ul>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<p><strong>Ejecutar</strong><br>Dado una copia limpia y configuración de desarrollo<br>Cuando construye y ejecuta el entorno documentado<br>Entonces Angular y ambas APIs funcionan con comprobaciones de salud. </p><p><strong>Versionar</strong><br>Dado un commit validado<br>Cuando publica imágenes en ECR<br>Entonces cada componente tiene commit y digest identificables sin credenciales incrustadas. </p>",
+        "System.Tags": "AWS; HU10; MVP; SS-MVP-20261108",
+        "System.Parent": 126
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/161"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/154"
+        },
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/183"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/135"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/126"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/160"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/132"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/159"
+        }
+      ]
+    },
+    {
+      "id": 159,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Preparar contenedores y ejecución local integrada",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Builds separados, configuración externa y health checks; probar flujo comercial. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU10-T01; MVP; SS-MVP-20261108",
+        "System.Parent": 158
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/158"
+        }
+      ]
+    },
+    {
+      "id": 160,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Configurar ECR y publicación por componente",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Etiquetas por commit, digest y descarga con roles permitidos. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU10-T02; MVP; SS-MVP-20261108",
+        "System.Parent": 158
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/158"
+        }
+      ]
+    },
+    {
+      "id": 161,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.State": "New",
+        "System.Title": "[HU11] Desplegar servicios en ECS con balanceador y logs",
+        "Microsoft.VSTS.Common.Priority": 1,
+        "System.Description": "<p>Como evaluador, quiero acceder al CRM en AWS, para comprobar servicios operativos con persistencia y observabilidad. </p><h3>Alcance </h3><ul><li>Servicios ECS por componente y ALB con rutas de APIs y frontend; elegir Fargate o ECS sobre EC2 según permisos del laboratorio. </li><li>RDS privado, reglas de red mínimas y secretos por mecanismos permitidos. HTTPS si hay dominio/certificado disponible; documentar limitaciones académicas. </li><li>CloudWatch para ambas APIs con correlación y retención; health checks. No registrar contraseñas ni tokens. </li><li>Actualizar o aumentar réplicas de una API sin redesplegar la otra; contemplar costos, salida de red y límites del laboratorio. </li> </ul><h3>Finalización </h3><ul><li>Criterios verificados con evidencia y cambios vinculados a esta HU. </li><li>Pruebas pertinentes de reglas y errores; revisión del equipo antes de cerrar. </li><li>Estado New: planificación, sin implementación ni pruebas ejecutadas. </li> </ul>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<p><strong>Acceso y datos</strong><br>Dado ECS, ALB y RDS configurados<br>Cuando recorre el CRM y reemplaza una tarea ECS<br>Entonces las rutas funcionan y los datos persisten. </p><p><strong>Independencia y logs</strong><br>Dado las dos APIs desplegadas<br>Cuando actualiza o escala una API<br>Entonces la otra conserva su versión y operación; una petición puede rastrearse en CloudWatch. </p><p><strong>Red restringida</strong><br>Dado reglas de acceso configuradas<br>Cuando revisa RDS<br>Entonces no está expuesto públicamente y solo los servicios autorizados alcanzan su puerto. </p>",
+        "System.Tags": "AWS; HU11; MVP; SS-MVP-20261108",
+        "System.Parent": 127
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/163"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/158"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/162"
+        },
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/184"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/154"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/127"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/165"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/164"
+        }
+      ]
+    },
+    {
+      "id": 162,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Preparar red, roles y conectividad de los servicios",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>VPC, subredes, security groups y roles permitidos para RDS/ECR. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU11-T01; MVP; SS-MVP-20261108",
+        "System.Parent": 161
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/161"
+        }
+      ]
+    },
+    {
+      "id": 163,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Configurar ECS y rutas ALB por componente",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Desplegar Angular y APIs con health checks y configuración externa; verificar persistencia. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU11-T02; MVP; SS-MVP-20261108",
+        "System.Parent": 161
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/161"
+        }
+      ]
+    },
+    {
+      "id": 164,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Configurar CloudWatch y demostrar operación independiente",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Logs y retención; registrar actualización y escala sin redesplegar la otra API. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU11-T03; MVP; SS-MVP-20261108",
+        "System.Parent": 161
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/161"
+        }
+      ]
+    },
+    {
+      "id": 165,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.State": "New",
+        "System.Title": "[HU12] Automatizar validación y despliegue con rollback",
+        "Microsoft.VSTS.Common.Priority": 1,
+        "System.Description": "<p>Como equipo, quiero validar y desplegar cada servicio mediante CI/CD, para demostrar una entrega automatizada y recuperable. </p><h3>Alcance </h3><ul><li>Código en Azure Repos; CI por componente compila .NET/Angular, ejecuta pruebas y produce imágenes/artefactos versionados. </li><li>Diseño propuesto: Azure Pipelines publica ECR y paquete inmutable de release en S3 con taskdef/AppSpec; CodePipeline consume artefactos compatibles y CodeDeploy despliega ECS blue/green. Confirmar permisos antes de implementar. </li><li>No asumir conexión nativa de Azure Repos a CodePipeline: documentar el puente S3/ECR y correlación commit-digest-ejecución. Evitar carreras con releases inmutables. </li><li>Comprobación antes de cambiar tráfico y rollback ante fallo; actualizar una API sin cambiar la otra. Migraciones de datos compatibles con ambas versiones durante blue/green. </li> </ul><h3>Finalización </h3><ul><li>Criterios verificados con evidencia y cambios vinculados a esta HU. </li><li>Pruebas pertinentes de reglas y errores; revisión del equipo antes de cerrar. </li><li>Estado New: planificación, sin implementación ni pruebas ejecutadas. </li> </ul>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<p><strong>Bloquear fallos</strong><br>Dado un cambio con build o pruebas fallidas<br>Cuando ejecuta CI<br>Entonces informa el fallo y no publica una release desplegable. </p><p><strong>Desplegar versión</strong><br>Dado un commit válido de una API<br>Cuando publica release y ejecuta CodePipeline<br>Entonces CodeDeploy comprueba salud y cambia tráfico con trazabilidad; la otra API mantiene su versión. </p><p><strong>Rollback</strong><br>Dado la nueva versión falla una comprobación de salud<br>Cuando aplica la política de recuperación<br>Entonces el tráfico sigue o vuelve a una versión sana y se conserva la evidencia del fallo. </p>",
+        "System.Tags": "AWS; HU12; MVP; SS-MVP-20261108",
+        "System.Parent": 127
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/166"
+        },
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/185"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/167"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/169"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/161"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/127"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/168"
+        }
+      ]
+    },
+    {
+      "id": 166,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Configurar CI y paquete de release desde Azure Repos",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Compilar/probar por componente y publicar imágenes ECR y artefactos S3 versionados. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU12-T01; MVP; SS-MVP-20261108",
+        "System.Parent": 165
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/165"
+        }
+      ]
+    },
+    {
+      "id": 167,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Configurar CodePipeline y ECS blue/green con CodeDeploy",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Preparar artefactos, taskdef/AppSpec, target groups y permisos; correlacionar commit e imagen. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU12-T02; MVP; SS-MVP-20261108",
+        "System.Parent": 165
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/165"
+        }
+      ]
+    },
+    {
+      "id": 168,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Verificar bloqueo de fallos, actualización y rollback",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Fallo controlado, recuperación y compatibilidad de esquema durante la transición. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU12-T03; MVP; SS-MVP-20261108",
+        "System.Parent": 165
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/165"
+        }
+      ]
+    },
+    {
+      "id": 169,
+      "rev": 2,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.State": "New",
+        "System.Title": "[HU13] Preparar evidencias y demostración del entregable",
+        "Microsoft.VSTS.Common.Priority": 1,
+        "System.Description": "<p>Como estudiante, quiero presentar el CRM y evidencias técnicas, para demostrar los resultados funcionales y de AWS. </p><h3>Alcance </h3><ul><li>Guion: acceso, contacto, oportunidad, Kanban, seguimiento, interacción, cierre y dashboard. </li><li>Diagrama final y matriz requisito-evidencia; capturas/video de RDS/ECS/ECR/CloudWatch/CI-CD/rollback y escalado independiente. Comparación monolito/microservicios si se exige. </li><li>Instrucciones reproducibles, limitaciones, costos estimados y limpieza documentada. Eliminar recursos requiere autorización al momento de ejecutarlo. </li> </ul><h3>Finalización </h3><ul><li>Criterios verificados con evidencia y cambios vinculados a esta HU. </li><li>Pruebas pertinentes de reglas y errores; revisión del equipo antes de cerrar. </li><li>Estado New: planificación, sin implementación ni pruebas ejecutadas. </li> </ul>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<p><strong>Recorrido funcional</strong><br>Dado entorno y datos de demo<br>Cuando realiza el guion<br>Entonces completa el ciclo comercial y los indicadores coinciden con los cambios. </p><p><strong>Evidencia verificable</strong><br>Dado la matriz y ejecuciones de pipeline<br>Cuando prepara la entrega<br>Entonces cada requisito tiene evidencia concreta y enlaces válidos, con versión identificada. </p><p><strong>Operación académica</strong><br>Dado los recursos del proyecto<br>Cuando revisa costos e instrucciones<br>Entonces documenta estimaciones, límites y limpieza sin borrar recursos en esta fase. </p>",
+        "System.Tags": "AWS; HU13; MVP; SS-MVP-20261108",
+        "System.Parent": 127
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/127"
+        },
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/186"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/138"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/148"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/142"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/170"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/151"
+        },
+        {
+          "rel": "System.LinkTypes.Hierarchy-Forward",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/171"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/165"
+        },
+        {
+          "rel": "System.LinkTypes.Dependency-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/145"
+        }
+      ]
+    },
+    {
+      "id": 170,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Ejecutar y registrar demostración funcional y técnica",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Recorrido, URL/versión, pipeline, rollback, persistencia y escala independiente. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU13-T01; MVP; SS-MVP-20261108",
+        "System.Parent": 169
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/169"
+        }
+      ]
+    },
+    {
+      "id": 171,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Task",
+        "System.State": "New",
+        "System.Title": "Preparar documentación, costos y matriz de evidencias",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Diagrama final, requisitos, operación, limitaciones y pasos de limpieza. </p><p>Finaliza al realizar el alcance, comprobar escenarios pertinentes de la HU y registrar evidencia. Trabajo pendiente. </p>",
+        "System.Tags": "HU13-T02; MVP; SS-MVP-20261108",
+        "System.Parent": 169
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/169"
+        }
+      ]
+    },
+    {
+      "id": 172,
+      "rev": 2,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.State": "Removed",
+        "System.Title": "[HU14] Integrar WhatsApp empresarial después del entregable",
+        "Microsoft.VSTS.Common.Priority": 4,
+        "System.Description": "<p>Consolida conexión, webhooks, envío/recepción y asociación de conversaciones. Aplazado por dependencias de configuración y credenciales externas. El MVP usa interacciones manuales; no presenta chat simulado como integración real. </p><p>Fuera del MVP. Removed significa excluido/aplazado, no implementado. Tareas y pruebas originales permanecen como archivo de referencia; no se generan tareas activas. </p><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/16\">#16 [SCRUM-15] [PBI 301] Vincular un canal empresarial de WhatsApp al CRM</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/20\">#20 [SCRUM-19] [PBI 302] Enviar y recibir mensajes de texto de WhatsApp desde la ficha del cliente</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/21\">#21 [SCRUM-20] [PBI 303] Asociar una conversación de WhatsApp con un prospecto, cliente y oportunidad</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/31\">#31 [SCRUM-30] Configurar canal WhatsApp Business</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/33\">#33 [SCRUM-32] Implementar conexión y webhook de WhatsApp</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/34\">#34 [SCRUM-33] Probar conexión, errores y reintentos</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/35\">#35 [SCRUM-34] Persistir configuración y estado del canal</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/36\">#36 [SCRUM-35] Implementar envío de mensajes de texto</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/37\">#37 [SCRUM-36] Implementar recepción mediante webhook</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/38\">#38 [SCRUM-37] Persistir mensajes y estados</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/39\">#39 [SCRUM-38] Definir reglas de asociación de conversaciones</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/40\">#40 [SCRUM-39] Integrar conversación en la ficha del cliente</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/41\">#41 [SCRUM-40] Construir selección y visualización de asociaciones</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/42\">#42 [SCRUM-41] Implementar relación conversación-entidades</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/46\">#46 [SCRUM-45] Probar asociaciones y casos límite</a> </li> </ul>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<p>Antes de reincorporar: confirmar necesidad, dependencias y nuevos criterios con el equipo. No condiciona la entrega universitaria. </p>",
+        "System.Tags": "Fuera-MVP; HU14; SS-MVP-20261108",
+        "System.Parent": 128
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/128"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/39"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/42"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/46"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/41"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/35"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/20"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/36"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/33"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/37"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/21"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/40"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/38"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/31"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/34"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/16"
+        }
+      ]
+    },
+    {
+      "id": 173,
+      "rev": 2,
+      "fields": {
+        "System.WorkItemType": "User Story",
+        "System.State": "Removed",
+        "System.Title": "[HU15] Incorporar Lead Score después del entregable",
+        "Microsoft.VSTS.Common.Priority": 4,
+        "System.Description": "<p>Conserva puntaje y explicación de reglas como evolución posible. El MVP utiliza prioridad manual sin motor de scoring. </p><p>Fuera del MVP. Removed significa excluido/aplazado, no implementado. Tareas y pruebas originales permanecen como archivo de referencia; no se generan tareas activas. </p><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/22\">#22 [SCRUM-21] [PBI 401] Visualizar un Lead Score calculado mediante reglas para cada oportunidad</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/43\">#43 [SCRUM-42] Definir reglas y fórmula del Lead Score</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/44\">#44 [SCRUM-43] Persistir y exponer el puntaje</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/45\">#45 [SCRUM-44] Implementar cálculo del Lead Score</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/47\">#47 [SCRUM-46] Validar reglas y resultados del scoring</a> </li> </ul>",
+        "Microsoft.VSTS.Common.AcceptanceCriteria": "<p>Antes de reincorporar: confirmar necesidad, dependencias y nuevos criterios con el equipo. No condiciona la entrega universitaria. </p>",
+        "System.Tags": "Fuera-MVP; HU15; SS-MVP-20261108",
+        "System.Parent": 128
+      },
+      "relations": [
+        {
+          "rel": "System.LinkTypes.Hierarchy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/128"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/22"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/44"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/47"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/45"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/43"
+        }
+      ]
+    },
+    {
+      "id": 174,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Test Case",
+        "System.State": "Design",
+        "System.Title": "[TC-HU01] Validar acceder al CRM con dos roles y cuentas de demostración",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Aceptación adaptada de HU01. Cada paso representa un escenario independiente: preparar sus datos antes de ejecutarlo. Estado Design: pendiente de ejecución. </p><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/6\">#6 [TC-SCRUM-9-04] Impedir la gestión sin autorización</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/52\">#52 [TC-SCRUM-10-01] Iniciar sesión con credenciales válidas</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/53\">#53 [TC-SCRUM-10-02] Rechazar credenciales inválidas</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/54\">#54 [TC-SCRUM-10-03] Rechazar el ingreso de un usuario inactivo</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/55\">#55 [TC-SCRUM-10-04] Bloquear una función no autorizada</a> </li> </ul>",
+        "Microsoft.VSTS.TCM.Steps": "<steps id=\"0\" last=\"3\"><step id=\"1\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Acceso y salida&lt;br&gt;Dado credenciales válidas y cuenta activa&lt;br&gt;Cuando inicia sesión y luego sale&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces accede según su rol y debe autenticarse nuevamente para entrar.&lt;/div&gt;</parameterizedString></step><step id=\"2\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Credenciales inválidas&lt;br&gt;Dado credenciales incorrectas o cuenta inactiva&lt;br&gt;Cuando intenta ingresar&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces se rechaza con mensaje genérico sin revelar si el correo existe.&lt;/div&gt;</parameterizedString></step><step id=\"3\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Permisos&lt;br&gt;Dado un Comercial autenticado&lt;br&gt;Cuando intenta reasignar por interfaz o API&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces la API lo deniega sin modificar datos y Angular solo muestra opciones autorizadas.&lt;/div&gt;</parameterizedString></step></steps>",
+        "System.Tags": "Aceptacion; MVP; SS-MVP-20261108; TC-HU01"
+      },
+      "relations": [
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/129"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/55"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/52"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/54"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/53"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/6"
+        }
+      ]
+    },
+    {
+      "id": 175,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Test Case",
+        "System.State": "Design",
+        "System.Title": "[TC-HU02] Validar registrar, buscar y actualizar prospectos y clientes",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Aceptación adaptada de HU02. Cada paso representa un escenario independiente: preparar sus datos antes de ejecutarlo. Estado Design: pendiente de ejecución. </p><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/56\">#56 [TC-SCRUM-11-01] Registrar un prospecto válido</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/57\">#57 [TC-SCRUM-11-02] Registrar un cliente con teléfono como único contacto</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/58\">#58 [TC-SCRUM-11-03] Rechazar un registro sin información de contacto</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/59\">#59 [TC-SCRUM-11-04] Advertir un posible duplicado</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/64\">#64 [TC-SCRUM-13-01] Buscar contactos por coincidencia parcial</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/65\">#65 [TC-SCRUM-13-02] Consultar una ficha comercial</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/66\">#66 [TC-SCRUM-13-03] Actualizar datos válidos</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/67\">#67 [TC-SCRUM-13-04] Rechazar una actualización inválida</a> </li> </ul>",
+        "Microsoft.VSTS.TCM.Steps": "<steps id=\"0\" last=\"3\"><step id=\"1\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Crear y buscar&lt;br&gt;Dado datos válidos con al menos un medio de contacto&lt;br&gt;Cuando guarda y busca por coincidencia parcial&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces el contacto persiste y se encuentra sin distinguir mayúsculas.&lt;/div&gt;</parameterizedString></step><step id=\"2\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Validar y advertir&lt;br&gt;Dado datos incompletos o coincidentes con otro contacto&lt;br&gt;Cuando intenta guardar&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces bloquea la información incompleta y advierte el posible duplicado antes de confirmarlo.&lt;/div&gt;</parameterizedString></step><step id=\"3\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Conservar relaciones&lt;br&gt;Dado un contacto con historial y oportunidades&lt;br&gt;Cuando actualiza datos válidos&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces la ficha cambia y conserva sus relaciones.&lt;/div&gt;</parameterizedString></step></steps>",
+        "System.Tags": "Aceptacion; MVP; SS-MVP-20261108; TC-HU02"
+      },
+      "relations": [
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/132"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/57"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/67"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/58"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/56"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/59"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/64"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/65"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/66"
+        }
+      ]
+    },
+    {
+      "id": 176,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Test Case",
+        "System.State": "Design",
+        "System.Title": "[TC-HU03] Validar crear y editar oportunidades con responsable y prioridad manual",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Aceptación adaptada de HU03. Cada paso representa un escenario independiente: preparar sus datos antes de ejecutarlo. Estado Design: pendiente de ejecución. </p><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/60\">#60 [TC-SCRUM-12-01] Crear una oportunidad válida</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/61\">#61 [TC-SCRUM-12-02] Rechazar una oportunidad sin contacto asociado</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/62\">#62 [TC-SCRUM-12-03] Rechazar un valor negativo</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/63\">#63 [TC-SCRUM-12-04] Rechazar un responsable inactivo</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/68\">#68 [TC-SCRUM-14-01] Asignar un responsable activo</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/69\">#69 [TC-SCRUM-14-02] Reasignar una oportunidad</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/70\">#70 [TC-SCRUM-14-03] Rechazar un responsable inactivo</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/71\">#71 [TC-SCRUM-14-04] Impedir la reasignación sin permiso</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/108\">#108 [TC-SCRUM-24-01] Mostrar la prioridad de cada oportunidad</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/109\">#109 [TC-SCRUM-24-02] No encontrar coincidencias</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/110\">#110 [TC-SCRUM-24-03] Limpiar el filtro</a> </li> </ul>",
+        "Microsoft.VSTS.TCM.Steps": "<steps id=\"0\" last=\"3\"><step id=\"1\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Crear&lt;br&gt;Dado un contacto y usuario activos&lt;br&gt;Cuando registra datos válidos&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces inicia en Nuevo con responsable activo y prioridad manual.&lt;/div&gt;</parameterizedString></step><step id=\"2\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Validaciones&lt;br&gt;Dado monto negativo, contacto inexistente o responsable inactivo&lt;br&gt;Cuando intenta guardar&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces se rechaza sin persistir datos incompletos.&lt;/div&gt;</parameterizedString></step><step id=\"3\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Reasignar y filtrar&lt;br&gt;Dado un Administrador y oportunidades abiertas&lt;br&gt;Cuando reasigna y filtra por responsable y prioridad&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces registra autor/fecha y muestra solo coincidencias; limpiar restaura resultados.&lt;/div&gt;</parameterizedString></step></steps>",
+        "System.Tags": "Aceptacion; MVP; SS-MVP-20261108; TC-HU03"
+      },
+      "relations": [
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/135"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/109"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/110"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/69"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/63"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/70"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/62"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/71"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/60"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/61"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/68"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/108"
+        }
+      ]
+    },
+    {
+      "id": 177,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Test Case",
+        "System.State": "Design",
+        "System.Title": "[TC-HU04] Validar gestionar el Kanban y cerrar oportunidades ganadas o perdidas",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Aceptación adaptada de HU04. Cada paso representa un escenario independiente: preparar sus datos antes de ejecutarlo. Estado Design: pendiente de ejecución. </p><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/76\">#76 [TC-SCRUM-16-01] Cerrar una oportunidad como ganada</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/77\">#77 [TC-SCRUM-16-02] Cerrar una oportunidad como perdida</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/78\">#78 [TC-SCRUM-16-03] Exigir motivo para una pérdida</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/79\">#79 [TC-SCRUM-16-04] Impedir cerrar nuevamente una oportunidad</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/80\">#80 [TC-SCRUM-17-01] Visualizar oportunidades por etapa</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/81\">#81 [TC-SCRUM-17-02] Mover una oportunidad a una etapa permitida</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/82\">#82 [TC-SCRUM-17-03] Rechazar una transición no permitida</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/83\">#83 [TC-SCRUM-17-04] Recuperarse de un error de actualización</a> </li> </ul>",
+        "Microsoft.VSTS.TCM.Steps": "<steps id=\"0\" last=\"4\"><step id=\"1\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Persistir movimiento&lt;br&gt;Dado una oportunidad abierta&lt;br&gt;Cuando la mueve a otra etapa activa y recarga&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces aparece una sola vez en su etapa persistida.&lt;/div&gt;</parameterizedString></step><step id=\"2\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Fallo de movimiento&lt;br&gt;Dado un error al actualizar&lt;br&gt;Cuando Angular recibe el fallo&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces informa el error y conserva o recupera la etapa persistida.&lt;/div&gt;</parameterizedString></step><step id=\"3\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Cerrar&lt;br&gt;Dado una oportunidad abierta&lt;br&gt;Cuando confirma Ganada con monto o Perdida con motivo&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces guarda resultado, autor y fecha y sale del tablero activo.&lt;/div&gt;</parameterizedString></step><step id=\"4\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Rechazar cierre&lt;br&gt;Dado una perdida sin motivo o una oportunidad cerrada&lt;br&gt;Cuando intenta cerrar&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces se rechaza sin modificar los datos.&lt;/div&gt;</parameterizedString></step></steps>",
+        "System.Tags": "Aceptacion; MVP; SS-MVP-20261108; TC-HU04"
+      },
+      "relations": [
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/138"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/80"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/79"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/81"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/82"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/83"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/78"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/77"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/76"
+        }
+      ]
+    },
+    {
+      "id": 178,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Test Case",
+        "System.State": "Design",
+        "System.Title": "[TC-HU05] Validar programar y completar seguimientos desde una agenda",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Aceptación adaptada de HU05. Cada paso representa un escenario independiente: preparar sus datos antes de ejecutarlo. Estado Design: pendiente de ejecución. </p><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/84\">#84 [TC-SCRUM-18-01] Crear un seguimiento válido</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/85\">#85 [TC-SCRUM-18-02] Rechazar un seguimiento sin asociación</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/87\">#87 [TC-SCRUM-18-04] Conservar la fecha y hora de negocio</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/100\">#100 [TC-SCRUM-22-01] Clasificar seguimientos pendientes</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/101\">#101 [TC-SCRUM-22-02] Ordenar por urgencia</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/102\">#102 [TC-SCRUM-22-03] Abrir la entidad relacionada</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/103\">#103 [TC-SCRUM-22-04] Excluir seguimientos finalizados</a> </li> </ul>",
+        "Microsoft.VSTS.TCM.Steps": "<steps id=\"0\" last=\"4\"><step id=\"1\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Programar&lt;br&gt;Dado un contacto y oportunidad opcional coherente&lt;br&gt;Cuando guarda asunto y fecha/hora válidos&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces queda Pendiente con el usuario actual como responsable.&lt;/div&gt;</parameterizedString></step><step id=\"2\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Validar relación&lt;br&gt;Dado una fecha inválida u oportunidad de otro contacto&lt;br&gt;Cuando intenta guardar&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces se rechaza con un mensaje que identifica el dato a corregir.&lt;/div&gt;</parameterizedString></step><step id=\"3\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Clasificar&lt;br&gt;Dado pendientes en distintos instantes&lt;br&gt;Cuando abre la agenda en America/Bogota&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces cada registro aparece una vez en la categoría correcta y dentro del alcance autorizado.&lt;/div&gt;</parameterizedString></step><step id=\"4\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Completar&lt;br&gt;Dado un seguimiento pendiente&lt;br&gt;Cuando lo completa&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces desaparece de pendientes y conserva referencias y fecha de finalización.&lt;/div&gt;</parameterizedString></step></steps>",
+        "System.Tags": "Aceptacion; MVP; SS-MVP-20261108; TC-HU05"
+      },
+      "relations": [
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/142"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/87"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/84"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/100"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/101"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/85"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/102"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/103"
+        }
+      ]
+    },
+    {
+      "id": 179,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Test Case",
+        "System.State": "Design",
+        "System.Title": "[TC-HU06] Validar registrar interacciones manuales y consultar el historial",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Aceptación adaptada de HU06. Cada paso representa un escenario independiente: preparar sus datos antes de ejecutarlo. Estado Design: pendiente de ejecución. </p><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/104\">#104 [TC-SCRUM-23-01] Registrar una interacción válida</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/105\">#105 [TC-SCRUM-23-02] Registrar una interacción para una oportunidad</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/106\">#106 [TC-SCRUM-23-03] Rechazar una interacción sin relación</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/107\">#107 [TC-SCRUM-23-04] Rechazar una fecha futura</a> </li> </ul>",
+        "Microsoft.VSTS.TCM.Steps": "<steps id=\"0\" last=\"3\"><step id=\"1\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Registrar&lt;br&gt;Dado una actividad realizada con contacto y resumen&lt;br&gt;Cuando guarda la interacción&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces conserva autor/fecha y aparece en el historial.&lt;/div&gt;</parameterizedString></step><step id=\"2\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Relacionar&lt;br&gt;Dado una oportunidad del contacto&lt;br&gt;Cuando asocia la actividad&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces se consulta desde ambas fichas sin duplicar el registro.&lt;/div&gt;</parameterizedString></step><step id=\"3\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Rechazar errores&lt;br&gt;Dado fecha futura, resumen vacío u oportunidad de otro contacto&lt;br&gt;Cuando intenta guardar&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces rechaza y no crea una actividad incompleta.&lt;/div&gt;</parameterizedString></step></steps>",
+        "System.Tags": "Aceptacion; MVP; SS-MVP-20261108; TC-HU06"
+      },
+      "relations": [
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/145"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/105"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/104"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/106"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/107"
+        }
+      ]
+    },
+    {
+      "id": 180,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Test Case",
+        "System.State": "Design",
+        "System.Title": "[TC-HU07] Validar consultar un dashboard comercial con filtros simples",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Aceptación adaptada de HU07. Cada paso representa un escenario independiente: preparar sus datos antes de ejecutarlo. Estado Design: pendiente de ejecución. </p><h3>Trazabilidad al proyecto Basic </h3><ul><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/111\">#111 [TC-SCRUM-25-01] Consultar indicadores con datos disponibles</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/112\">#112 [TC-SCRUM-25-02] Mantener consistencia entre indicador y embudo</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/113\">#113 [TC-SCRUM-25-03] Mostrar un dashboard sin datos</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/114\">#114 [TC-SCRUM-25-04] Actualizar los indicadores</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/115\">#115 [TC-SCRUM-26-01] Filtrar por periodo</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/116\">#116 [TC-SCRUM-26-02] Filtrar por vendedor</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/117\">#117 [TC-SCRUM-26-03] Combinar periodo y vendedor</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/118\">#118 [TC-SCRUM-26-04] Rechazar un rango inválido</a> </li><li><a href=\"https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/119\">#119 [TC-SCRUM-26-05] Limpiar los filtros</a> </li> </ul>",
+        "Microsoft.VSTS.TCM.Steps": "<steps id=\"0\" last=\"3\"><step id=\"1\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Totales consistentes&lt;br&gt;Dado un conjunto conocido de oportunidades&lt;br&gt;Cuando consulta indicadores y gráfico&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces coinciden con los datos de prueba sin duplicados.&lt;/div&gt;</parameterizedString></step><step id=\"2\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Filtros comunes&lt;br&gt;Dado responsable y rango válido de fecha de creación&lt;br&gt;Cuando aplica y limpia filtros&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces todos los componentes usan la misma intersección y restauran el alcance inicial.&lt;/div&gt;</parameterizedString></step><step id=\"3\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Vacíos y fechas&lt;br&gt;Dado un filtro sin resultados o rango invertido&lt;br&gt;Cuando consulta&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces muestra ceros y vacío para el primer caso y exige corregir el rango para el segundo.&lt;/div&gt;</parameterizedString></step></steps>",
+        "System.Tags": "Aceptacion; MVP; SS-MVP-20261108; TC-HU07"
+      },
+      "relations": [
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/148"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/116"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/119"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/111"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/112"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/117"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/114"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/115"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/118"
+        },
+        {
+          "rel": "Hyperlink",
+          "url": "https://dev.azure.com/mengrau/CRM%20SmartSales/_workitems/edit/113"
+        }
+      ]
+    },
+    {
+      "id": 181,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Test Case",
+        "System.State": "Design",
+        "System.Title": "[TC-HU08] Validar presentar una interfaz consistente y datos de demostración",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Aceptación adaptada de HU08. Cada paso representa un escenario independiente: preparar sus datos antes de ejecutarlo. Estado Design: pendiente de ejecución. </p>",
+        "Microsoft.VSTS.TCM.Steps": "<steps id=\"0\" last=\"3\"><step id=\"1\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Diseño adaptable&lt;br&gt;Dado pantallas de 1440 px y 390 px de ancho&lt;br&gt;Cuando recorre las secciones&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces no hay solapamientos y el Kanban permite desplazamiento horizontal dentro de su contenedor.&lt;/div&gt;</parameterizedString></step><step id=\"2\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Estados útiles&lt;br&gt;Dado una consulta en carga, vacía o fallida&lt;br&gt;Cuando se presenta la vista&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces muestra progreso, vacío con acción o error recuperable.&lt;/div&gt;</parameterizedString></step><step id=\"3\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Datos reproducibles&lt;br&gt;Dado una base de demostración limpia&lt;br&gt;Cuando prepara datos dos veces&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces obtiene el mismo conjunto coherente sin duplicados y puede completar el flujo comercial.&lt;/div&gt;</parameterizedString></step></steps>",
+        "System.Tags": "Aceptacion; MVP; SS-MVP-20261108; TC-HU08"
+      },
+      "relations": [
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/151"
+        }
+      ]
+    },
+    {
+      "id": 182,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Test Case",
+        "System.State": "Design",
+        "System.Title": "[TC-HU09] Validar definir dos microservicios y persistencia PostgreSQL en RDS",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Aceptación adaptada de HU09. Cada paso representa un escenario independiente: preparar sus datos antes de ejecutarlo. Estado Design: pendiente de ejecución. </p>",
+        "Microsoft.VSTS.TCM.Steps": "<steps id=\"0\" last=\"3\"><step id=\"1\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Límites verificables&lt;br&gt;Dado entidades y funcionalidades del MVP&lt;br&gt;Cuando revisa contratos y diseño&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces cada dato tiene un único propietario y las APIs se compilan, migran y despliegan independientemente.&lt;/div&gt;</parameterizedString></step><step id=\"2\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Persistencia&lt;br&gt;Dado RDS y usuarios de servicio configurados&lt;br&gt;Cuando cada API migra, guarda y consulta con su usuario&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces los datos sobreviven a reinicios y un usuario no accede a la base del otro servicio.&lt;/div&gt;</parameterizedString></step><step id=\"3\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Alineación académica&lt;br&gt;Dado guía 181128 y permisos disponibles&lt;br&gt;Cuando completa la matriz requisito-evidencia&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces registra servicios exigidos, restricciones y si necesita una línea base monolítica.&lt;/div&gt;</parameterizedString></step></steps>",
+        "System.Tags": "Aceptacion; MVP; SS-MVP-20261108; TC-HU09"
+      },
+      "relations": [
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/154"
+        }
+      ]
+    },
+    {
+      "id": 183,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Test Case",
+        "System.State": "Design",
+        "System.Title": "[TC-HU10] Validar empaquetar componentes y publicar imágenes versionadas en ECR",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Aceptación adaptada de HU10. Cada paso representa un escenario independiente: preparar sus datos antes de ejecutarlo. Estado Design: pendiente de ejecución. </p>",
+        "Microsoft.VSTS.TCM.Steps": "<steps id=\"0\" last=\"2\"><step id=\"1\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Ejecutar&lt;br&gt;Dado una copia limpia y configuración de desarrollo&lt;br&gt;Cuando construye y ejecuta el entorno documentado&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces Angular y ambas APIs funcionan con comprobaciones de salud.&lt;/div&gt;</parameterizedString></step><step id=\"2\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Versionar&lt;br&gt;Dado un commit validado&lt;br&gt;Cuando publica imágenes en ECR&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces cada componente tiene commit y digest identificables sin credenciales incrustadas.&lt;/div&gt;</parameterizedString></step></steps>",
+        "System.Tags": "Aceptacion; MVP; SS-MVP-20261108; TC-HU10"
+      },
+      "relations": [
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/158"
+        }
+      ]
+    },
+    {
+      "id": 184,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Test Case",
+        "System.State": "Design",
+        "System.Title": "[TC-HU11] Validar desplegar servicios en ECS con balanceador y logs",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Aceptación adaptada de HU11. Cada paso representa un escenario independiente: preparar sus datos antes de ejecutarlo. Estado Design: pendiente de ejecución. </p>",
+        "Microsoft.VSTS.TCM.Steps": "<steps id=\"0\" last=\"3\"><step id=\"1\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Acceso y datos&lt;br&gt;Dado ECS, ALB y RDS configurados&lt;br&gt;Cuando recorre el CRM y reemplaza una tarea ECS&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces las rutas funcionan y los datos persisten.&lt;/div&gt;</parameterizedString></step><step id=\"2\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Independencia y logs&lt;br&gt;Dado las dos APIs desplegadas&lt;br&gt;Cuando actualiza o escala una API&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces la otra conserva su versión y operación; una petición puede rastrearse en CloudWatch.&lt;/div&gt;</parameterizedString></step><step id=\"3\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Red restringida&lt;br&gt;Dado reglas de acceso configuradas&lt;br&gt;Cuando revisa RDS&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces no está expuesto públicamente y solo los servicios autorizados alcanzan su puerto.&lt;/div&gt;</parameterizedString></step></steps>",
+        "System.Tags": "Aceptacion; MVP; SS-MVP-20261108; TC-HU11"
+      },
+      "relations": [
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/161"
+        }
+      ]
+    },
+    {
+      "id": 185,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Test Case",
+        "System.State": "Design",
+        "System.Title": "[TC-HU12] Validar automatizar validación y despliegue con rollback",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Aceptación adaptada de HU12. Cada paso representa un escenario independiente: preparar sus datos antes de ejecutarlo. Estado Design: pendiente de ejecución. </p>",
+        "Microsoft.VSTS.TCM.Steps": "<steps id=\"0\" last=\"3\"><step id=\"1\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Bloquear fallos&lt;br&gt;Dado un cambio con build o pruebas fallidas&lt;br&gt;Cuando ejecuta CI&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces informa el fallo y no publica una release desplegable.&lt;/div&gt;</parameterizedString></step><step id=\"2\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Desplegar versión&lt;br&gt;Dado un commit válido de una API&lt;br&gt;Cuando publica release y ejecuta CodePipeline&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces CodeDeploy comprueba salud y cambia tráfico con trazabilidad; la otra API mantiene su versión.&lt;/div&gt;</parameterizedString></step><step id=\"3\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Rollback&lt;br&gt;Dado la nueva versión falla una comprobación de salud&lt;br&gt;Cuando aplica la política de recuperación&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces el tráfico sigue o vuelve a una versión sana y se conserva la evidencia del fallo.&lt;/div&gt;</parameterizedString></step></steps>",
+        "System.Tags": "Aceptacion; MVP; SS-MVP-20261108; TC-HU12"
+      },
+      "relations": [
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/165"
+        }
+      ]
+    },
+    {
+      "id": 186,
+      "rev": 1,
+      "fields": {
+        "System.WorkItemType": "Test Case",
+        "System.State": "Design",
+        "System.Title": "[TC-HU13] Validar preparar evidencias y demostración del entregable universitario",
+        "Microsoft.VSTS.Common.Priority": 2,
+        "System.Description": "<p>Aceptación adaptada de HU13. Cada paso representa un escenario independiente: preparar sus datos antes de ejecutarlo. Estado Design: pendiente de ejecución. </p>",
+        "Microsoft.VSTS.TCM.Steps": "<steps id=\"0\" last=\"3\"><step id=\"1\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Recorrido funcional&lt;br&gt;Dado entorno y datos de demo&lt;br&gt;Cuando realiza el guion&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces completa el ciclo comercial y los indicadores coinciden con los cambios.&lt;/div&gt;</parameterizedString></step><step id=\"2\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Evidencia verificable&lt;br&gt;Dado la matriz y ejecuciones de pipeline&lt;br&gt;Cuando prepara la entrega&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces cada requisito tiene evidencia concreta y enlaces válidos, con versión identificada.&lt;/div&gt;</parameterizedString></step><step id=\"3\" type=\"ActionStep\"><parameterizedString isformatted=\"true\">&lt;div&gt;Operación académica&lt;br&gt;Dado los recursos del proyecto&lt;br&gt;Cuando revisa costos e instrucciones&lt;/div&gt;</parameterizedString><parameterizedString isformatted=\"true\">&lt;div&gt;Entonces documenta estimaciones, límites y limpieza sin borrar recursos en esta fase.&lt;/div&gt;</parameterizedString></step></steps>",
+        "System.Tags": "Aceptacion; MVP; SS-MVP-20261108; TC-HU13"
+      },
+      "relations": [
+        {
+          "rel": "Microsoft.VSTS.Common.TestedBy-Reverse",
+          "url": "https://dev.azure.com/mengrau/57ee213f-1ec0-4d96-a3b8-45467dbf88d2/_apis/wit/workItems/169"
+        }
+      ]
+    }
+  ]
+}
