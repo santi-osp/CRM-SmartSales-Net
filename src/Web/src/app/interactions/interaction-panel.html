@@ -1,0 +1,67 @@
+<section class="interaction-panel" aria-labelledby="interaction-title">
+  <div class="section-head">
+    <h3 id="interaction-title">Actividad</h3>
+    <button mat-stroked-button type="button" (click)="load()">Actualizar</button>
+  </div>
+  <form [formGroup]="form" (ngSubmit)="save()" novalidate>
+    @if (!opportunityId) {
+      <mat-form-field appearance="outline">
+        <mat-label>Oportunidad (opcional)</mat-label>
+        <mat-select formControlName="opportunityId">
+          <mat-option value="">Sin oportunidad</mat-option>
+          @for (item of opportunityChoices(); track item.id) {
+            <mat-option [value]="item.id">{{ item.title }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      @if (opportunityChoices().length < opportunityTotal()) {
+        <button mat-stroked-button type="button" (click)="moreOpportunities()">Más oportunidades</button>
+      }
+    }
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo</mat-label>
+      <mat-select formControlName="type">
+        <mat-option value="Call">Llamada</mat-option>
+        <mat-option value="Email">Correo</mat-option>
+        <mat-option value="Meeting">Reunión</mat-option>
+      </mat-select>
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Fecha y hora (Bogotá)</mat-label>
+      <input matInput formControlName="occurredLocal" type="datetime-local" />
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+      <mat-label>Resumen</mat-label>
+      <textarea matInput formControlName="summary" maxlength="2000" rows="3"></textarea>
+      @if (form.controls.summary.touched && form.controls.summary.invalid) {
+        <mat-error>Escribe un resumen de máximo 2000 caracteres.</mat-error>
+      }
+    </mat-form-field>
+    @if (formError()) { <p class="error" role="alert">{{ formError() }}</p> }
+    <button mat-flat-button type="submit" [disabled]="saving()">{{ saving() ? 'Guardando…' : 'Registrar actividad' }}</button>
+  </form>
+  @if (loading()) { <p role="status">Cargando actividad…</p> }
+  @if (listError()) {
+    <p class="error" role="alert">{{ listError() }}</p>
+    <button mat-stroked-button type="button" (click)="load()">Reintentar actividad</button>
+  }
+  @if (!loading() && !listError() && page()?.items?.length === 0) { <p>Sin actividad registrada.</p> }
+  @if (!loading() && !listError()) {
+    <ol class="timeline">
+      @for (item of page()?.items ?? []; track item.id) {
+        <li>
+          <strong>{{ typeLabel(item.type) }}</strong> · {{ dateTime(item.occurredAt) }}
+          <p>{{ item.summary }}</p>
+          @if (item.opportunityId) { <small>Vinculada a oportunidad</small> }
+        </li>
+      }
+    </ol>
+    @if (page() && page()!.totalCount > 0) {
+      <div class="pagination">
+        <span>Página {{ pageNumber() }} · {{ page()!.totalCount }} actividades</span>
+        <button mat-stroked-button type="button" (click)="previous()" [disabled]="pageNumber() === 1">Anterior</button>
+        <button mat-stroked-button type="button" (click)="next()" [disabled]="pageNumber() * 20 >= page()!.totalCount">Siguiente</button>
+      </div>
+    }
+  }
+</section>

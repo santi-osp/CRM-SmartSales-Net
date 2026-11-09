@@ -1,0 +1,77 @@
+<div class="app-shell">
+  <header>
+    <strong>SmartSales</strong>
+    <div class="account">
+      <span>{{ user()?.displayName }}</span>
+      <button mat-stroked-button type="button" (click)="logout()">Cerrar sesión</button>
+    </div>
+  </header>
+  <main>
+    <div class="heading">
+      <p class="eyebrow">Resumen comercial</p>
+      <h1>Dashboard</h1>
+      <p>Estado de las oportunidades con una misma fecha de creación y responsable.</p>
+    </div>
+    <nav class="quick-links" aria-label="Secciones">
+      <a mat-stroked-button routerLink="/contacts">Contactos</a>
+      <a mat-stroked-button routerLink="/opportunities">Oportunidades</a>
+      <a mat-stroked-button routerLink="/pipeline">Tablero</a>
+      <a mat-stroked-button routerLink="/agenda">Agenda</a>
+    </nav>
+    <section class="filters" aria-label="Filtros del dashboard">
+      <mat-form-field appearance="outline">
+        <mat-label>Responsable</mat-label>
+        <mat-select [formControl]="owner">
+          <mat-option value="">Todos</mat-option>
+          @for (person of users(); track person.id) {
+            <mat-option [value]="person.id">{{ person.displayName }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Creada desde</mat-label>
+        <input matInput type="date" [formControl]="createdFrom" />
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Creada hasta</mat-label>
+        <input matInput type="date" [formControl]="createdTo" />
+      </mat-form-field>
+      <button mat-flat-button type="button" (click)="apply()">Aplicar</button>
+      <button mat-stroked-button type="button" (click)="clear()">Limpiar</button>
+    </section>
+    <p class="hint">Las fechas son inclusivas en la zona horaria de Bogotá.</p>
+    @if (validationError()) { <p class="error" role="alert">{{ validationError() }}</p> }
+    @if (usersError()) { <p class="error" role="alert">{{ usersError() }}</p> }
+    @if (loading()) { <p role="status">Cargando indicadores…</p> }
+    @if (error()) {
+      <p class="error" role="alert">{{ error() }}</p>
+      <button mat-stroked-button type="button" (click)="load()">Reintentar</button>
+    }
+    @if (data(); as dashboard) {
+      <section class="metrics" aria-label="Indicadores comerciales">
+        <div class="metric"><span>Abiertas</span><strong>{{ dashboard.openCount }}</strong></div>
+        <div class="metric"><span>Ganadas</span><strong>{{ dashboard.wonCount }}</strong></div>
+        <div class="metric"><span>Perdidas</span><strong>{{ dashboard.lostCount }}</strong></div>
+        <div class="metric"><span>Monto estimado abierto</span><strong>{{ money(dashboard.openEstimatedAmount) }}</strong></div>
+      </section>
+      <section class="stage-panel" aria-labelledby="stage-title">
+        <h2 id="stage-title">Oportunidades por etapa</h2>
+        @if (dashboard.openCount + dashboard.wonCount + dashboard.lostCount === 0) {
+          <p>No hay oportunidades para estos filtros.</p>
+        }
+        <table>
+          <thead><tr><th scope="col">Etapa</th><th scope="col">Cantidad</th><th scope="col">Comparación</th></tr></thead>
+          <tbody>
+            @for (item of dashboard.byStage; track item.stage) {
+              <tr>
+                <th scope="row">{{ stageLabel(item.stage) }}</th>
+                <td>{{ item.count }}</td>
+                <td><div class="bar-track" aria-hidden="true"><span [style.width.%]="barWidth(item.count)"></span></div></td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </section>
+    }
+  </main>
+</div>

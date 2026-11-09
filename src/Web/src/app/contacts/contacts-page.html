@@ -1,0 +1,124 @@
+<div class="page-shell">
+  <header class="topbar">
+    <a routerLink="/" class="brand">SmartSales</a>
+    <a routerLink="/">Inicio</a>
+  </header>
+
+  <main>
+    <div class="heading">
+      <div>
+        <p class="eyebrow">CRM</p>
+        <h1>Contactos</h1>
+        <p>Prospectos y clientes en una ficha compartida.</p>
+      </div>
+      <button mat-flat-button type="button" (click)="create()">Nuevo contacto</button>
+    </div>
+
+    <div class="workspace">
+      <section class="list-panel" aria-labelledby="list-title">
+        <h2 id="list-title">Buscar contactos</h2>
+        <mat-form-field appearance="outline">
+          <mat-label>Nombre, correo o teléfono</mat-label>
+          <input matInput [formControl]="query" autocomplete="off" />
+        </mat-form-field>
+        @if (loading()) { <p role="status">Cargando contactos…</p> }
+        @if (listError()) {
+          <p class="error" role="alert">{{ listError() }}</p>
+          <button mat-stroked-button type="button" (click)="reload()">Reintentar</button>
+        }
+        @if (!loading() && !listError() && page()?.items?.length === 0) {
+          <p>No hay contactos para esta búsqueda.</p>
+        }
+        <ul class="contact-list">
+          @for (contact of page()?.items ?? []; track contact.id) {
+            <li>
+              <button type="button" (click)="open(contact.id)" [class.selected]="selected()?.id === contact.id">
+                <strong>{{ contact.name }}</strong>
+                <small>{{ typeLabel(contact.type) }} · {{ contact.email || contact.phone }}</small>
+              </button>
+            </li>
+          }
+        </ul>
+        @if (page() && page()!.totalCount > 0) {
+          <div class="pagination">
+            <span>Página {{ pageNumber() }} · {{ page()!.totalCount }} contactos</span>
+            <div>
+              <button mat-stroked-button type="button" (click)="previous()" [disabled]="pageNumber() === 1">Anterior</button>
+              <button mat-stroked-button type="button" (click)="next()"
+                [disabled]="pageNumber() * 20 >= page()!.totalCount">Siguiente</button>
+            </div>
+          </div>
+        }
+      </section>
+
+      <section class="detail-panel" aria-labelledby="detail-title">
+        @if (showForm()) {
+          <h2 id="detail-title">{{ selected() ? 'Editar contacto' : 'Nuevo contacto' }}</h2>
+          <form [formGroup]="form" (ngSubmit)="save()" novalidate>
+            <mat-form-field appearance="outline">
+              <mat-label>Nombre</mat-label>
+              <input matInput formControlName="name" autocomplete="name" />
+              @if (form.controls.name.touched && form.controls.name.invalid) {
+                <mat-error>Escribe un nombre de máximo 160 caracteres.</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Tipo</mat-label>
+              <mat-select formControlName="type">
+                <mat-option value="Prospect">Prospecto</mat-option>
+                <mat-option value="Customer">Cliente</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Correo electrónico</mat-label>
+              <input matInput formControlName="email" type="email" autocomplete="email" />
+              @if (form.controls.email.touched && form.controls.email.invalid) {
+                <mat-error>Escribe un correo válido.</mat-error>
+              }
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Teléfono</mat-label>
+              <input matInput formControlName="phone" type="tel" autocomplete="tel" />
+            </mat-form-field>
+            <mat-form-field appearance="outline">
+              <mat-label>Origen</mat-label>
+              <mat-select formControlName="source">
+                @for (source of sources; track source.value) {
+                  <mat-option [value]="source.value">{{ source.label }}</mat-option>
+                }
+              </mat-select>
+            </mat-form-field>
+            <p class="hint">Indica al menos correo o teléfono.</p>
+            @if (formError()) { <p class="error" role="alert">{{ formError() }}</p> }
+            @if (duplicateIds().length > 0) {
+              <div class="duplicate-warning" role="group" aria-label="Posibles duplicados">
+                <strong>{{ duplicateIds().length }} coincidencia(s) encontrada(s)</strong>
+                <p>Busca el correo o teléfono en la lista para revisar la ficha antes de continuar.</p>
+                <button mat-stroked-button type="button" (click)="query.setValue(form.controls.email.value || form.controls.phone.value)">Buscar coincidencias</button>
+                <button mat-flat-button type="button" (click)="save(true)" [disabled]="saving()">Confirmar y guardar</button>
+              </div>
+            }
+            <div class="actions">
+              <button mat-stroked-button type="button" (click)="cancel()" [disabled]="saving()">Cancelar</button>
+              <button mat-flat-button type="submit" [disabled]="saving()">{{ saving() ? 'Guardando…' : 'Guardar' }}</button>
+            </div>
+          </form>
+        } @else if (selected()) {
+          <h2 id="detail-title">{{ selected()!.name }}</h2>
+          <p class="badge">{{ typeLabel(selected()!.type) }}</p>
+          <dl>
+            <div><dt>Correo</dt><dd>{{ selected()!.email || 'No registrado' }}</dd></div>
+            <div><dt>Teléfono</dt><dd>{{ selected()!.phone || 'No registrado' }}</dd></div>
+            <div><dt>Origen</dt><dd>{{ selected()!.source }}</dd></div>
+          </dl>
+          <button mat-stroked-button type="button" (click)="edit()">Editar ficha</button>
+          <app-interaction-panel [contactId]="selected()!.id" />
+        } @else {
+          <h2 id="detail-title">Ficha de contacto</h2>
+          <p>Selecciona un contacto o crea uno nuevo.</p>
+        }
+        @if (detailError()) { <p class="error" role="alert">{{ detailError() }}</p> }
+      </section>
+    </div>
+  </main>
+</div>

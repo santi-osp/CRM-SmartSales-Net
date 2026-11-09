@@ -1,0 +1,12 @@
+{
+  "/api/contacts": {
+    "target": "https://localhost:7101",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/api/sales": {
+    "target": "https://localhost:7102",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

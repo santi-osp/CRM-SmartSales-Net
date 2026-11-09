@@ -1,0 +1,36 @@
+.page-shell { min-height: 100dvh; background: var(--background); }
+.topbar { display: flex; justify-content: space-between; padding: 16px clamp(20px, 5vw, 64px); background: var(--surface); border-bottom: 1px solid var(--border); }
+.brand { color: var(--text); font-weight: 700; text-decoration: none; }
+nav { display: flex; gap: 20px; }
+main { max-width: 1440px; margin: auto; padding: 32px clamp(20px, 5vw, 64px); }
+.heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 24px; }
+.heading h1 { margin: 4px 0 0; }
+.heading p:last-child { margin: 4px 0 0; color: var(--muted); }
+.eyebrow { color: var(--primary); text-transform: uppercase; font-weight: 700; letter-spacing: .08em; }
+.filters { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 24px; }
+.filters mat-form-field { min-width: 180px; }
+.workspace { display: grid; grid-template-columns: minmax(280px, 1fr) minmax(300px, 1.2fr); gap: 24px; }
+.list-panel, .detail-panel { min-width: 0; padding: 24px; border: 1px solid var(--border); border-radius: 12px; background: var(--surface); }
+h2 { margin-top: 0; font-size: 1.25rem; }
+mat-form-field { width: 100%; }
+.opportunity-list { list-style: none; padding: 0; margin: 0; }
+.opportunity-list li { border-top: 1px solid var(--border); }
+.opportunity-list button { width: 100%; min-height: 76px; border: 0; background: transparent; text-align: left; padding: 12px; cursor: pointer; }
+.opportunity-list button:hover, .opportunity-list button.selected { background: #eef3ff; }
+.opportunity-list strong, .opportunity-list span, .opportunity-list small { display: block; }
+.opportunity-list span, .opportunity-list small { color: var(--muted); }
+.pagination { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+.pagination div, .actions { display: flex; gap: 8px; }
+form { display: grid; gap: 8px; }
+.error { color: var(--error); }
+.actions { justify-content: flex-end; margin-top: 12px; }
+.badge { display: inline-block; padding: 4px 10px; border-radius: 20px; background: #e8efff; color: var(--primary); }
+dl div { margin: 16px 0; }
+dt { color: var(--muted); font-size: .875rem; }
+dd { margin: 4px 0 0; overflow-wrap: anywhere; }
+.reassign { margin-top: 24px; padding: 16px; background: var(--background); border-radius: 8px; }
+.audit-list { padding-left: 20px; }
+@media (max-width: 800px) {
+  .workspace { grid-template-columns: 1fr; }
+  .heading { align-items: flex-start; }
+}

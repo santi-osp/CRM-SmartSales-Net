@@ -1,0 +1,20 @@
+@import '@angular/material/prebuilt-themes/azure-blue.css';
+
+:root {
+  color-scheme: light;
+  font-family: system-ui, 'Segoe UI', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  --background: #f5f7fb;
+  --surface: #fff;
+  --text: #182230;
+  --muted: #475467;
+  --primary: #1d4ed8;
+  --border: #d0d5dd;
+  --error: #b42318;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--text); }
+button, input { font: inherit; }
+:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }

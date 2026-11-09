@@ -1,0 +1,97 @@
+<div class="page-shell">
+  <header class="topbar">
+    <a routerLink="/" class="brand">SmartSales</a>
+    <nav aria-label="Principal">
+      <a routerLink="/opportunities">Oportunidades</a>
+      <a routerLink="/contacts">Contactos</a>
+      <a routerLink="/">Inicio</a>
+    </nav>
+  </header>
+  <main>
+    <div class="heading">
+      <div>
+        <p class="eyebrow">Ventas</p>
+        <h1>Tablero comercial</h1>
+        <p>Mueve oportunidades entre etapas o ciérralas como ganadas o perdidas.</p>
+      </div>
+      <a mat-flat-button routerLink="/opportunities">Nueva oportunidad</a>
+    </div>
+
+    <section class="filters" aria-label="Filtros del tablero">
+      <mat-form-field appearance="outline">
+        <mat-label>Responsable</mat-label>
+        <mat-select [formControl]="ownerFilter">
+          <mat-option value="">Todos</mat-option>
+          @for (user of users(); track user.id) {
+            <mat-option [value]="user.id">{{ user.displayName }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Prioridad</mat-label>
+        <mat-select [formControl]="priorityFilter">
+          <mat-option value="">Todas</mat-option>
+          <mat-option value="High">Alta</mat-option>
+          <mat-option value="Medium">Media</mat-option>
+          <mat-option value="Low">Baja</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-flat-button type="button" (click)="applyFilters()">Filtrar</button>
+      <button mat-stroked-button type="button" (click)="clearFilters()">Limpiar</button>
+      <button mat-stroked-button type="button" (click)="refreshAll()">Actualizar</button>
+    </section>
+    @if (error()) { <p class="error" role="alert">{{ error() }}</p> }
+    <p class="board-hint">Desliza el tablero hacia los lados en pantallas pequeñas. El menú Acciones permite mover con teclado.</p>
+
+    <div class="board" cdkDropListGroup aria-label="Etapas activas">
+      @for (stage of stages; track stage.value) {
+        <section class="column" [attr.aria-label]="stage.label">
+          <header class="column-heading">
+            <h2>{{ stage.label }}</h2>
+            <span>{{ columns()[stage.value].total }}</span>
+          </header>
+          <div class="drop-zone" cdkDropList [cdkDropListData]="stage.value"
+            (cdkDropListDropped)="drop($event)">
+            @for (item of columns()[stage.value].items; track item.id) {
+              <article class="card" cdkDrag [cdkDragData]="item" [cdkDragDisabled]="!!savingId()">
+                <div class="card-head">
+                  <h3>{{ item.title }}</h3>
+                  <button mat-button type="button" [matMenuTriggerFor]="actions"
+                    [disabled]="!!savingId()" [attr.aria-label]="'Acciones de ' + item.title">Acciones</button>
+                </div>
+                <p>{{ contactLabel(item.contactId) }}</p>
+                <p class="amount">{{ money(item.estimatedAmount) }}</p>
+                <div class="meta">
+                  <span>{{ priorityLabel(item.priority) }}</span>
+                  <span>{{ ownerLabel(item.ownerUserId) }}</span>
+                </div>
+                <mat-menu #actions="matMenu">
+                  @for (target of stages; track target.value) {
+                    @if (target.value !== item.stage) {
+                      <button mat-menu-item type="button" (click)="move(item, target.value)">
+                        Mover a {{ target.label }}
+                      </button>
+                    }
+                  }
+                  <button mat-menu-item type="button" (click)="beginClose(item)">Cerrar oportunidad</button>
+                </mat-menu>
+              </article>
+            }
+            @if (columns()[stage.value].loading) { <p role="status">Cargando…</p> }
+            @if (columns()[stage.value].error) {
+              <p class="error" role="alert">No se cargó esta etapa.</p>
+              <button mat-stroked-button type="button" (click)="load(stage.value, true)">Reintentar</button>
+            }
+            @if (!columns()[stage.value].loading && !columns()[stage.value].error && columns()[stage.value].total === 0) {
+              <p class="empty">Sin oportunidades en esta etapa.</p>
+            }
+          </div>
+          @if (columns()[stage.value].items.length < columns()[stage.value].total) {
+            <button mat-stroked-button type="button" class="more"
+              (click)="load(stage.value)" [disabled]="columns()[stage.value].loading">Mostrar más</button>
+          }
+        </section>
+      }
+    </div>
+  </main>
+</div>

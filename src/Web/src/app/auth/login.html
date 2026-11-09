@@ -1,0 +1,30 @@
+<main class="login-page">
+  <section class="login-card" aria-labelledby="login-title">
+    <p class="eyebrow">SmartSales</p>
+    <h1 id="login-title">Ingresa a tu CRM</h1>
+    <p class="intro">Organiza tus contactos y oportunidades en un solo lugar.</p>
+
+    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+      <mat-form-field appearance="outline">
+        <mat-label>Correo electrónico</mat-label>
+        <input matInput formControlName="email" type="email" autocomplete="username" />
+        @if (form.controls.email.touched && form.controls.email.invalid) {
+          <mat-error>Escribe un correo válido.</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Contraseña</mat-label>
+        <input matInput formControlName="password" type="password" autocomplete="current-password" />
+        @if (form.controls.password.touched && form.controls.password.invalid) {
+          <mat-error>Escribe tu contraseña.</mat-error>
+        }
+      </mat-form-field>
+      @if (error()) {
+        <p class="error" role="alert">{{ error() }}</p>
+      }
+      <button mat-flat-button type="submit" [disabled]="busy()">
+        {{ busy() ? 'Ingresando…' : 'Ingresar' }}
+      </button>
+    </form>
+  </section>
+</main>

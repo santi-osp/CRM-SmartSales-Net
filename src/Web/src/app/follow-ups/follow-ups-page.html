@@ -1,0 +1,112 @@
+<div class="page-shell">
+  <header class="topbar">
+    <a routerLink="/" class="brand">SmartSales</a>
+    <nav aria-label="Principal"><a routerLink="/pipeline">Tablero</a><a routerLink="/opportunities">Oportunidades</a><a routerLink="/contacts">Contactos</a><a routerLink="/">Inicio</a></nav>
+  </header>
+  <main>
+    <div class="heading">
+      <p class="eyebrow">Actividad</p>
+      <h1>Agenda de seguimientos</h1>
+      <p>Los horarios se muestran en Bogotá. Programa el próximo contacto y marca lo realizado.</p>
+    </div>
+    <div class="workspace">
+      <section class="agenda-panel" aria-labelledby="agenda-title">
+        <div class="section-head">
+          <h2 id="agenda-title">Seguimientos</h2>
+          <button mat-stroked-button type="button" (click)="load()">Actualizar</button>
+        </div>
+        <div class="tabs" role="group" aria-label="Categoría de agenda">
+          @for (choice of buckets; track choice.value) {
+            <button mat-stroked-button type="button" [attr.aria-pressed]="bucket() === choice.value"
+              [class.active]="bucket() === choice.value" (click)="selectBucket(choice.value)">{{ choice.label }}</button>
+          }
+        </div>
+        @if (isAdmin()) {
+          <div class="scope" role="group" aria-label="Alcance">
+            <button mat-button type="button" [attr.aria-pressed]="scope() === 'Mine'" (click)="selectScope('Mine')">Mis seguimientos</button>
+            <button mat-button type="button" [attr.aria-pressed]="scope() === 'All'" (click)="selectScope('All')">Todo el equipo</button>
+          </div>
+        }
+        @if (loading()) { <p role="status">Cargando agenda…</p> }
+        @if (listError()) {
+          <p class="error" role="alert">{{ listError() }}</p>
+          <button mat-stroked-button type="button" (click)="load()">Reintentar</button>
+        }
+        @if (!loading() && !listError() && page()?.items?.length === 0) {
+          <p class="empty">No hay seguimientos en esta categoría.</p>
+        }
+        @if (!loading() && !listError()) {
+          <ul class="follow-list">
+            @for (item of page()?.items ?? []; track item.id) {
+              <li>
+                <div>
+                  <strong>{{ item.subject }}</strong>
+                  <p>{{ contactLabel(item.contactId) }} · {{ dateTime(item.scheduledAt) }}</p>
+                  @if (item.opportunityId) { <small>Oportunidad vinculada</small> }
+                  @if (item.completedAt) { <small>Completado: {{ dateTime(item.completedAt) }}</small> }
+                </div>
+                @if (item.status === 'Pending') {
+                  <button mat-flat-button type="button" (click)="complete(item)"
+                    [disabled]="!!completingId()">{{ completingId() === item.id ? 'Guardando…' : 'Completar' }}</button>
+                }
+              </li>
+            }
+          </ul>
+          @if (page() && page()!.totalCount > 0) {
+            <div class="pagination">
+              <span>Página {{ pageNumber() }} · {{ page()!.totalCount }} registros</span>
+              <div>
+                <button mat-stroked-button type="button" (click)="previous()" [disabled]="pageNumber() === 1">Anterior</button>
+                <button mat-stroked-button type="button" (click)="next()" [disabled]="pageNumber() * 20 >= page()!.totalCount">Siguiente</button>
+              </div>
+            </div>
+          }
+        }
+      </section>
+
+      <section class="form-panel" aria-labelledby="new-title">
+        <h2 id="new-title">Nuevo seguimiento</h2>
+        <form [formGroup]="form" (ngSubmit)="save()" novalidate>
+          <mat-form-field appearance="outline">
+            <mat-label>Buscar contacto</mat-label>
+            <input matInput [formControl]="contactQuery" autocomplete="off" />
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Contacto</mat-label>
+            <mat-select formControlName="contactId">
+              @for (contact of contactChoices(); track contact.id) {
+                <mat-option [value]="contact.id">{{ contact.name }} · {{ contact.email || contact.phone }}</mat-option>
+              }
+            </mat-select>
+            @if (form.controls.contactId.touched && form.controls.contactId.invalid) { <mat-error>Selecciona un contacto.</mat-error> }
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Oportunidad (opcional)</mat-label>
+            <mat-select formControlName="opportunityId" [disabled]="!form.controls.contactId.value">
+              <mat-option value="">Sin oportunidad</mat-option>
+              @for (opportunity of opportunityChoices(); track opportunity.id) {
+                <mat-option [value]="opportunity.id">{{ opportunity.title }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+          @if (opportunityError()) { <p class="error" role="alert">{{ opportunityError() }}</p> }
+          @if (opportunityChoices().length < opportunityTotal()) {
+            <button mat-stroked-button type="button" (click)="moreOpportunities()">Más oportunidades</button>
+          }
+          <mat-form-field appearance="outline">
+            <mat-label>Asunto</mat-label>
+            <input matInput formControlName="subject" maxlength="160" />
+            @if (form.controls.subject.touched && form.controls.subject.invalid) { <mat-error>Escribe un asunto de máximo 160 caracteres.</mat-error> }
+          </mat-form-field>
+          <mat-form-field appearance="outline">
+            <mat-label>Fecha y hora (Bogotá)</mat-label>
+            <input matInput formControlName="scheduledLocal" type="datetime-local" />
+            @if (form.controls.scheduledLocal.touched && form.controls.scheduledLocal.invalid) { <mat-error>Indica fecha y hora.</mat-error> }
+          </mat-form-field>
+          @if (actionError()) { <p class="error" role="alert">{{ actionError() }}</p> }
+          <button mat-flat-button type="submit" [disabled]="saving()">{{ saving() ? 'Guardando…' : 'Programar seguimiento' }}</button>
+        </form>
+      </section>
+    </div>
+  </main>
+</div>

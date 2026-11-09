@@ -1,0 +1,31 @@
+.app-shell { min-height: 100dvh; background: var(--background); }
+header { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 16px clamp(20px, 5vw, 64px); border-bottom: 1px solid var(--border); background: var(--surface); }
+.account { display: flex; align-items: center; gap: 16px; }
+main { max-width: 1440px; margin: auto; padding: 32px clamp(20px, 5vw, 64px); }
+.heading { margin-bottom: 24px; }
+.eyebrow { color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+h1 { margin: 4px 0; }
+.heading p:last-child, .hint { color: var(--muted); }
+.quick-links { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
+.filters { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.filters mat-form-field { min-width: 180px; }
+.hint { margin: -8px 0 24px; font-size: .875rem; }
+.error { color: var(--error); }
+.metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 24px; }
+.metric, .stage-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
+.metric span { display: block; color: var(--muted); }
+.metric strong { display: block; font-size: clamp(1.5rem, 2vw, 2.2rem); margin-top: 12px; overflow-wrap: anywhere; }
+.stage-panel h2 { margin-top: 0; font-size: 1.25rem; }
+table { width: 100%; border-collapse: collapse; }
+th, td { text-align: left; padding: 10px 8px; border-top: 1px solid var(--border); }
+td:nth-child(2) { width: 100px; font-weight: 700; }
+td:last-child { width: 40%; }
+.bar-track { width: 100%; height: 12px; border-radius: 10px; background: #e8efff; overflow: hidden; }
+.bar-track span { display: block; height: 100%; border-radius: 10px; background: var(--primary); }
+@media (max-width: 900px) { .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) {
+  header { align-items: flex-start; }
+  .account { flex-direction: column; align-items: flex-end; }
+  .metrics { grid-template-columns: 1fr; }
+  td:last-child { width: 30%; }
+}
