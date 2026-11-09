@@ -19,7 +19,7 @@ Fecha de corte: **2026-11-08, America/Bogota**. [ARCH-001 v1](approval.md) y el 
 | HU11–HU13 | New | AWS y entrega pendientes; HU13 se centrará en demostración funcional/técnica |
 | HU14–HU15 | Removed | Fuera del MVP |
 
-No cerrar HU01–HU04 en Boards hasta comprobar cada criterio con el recorrido integrado y registrar el resultado. No hay commit ni push por instrucción de [AGENTS.md](../AGENTS.md).
+No cerrar HU01–HU04 en Boards hasta comprobar cada criterio con el recorrido integrado y registrar el resultado. Los commits iniciales segmentados y el push a origin/master fueron autorizados por el usuario y completados el 2026-11-08.
 
 ## Implementado
 
