@@ -1,0 +1,2 @@
+CREATE DATABASE contacts_db;
+CREATE DATABASE sales_db;

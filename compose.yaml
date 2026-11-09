@@ -1,0 +1,71 @@
+name: smartsales
+services:
+  postgres:
+    image: postgres:17@sha256:ff87138949ad9a46f32ff23bd6852b52ce024a13dffe9b4087be98292cdd3b4f
+    environment:
+      POSTGRES_PASSWORD: ${LOCAL_DB_PASSWORD:?Define LOCAL_DB_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./deploy/local/init-dbs.sql:/docker-entrypoint-initdb.d/init-dbs.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+
+  contacts:
+    build:
+      context: .
+      dockerfile: src/Contacts/SmartSales.Contacts.Api/Dockerfile
+    image: smartsales-contacts:local
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Contacts: Host=postgres;Port=5432;Database=contacts_db;Username=postgres;Password=${LOCAL_DB_PASSWORD:?Define LOCAL_DB_PASSWORD};GSS Encryption Mode=Disable
+      Jwt__PublicKeyPem: ${LOCAL_JWT_PUBLIC_PEM:?Define LOCAL_JWT_PUBLIC_PEM}
+      Jwt__PrivateKeyPem: ${LOCAL_JWT_PRIVATE_PEM:?Define LOCAL_JWT_PRIVATE_PEM}
+      Jwt__KeyId: local-compose
+      Demo__Enabled: "true"
+      Logging__LogLevel__Microsoft.EntityFrameworkCore: Warning
+      Seed__Administrator__Email: admin@demo.local
+      Seed__Administrator__DisplayName: Administradora Demo
+      Seed__Administrator__Password: ${LOCAL_ADMIN_PASSWORD:?Define LOCAL_ADMIN_PASSWORD}
+      Seed__Commercial__Email: comercial@demo.local
+      Seed__Commercial__DisplayName: Comercial Demo
+      Seed__Commercial__Password: ${LOCAL_COMMERCIAL_PASSWORD:?Define LOCAL_COMMERCIAL_PASSWORD}
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  sales:
+    build:
+      context: .
+      dockerfile: src/Sales/SmartSales.Sales.Api/Dockerfile
+    image: smartsales-sales:local
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings__Sales: Host=postgres;Port=5432;Database=sales_db;Username=postgres;Password=${LOCAL_DB_PASSWORD:?Define LOCAL_DB_PASSWORD};GSS Encryption Mode=Disable
+      Jwt__PublicKeyPem: ${LOCAL_JWT_PUBLIC_PEM:?Define LOCAL_JWT_PUBLIC_PEM}
+      Jwt__KeyId: local-compose
+      ContactsBaseUrl: http://contacts:8080
+      Demo__Enabled: "true"
+      Logging__LogLevel__Microsoft.EntityFrameworkCore: Warning
+    depends_on:
+      postgres:
+        condition: service_healthy
+      contacts:
+        condition: service_started
+
+  web:
+    build:
+      context: src/Web
+    image: smartsales-web:local
+    ports:
+      - "127.0.0.1:8088:8080"
+    volumes:
+      - ./deploy/local/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - contacts
+      - sales
+
+volumes:
+  postgres-data:
