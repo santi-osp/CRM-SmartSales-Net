@@ -1,15 +1,9 @@
 <div class="page-shell">
-  <header class="topbar">
-    <a routerLink="/" class="brand">SmartSales</a>
-    <a routerLink="/">Inicio</a>
-  </header>
-
-  <main>
     <div class="heading">
       <div>
-        <p class="eyebrow">CRM</p>
+        <span class="section-tag">Directorio comercial</span>
         <h1>Contactos</h1>
-        <p>Prospectos y clientes en una ficha compartida.</p>
+        <p>Prospectos y clientes en una ficha compartida con historial de interacciones.</p>
       </div>
       <button mat-flat-button type="button" (click)="create()">Nuevo contacto</button>
     </div>
@@ -23,25 +17,33 @@
         </mat-form-field>
         @if (loading()) { <p role="status">Cargando contactos…</p> }
         @if (listError()) {
-          <p class="error" role="alert">{{ listError() }}</p>
-          <button mat-stroked-button type="button" (click)="reload()">Reintentar</button>
+          <div class="error-panel" role="alert">
+            <p class="error">{{ listError() }}</p>
+            <button mat-stroked-button type="button" (click)="reload()">Reintentar</button>
+          </div>
         }
         @if (!loading() && !listError() && page()?.items?.length === 0) {
-          <p>No hay contactos para esta búsqueda.</p>
+          <div class="empty-state">
+            <p>No hay contactos para esta búsqueda.</p>
+            <button mat-stroked-button type="button" (click)="create()">Crear contacto nuevo</button>
+          </div>
         }
         <ul class="contact-list">
           @for (contact of page()?.items ?? []; track contact.id) {
             <li>
               <button type="button" (click)="open(contact.id)" [class.selected]="selected()?.id === contact.id">
-                <strong>{{ contact.name }}</strong>
-                <small>{{ typeLabel(contact.type) }} · {{ contact.email || contact.phone }}</small>
+                <span class="contact-avatar" aria-hidden="true">{{ contact.name.slice(0, 1).toUpperCase() }}</span>
+                <span class="contact-summary">
+                  <strong>{{ contact.name }}</strong>
+                  <small>{{ typeLabel(contact.type) }} · {{ contact.email || contact.phone }}</small>
+                </span>
               </button>
             </li>
           }
         </ul>
         @if (page() && page()!.totalCount > 0) {
           <div class="pagination">
-            <span>Página {{ pageNumber() }} · {{ page()!.totalCount }} contactos</span>
+            <span class="tabular-nums">Página {{ pageNumber() }} · {{ page()!.totalCount }} contactos</span>
             <div>
               <button mat-stroked-button type="button" (click)="previous()" [disabled]="pageNumber() === 1">Anterior</button>
               <button mat-stroked-button type="button" (click)="next()"
@@ -115,10 +117,10 @@
           <app-interaction-panel [contactId]="selected()!.id" />
         } @else {
           <h2 id="detail-title">Ficha de contacto</h2>
-          <p>Selecciona un contacto o crea uno nuevo.</p>
+          <p>Selecciona un contacto de la lista o crea uno nuevo para consultar su actividad.</p>
+          <button mat-stroked-button type="button" (click)="create()">Crear contacto</button>
         }
         @if (detailError()) { <p class="error" role="alert">{{ detailError() }}</p> }
       </section>
     </div>
-  </main>
 </div>

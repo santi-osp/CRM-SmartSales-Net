@@ -2,19 +2,177 @@
 
 :root {
   color-scheme: light;
-  font-family: system-ui, 'Segoe UI', sans-serif;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   font-size: 16px;
   line-height: 1.5;
-  --background: #f5f7fb;
-  --surface: #fff;
-  --text: #182230;
-  --muted: #475467;
-  --primary: #1d4ed8;
-  --border: #d0d5dd;
-  --error: #b42318;
+
+  /* Paleta principal SmartSales SaaS */
+  --sidebar-bg: #12203D;
+  --sidebar-text: #E0E7F5;
+  --sidebar-text-muted: #8E9EBE;
+  --sidebar-hover: #1D315C;
+  --sidebar-active: #315BFF;
+
+  --background: #F4F7FC;
+  --surface: #FFFFFF;
+  --surface-subtle: #F8FAFE;
+  --border: #DFE7F2;
+  --border-light: #EEF3FA;
+
+  --text: #1F2A44;
+  --muted: #5A6B87;
+
+  --primary: #315BFF;
+  --primary-hover: #2347DB;
+  --primary-subtle: #EDF1FF;
+
+  /* Estados y etapas comerciales */
+  --stage-new: #315BFF;
+  --stage-contacted: #D38A12;
+  --stage-proposal: #7957D9;
+  --stage-won: #0B9E87;
+  --stage-lost: #D44F62;
+
+  --success: #0B9E87;
+  --success-subtle: #E6F7F4;
+  --warning: #D38A12;
+  --warning-subtle: #FEF6E7;
+  --error: #D44F62;
+  --error-subtle: #FDF2F4;
 }
 
 * { box-sizing: border-box; }
-body { margin: 0; color: var(--text); }
-button, input { font: inherit; }
-:focus-visible { outline: 3px solid var(--primary); outline-offset: 3px; }
+html { overflow-x: hidden; }
+body {
+  margin: 0;
+  color: var(--text);
+  background: var(--background);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+button, input, select, textarea { font: inherit; }
+
+h1, h2, h3, h4 {
+  color: var(--text);
+  text-wrap: balance;
+  margin-top: 0;
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 16px;
+  background: var(--primary);
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+  text-decoration: none;
+  z-index: 10000;
+  transition: top 0.2s ease;
+
+  &:focus {
+    top: 16px;
+    outline: 3px solid #fff;
+    outline-offset: 2px;
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+:focus-visible {
+  outline: 3px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* FullCalendar styling overrides para consistencia con SmartSales */
+.fc {
+  font-family: inherit;
+  --fc-border-color: var(--border);
+  --fc-page-bg-color: transparent;
+  --fc-today-bg-color: #EDF1FF;
+  --fc-event-border-color: transparent;
+
+  .fc-button-primary {
+    background-color: var(--surface) !important;
+    border-color: var(--border) !important;
+    color: var(--text) !important;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 6px 14px;
+    border-radius: 8px;
+    box-shadow: none;
+
+    &:hover {
+      background-color: var(--border-light) !important;
+      color: var(--primary) !important;
+    }
+
+    &.fc-button-active {
+      background-color: var(--primary) !important;
+      border-color: var(--primary) !important;
+      color: #fff !important;
+    }
+  }
+
+  .fc-toolbar-title {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+    text-transform: capitalize;
+  }
+
+  .fc-col-header-cell-cushion {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    padding: 8px 0;
+  }
+
+  .fc-daygrid-day-number {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text);
+    padding: 6px 8px;
+  }
+
+  .fc-event {
+    cursor: pointer;
+    border-radius: 6px;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin: 1px 2px;
+    transition: transform 0.1s ease;
+
+    &:hover {
+      transform: scale(1.02);
+      filter: brightness(0.95);
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

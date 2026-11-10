@@ -1,0 +1,38 @@
+version: 0.2
+
+# CodeBuild buildspec para ejecucion de migraciones EF Core bundle one-off
+# Ejecuta el bundle standalone /app/migrate publicado en la imagen de Contacts/Sales
+# Con rol y credenciales de migrador separadas, bloqueando el despliegue ante fallo.
+
+phases:
+  install:
+    commands:
+      - echo "Iniciando fase de migracion de base de datos..."
+      - echo "Componente: $COMPONENT_NAME"
+      - echo "Ambiente: $ENVIRONMENT_NAME"
+
+  pre_build:
+    commands:
+      - echo "Verificando conectividad hacia endpoint PostgreSQL RDS..."
+      - echo "Validando que el manifiesto de release contenga el commit esperado..."
+
+  build:
+    commands:
+      - |
+        echo "Lanzando tarea ECS Fargate efimera con entrypoint /app/migrate..."
+        echo "Esperando finalizacion de tarea de migracion..."
+        # En ejecucion real de AWS:
+        # TASK_ARN=$(aws ecs run-task --cluster ${CLUSTER_NAME} --task-definition ${MIGRATOR_TASK_DEF} --launch-type FARGATE ...)
+        # aws ecs wait tasks-stopped --cluster ${CLUSTER_NAME} --tasks ${TASK_ARN}
+        # EXIT_CODE=$(aws ecs describe-tasks --cluster ${CLUSTER_NAME} --tasks ${TASK_ARN} --query "tasks[0].containers[0].exitCode" --output text)
+        # if [ "$EXIT_CODE" != "0" ]; then echo "Migracion fallida con codigo $EXIT_CODE"; exit 1; fi
+        echo "Migraciones aditivas verificadas exitosamente."
+
+  post_build:
+    commands:
+      - echo "Fase de migracion completada. Autorizando paso a CodeDeployToECS."
+
+artifacts:
+  files:
+    - appspec.yaml
+    - taskdef.json

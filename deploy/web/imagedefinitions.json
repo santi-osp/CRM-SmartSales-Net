@@ -1,0 +1,6 @@
+[
+  {
+    "name": "web-app",
+    "imageUri": "<IMAGE_URI_WITH_DIGEST>"
+  }
+]

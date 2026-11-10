@@ -85,3 +85,47 @@ ADR nuevo: contexto y HU afectadas → propuesta → alternativas → impacto en
 costo → pruebas/migración → decisión del usuario y fecha. Parches compatibles y refactor interno no
 cambian ADR; registrar lock y resultados. Un criterio de Azure cambiado exige reconciliación explícita
 de requirements, pruebas, roadmap y snapshot; nunca usar snapshot viejo para descartar un requisito nuevo.
+
+### ADR-12 propuesto — resolución de compatibilidad entre CodeDeploy ECS Blue/Green y ALB compartido con reglas por path
+
+**Estado:** PROPUESTA (pendiente de aprobación del usuario, registrado el 2026-11-09). Afecta HU11/HU12, ADR-07 y ADR-08.
+
+**Contexto del problema:**
+ADR-07 aprobó despliegue Blue/Green con AWS CodeDeploy para Contacts y Sales, y ADR-08 aprobó un único Application Load Balancer (ALB) con enrutamiento basado en rutas (`/api/contacts/*`, `/api/sales/*`) y Web en el fallback default.
+Al investigar la especificación oficial de la API de AWS CodeDeploy (`TrafficRoute.ListenerArns` y `TargetGroupPairInfo`), se evidencia que CodeDeploy para ECS conmuta el tráfico modificando la configuración del **Listener completo** (ARN de Listener), no una regla individual basada en ruta (`ListenerRule`).
+Si dos Deployment Groups independientes (Contacts y Sales) administran el mismo Listener HTTPS 443 del ALB:
+1. Habrá colisión inevitable entre despliegues: el primer servicio que conmute el listener sobreescribirá la acción por defecto del listener, rompiendo la regla de enrutamiento por path del otro servicio y del frontend Web.
+2. Un test listener secundario tampoco soluciona la titularidad de las reglas del listener productivo principal.
+
+**Alternativas analizadas:**
+1. **Alternativa A (Recomendada — Controlador ECS Rolling / Blue-Green nativo con Deployment Circuit Breaker):**
+   Usar el controlador de despliegue nativo de ECS (`deploymentController: ECS`) con `deploymentCircuitBreaker` (con rollback automático activado) y alarmas de CloudWatch. Conserva estrictamente el **ALB único** (ADR-08), el enrutamiento por rutas relativas del frontend, sin costos adicionales de balanceadores, y garantiza rollback automático si una nueva tarea no pasa el health check. Requiere ajustar ADR-07 para permitir el controlador nativo de ECS en lugar de CodeDeploy.
+2. **Alternativa B (CodeDeploy tradicional con Listeners y Puertos Dedicados):**
+   Conservar CodeDeploy tradicional asignando listeners en puertos separados del mismo ALB (ej. 443 para Web, 8443 para Contacts, 9443 para Sales). Requiere modificar la configuración de red y certificados, e impide URLs relativas homogéneas en el frontend SPA.
+3. **Alternativa C (Dos o Tres ALBs independientes):**
+   Crear un ALB por servicio o un ALB para APIs y otro para Web. Aumenta significativamente el costo de infraestructura del laboratorio AWS Academy (~$22.50 USD/mes por ALB adicional) y contradice ADR-08.
+
+**Propuesta concreta:**
+Mantener la preparación de CloudFormation de red, datos y aplicación (`network.yaml`, `data.yaml`, `application.yaml`) lista con el ALB único y los Target Groups IP correspondientes. Dejar la plantilla de entrega (`delivery.yaml`) y el gate de despliegue en estado `BLOCKED` documentado hasta que el usuario elija entre la Alternativa A (ECS nativo con Circuit Breaker) o la Alternativa B/C (CodeDeploy con separación de listeners/balanceadores). No aplicar ninguna alternativa de forma unilateral.
+
+### ADR-13 — Rediseño visual profesional: incorporación de Chart.js 4.x, FullCalendar Standard 6.1.x y AppShell centralizado
+
+**Estado:** APROBADA (Instrucción expresa del usuario en GOAL 01.3, registrado el 2026-11-09). Modifica parcialmente ADR-10. Afecta HU05, HU07, HU08 y `src/Web`.
+
+**Contexto:**
+ADR-10 aprobó originalmente componentes nativos Angular Material/CDK con gráficos simples SVG/CSS y una agenda en formato lista por categorías. La evaluación de uso del CRM demostró que el aspecto visual resultaba plano, carente de jerarquía SaaS profesional, y la ausencia de una vista de calendario impedía una gestión temporal adecuada de los 120 seguimientos comerciales.
+
+**Decisión:**
+1. **Librerías gráficas y calendario:**
+   - Incorporar **Chart.js 4.x (licencia MIT)** para la renderización de gráficos interactivos (doughnut de distribución por etapas y barras de volumen de oportunidades) en el Dashboard, con ciclo de vida que destruye explícitamente las instancias de canvas en `ngOnDestroy` para evitar fugas de memoria.
+   - Incorporar **FullCalendar Standard v6.1.x (licencia MIT)** y su adaptador oficial `@fullcalendar/angular` (paquetes `@fullcalendar/core`, `@fullcalendar/daygrid`, `@fullcalendar/timegrid`, `@fullcalendar/list`, `@fullcalendar/interaction`) para proveer vistas mensuales, semanales, diarias y de lista en la Agenda. Se prohíbe explícitamente FullCalendar Scheduler/Premium o dependencias comerciales.
+   - Conservar **Angular Material/CDK 22** y **Luxon 3** para zona horaria `America/Bogota`.
+2. **Layout y Navegación:**
+   - Reemplazar las cabeceras duplicadas en cada componente por un componente layout global `AppShell` autenticado con barra lateral colapsable, navegación superior contextual y un único `<router-outlet>` hijo. La ruta `/login` permanece externa al AppShell.
+3. **Endpoint de Calendario en Sales API:**
+   - Incorporar un endpoint de solo lectura `GET /api/sales/v1/follow-ups/calendar?from=...&to=...&scope=...` para consultar seguimientos en rangos de fechas de hasta 365 días (máx. 500 registros) sin truncamiento artificial, manteniendo la autorización y las reglas de negocio vigentes.
+
+**Consecuencias:**
+- El tamaño del bundle frontend se mantiene acotado bajo los budgets definidos en `angular.json` mediante carga diferida (lazy loading).
+- No se introducen microfrontends, frameworks de CSS externos (Tailwind/Bootstrap) ni librerías de estado global (NgRx).
+- Se preserva el 100% de la funcionalidad preexistente, incluyendo la vista de lista de agenda mediante un selector de vista (toggle).

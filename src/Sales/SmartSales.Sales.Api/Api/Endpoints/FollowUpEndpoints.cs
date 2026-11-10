@@ -14,6 +14,7 @@ public static class FollowUpEndpoints
                 return await next(context);
             });
         group.MapGet("/", ListAsync);
+        group.MapGet("/calendar", CalendarAsync);
         group.MapGet("/{id:guid}", GetAsync);
         group.MapPost("/", CreateAsync);
         group.MapPost("/{id:guid}/complete", CompleteAsync);
@@ -28,6 +29,18 @@ public static class FollowUpEndpoints
         {
             return Results.Ok(await service.ListAsync(bucket, scope, page ?? 1, pageSize ?? 20,
                 actor, cancellationToken));
+        }
+        catch (FollowUpRequestException error) { return Problem(error); }
+    }
+
+    private static async Task<IResult> CalendarAsync(string? from, string? to, string? scope,
+        HttpContext context, FollowUpService service, CancellationToken cancellationToken)
+    {
+        var actor = ActorContext.From(context);
+        if (actor is null) return Results.Unauthorized();
+        try
+        {
+            return Results.Ok(await service.GetCalendarAsync(from, to, scope, actor, cancellationToken));
         }
         catch (FollowUpRequestException error) { return Problem(error); }
     }

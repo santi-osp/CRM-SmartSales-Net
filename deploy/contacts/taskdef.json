@@ -1,0 +1,75 @@
+{
+  "family": "smartsales-contacts",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "cpu": "256",
+  "memory": "512",
+  "executionRoleArn": "<EXECUTION_ROLE_ARN>",
+  "taskRoleArn": "<TASK_ROLE_ARN>",
+  "containerDefinitions": [
+    {
+      "name": "contacts-api",
+      "image": "<IMAGE_URI>",
+      "essential": true,
+      "portMappings": [
+        {
+          "containerPort": 8080,
+          "hostPort": 8080,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "ASPNETCORE_ENVIRONMENT",
+          "value": "Production"
+        },
+        {
+          "name": "ASPNETCORE_URLS",
+          "value": "http://+:8080"
+        },
+        {
+          "name": "DOTNET_SYSTEM_GLOBALIZATION_INVARIANT",
+          "value": "false"
+        },
+        {
+          "name": "Jwt__KeyId",
+          "value": "smartsales-prod-key"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "ConnectionStrings__Contacts",
+          "valueFrom": "<SSM_OR_SECRETS_MANAGER_ARN_CONTACTS_DB>"
+        },
+        {
+          "name": "Jwt__PrivateKeyPem",
+          "valueFrom": "<SSM_ARN_JWT_PRIVATE_KEY>"
+        },
+        {
+          "name": "Jwt__PublicKeyPem",
+          "valueFrom": "<SSM_ARN_JWT_PUBLIC_KEY>"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "/ecs/smartsales-contacts",
+          "awslogs-region": "us-east-1",
+          "awslogs-stream-prefix": "contacts"
+        }
+      },
+      "healthCheck": {
+        "command": [
+          "CMD-SHELL",
+          "curl -f http://localhost:8080/api/contacts/health/ready || exit 1"
+        ],
+        "interval": 15,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 15
+      }
+    }
+  ]
+}

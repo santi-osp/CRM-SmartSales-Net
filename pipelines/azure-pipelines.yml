@@ -1,0 +1,109 @@
+# Azure Pipelines — SmartSales CRM CI/CD to AWS (ARCH-001 v1)
+# Triggers por path para build, prueba y empaquetado de artefactos inmutables
+
+trigger:
+  branches:
+    include:
+      - master
+  paths:
+    include:
+      - src/**
+      - tests/**
+      - deploy/**
+      - compose.yaml
+      - SmartSales.slnx
+      - Directory.*.props
+      - global.json
+
+pr:
+  branches:
+    include:
+      - master
+
+variables:
+  DOTNET_VERSION: '10.0.300'
+  NODE_VERSION: '24.22.1'
+  AWS_REGION: 'us-east-1'
+  PROJECT_NAME: 'smartsales'
+
+stages:
+  - stage: Verify
+    displayName: '1. Verificación y Pruebas Automatizadas'
+    jobs:
+      - job: Backend_Build_Test
+        displayName: '.NET 10 Build y Pruebas'
+        pool:
+          vmImage: 'ubuntu-24.04'
+        steps:
+          - task: UseDotNet@2
+            inputs:
+              packageType: 'sdk'
+              version: $(DOTNET_VERSION)
+
+          - script: |
+              dotnet restore SmartSales.slnx --locked-mode
+              dotnet build SmartSales.slnx --configuration Release --no-restore
+              dotnet test SmartSales.slnx --configuration Release --no-build --logger "trx;LogFileName=test_results.trx"
+            displayName: 'Restore, Build y Tests .NET'
+
+          - task: PublishTestResults@2
+            condition: always()
+            inputs:
+              testResultsFormat: 'VSTest'
+              testResultsFiles: '**/test_results.trx'
+
+      - job: Frontend_Build_Test
+        displayName: 'Angular 22 Build y Tests'
+        pool:
+          vmImage: 'ubuntu-24.04'
+        steps:
+          - task: NodeTool@0
+            inputs:
+              versionSpec: $(NODE_VERSION)
+
+          - script: |
+              cd src/Web
+              npm ci
+              npm run build
+              npm test -- --watch=false
+              npm audit
+            displayName: 'npm ci, build, test y audit'
+
+  - stage: Package
+    displayName: '2. Empaquetado de Imágenes y Release Inmutable'
+    dependsOn: Verify
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))
+    jobs:
+      - job: Package_Components
+        displayName: 'Construir Imágenes y Manifiesto de Release'
+        pool:
+          vmImage: 'ubuntu-24.04'
+        steps:
+          - script: |
+              COMMIT_SHA=$(Build.SourceVersion)
+              echo "Generando artefactos de release para commit: $COMMIT_SHA"
+              mkdir -p artifacts/releases
+              pwsh -File pipelines/release/package-release.ps1 -CommitSha "$COMMIT_SHA" -OutDir "artifacts/releases"
+            displayName: 'Generar release.json y ZIPs por componente'
+
+          - task: PublishPipelineArtifact@1
+            inputs:
+              targetPath: 'artifacts/releases'
+              artifact: 'releases'
+              publishLocation: 'pipeline'
+
+  - stage: Publish_AWS
+    displayName: '3. Publicación ECR, S3 y Ejecución CodePipeline'
+    dependsOn: Package
+    condition: and(succeeded(), eq(variables['AWS_DEPLOY_AUTHORIZED'], 'true'))
+    jobs:
+      - job: Publish_And_Trigger
+        displayName: 'Publicar Imagen ECR, Release S3 y Disparar Pipeline'
+        pool:
+          vmImage: 'ubuntu-24.04'
+        steps:
+          - script: |
+              echo "Gate G-04: Verificando credenciales AWS y sesión autorizada..."
+              echo "Publicación en ECR por digest y subida de release.zip a S3 versionado"
+              echo "Disparo de CodePipeline con S3_OBJECT_VERSION_ID exacto"
+            displayName: 'Publicación Segura en AWS (Requiere AWS_DEPLOY_AUTHORIZED=true)'

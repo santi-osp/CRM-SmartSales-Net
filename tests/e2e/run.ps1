@@ -1,4 +1,4 @@
-param([string]$Grep = '')
+param([string]$Grep = '', [ValidateSet('Basic', 'Showcase')][string]$DemoProfile = 'Basic')
 
 $ErrorActionPreference = 'Stop'
 $workspace = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
@@ -95,12 +95,22 @@ try {
     Set-RunEnvironment 'ASPNETCORE_ENVIRONMENT' 'Development'
     Set-RunEnvironment 'Logging__LogLevel__Microsoft.EntityFrameworkCore' 'Warning'
     Set-RunEnvironment 'Demo__Enabled' 'true'
+    Set-RunEnvironment 'Demo__Profile' $DemoProfile
+    Set-RunEnvironment 'E2E_DEMO_PROFILE' $DemoProfile
     Set-RunEnvironment 'Seed__Administrator__Email' 'e2e-admin@demo.example'
     Set-RunEnvironment 'Seed__Administrator__DisplayName' 'Administradora Demo'
     Set-RunEnvironment 'Seed__Administrator__Password' $adminPassword
     Set-RunEnvironment 'Seed__Commercial__Email' 'e2e-commercial@demo.example'
     Set-RunEnvironment 'Seed__Commercial__DisplayName' 'Comercial Demo'
     Set-RunEnvironment 'Seed__Commercial__Password' $commercialPassword
+    if ($DemoProfile -eq 'Showcase') {
+        Set-RunEnvironment 'Seed__Commercial2__Email' 'e2e-comercial2@demo.example'
+        Set-RunEnvironment 'Seed__Commercial2__DisplayName' 'Comercial 2 Demo'
+        Set-RunEnvironment 'Seed__Commercial2__Password' (New-RandomPassword)
+        Set-RunEnvironment 'Seed__Commercial3__Email' 'e2e-comercial3@demo.example'
+        Set-RunEnvironment 'Seed__Commercial3__DisplayName' 'Comercial 3 Demo'
+        Set-RunEnvironment 'Seed__Commercial3__Password' (New-RandomPassword)
+    }
     Set-RunEnvironment 'E2E_ADMIN_EMAIL' 'e2e-admin@demo.example'
     Set-RunEnvironment 'E2E_ADMIN_PASSWORD' $adminPassword
     Set-RunEnvironment 'E2E_COMMERCIAL_EMAIL' 'e2e-commercial@demo.example'
@@ -121,6 +131,19 @@ try {
         if ($LASTEXITCODE -ne 0) { throw 'Falló el seed de contactos.' }
         dotnet src/Sales/SmartSales.Sales.Api/bin/Release/net10.0/SmartSales.Sales.Api.dll --seed-demo
         if ($LASTEXITCODE -ne 0) { throw 'Falló el seed de ventas.' }
+        if ($DemoProfile -eq 'Showcase') {
+            # Referencias de conteos del contenedor desechable, no de la base del propietario.
+            $users = (docker exec $containerId psql -U postgres -d contacts_db -t -A -c 'SELECT count(*) FROM users').Trim()
+            $contacts = (docker exec $containerId psql -U postgres -d contacts_db -t -A -c 'SELECT count(*) FROM contacts').Trim()
+            $opportunities = (docker exec $containerId psql -U postgres -d sales_db -t -A -c 'SELECT count(*) FROM opportunities').Trim()
+            $followUps = (docker exec $containerId psql -U postgres -d sales_db -t -A -c 'SELECT count(*) FROM follow_ups').Trim()
+            $interactions = (docker exec $containerId psql -U postgres -d sales_db -t -A -c 'SELECT count(*) FROM interactions').Trim()
+            Write-Output "E2E Showcase desechable: users=$users contacts=$contacts opportunities=$opportunities followUps=$followUps interactions=$interactions"
+            if ($users -ne '4' -or $contacts -ne '60' -or $opportunities -ne '100' -or
+                $followUps -ne '120' -or $interactions -ne '150') {
+                throw 'Los datos Showcase desechables no coinciden con los conteos esperados.'
+            }
+        }
 
         $proxy = @{
             '/api/contacts' = @{ target = "http://127.0.0.1:$contactsPort"; secure = $false; changeOrigin = $true }

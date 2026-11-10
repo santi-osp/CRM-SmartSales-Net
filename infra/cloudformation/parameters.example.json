@@ -1,0 +1,18 @@
+{
+  "Parameters": {
+    "EnvironmentName": "smartsales-demo",
+    "VpcCIDR": "10.0.0.0/16",
+    "PublicSubnet1CIDR": "10.0.1.0/24",
+    "PublicSubnet2CIDR": "10.0.2.0/24",
+    "PrivateSubnet1CIDR": "10.0.10.0/24",
+    "PrivateSubnet2CIDR": "10.0.11.0/24",
+    "DBInstanceClass": "db.t4g.micro",
+    "DBAllocatedStorage": "20",
+    "MasterUsername": "postgres",
+    "MasterUserPassword": "REPLACE_WITH_SECURE_RANDOM_PASSWORD",
+    "ExecutionRoleArn": "arn:aws:iam::123456789012:role/LabRole",
+    "TaskRoleArn": "arn:aws:iam::123456789012:role/LabRole",
+    "CodeBuildServiceRoleArn": "arn:aws:iam::123456789012:role/LabRole",
+    "CertificateArn": "arn:aws:acm:us-east-1:123456789012:certificate/00000000-0000-0000-0000-000000000000"
+  }
+}

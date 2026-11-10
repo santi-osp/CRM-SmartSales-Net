@@ -26,7 +26,7 @@ Reglas por path, sin quitar prefijo:
 | `/api/sales/*` | Sales, target group activo del par A/B |
 | Cualquier otro | Web/Nginx, fallback index.html para rutas Angular |
 
-Health checks de APIs usan sus `/api/<servicio>/v1/health/ready`; Web `/healthz`. Assets con hash pueden
+Health checks de APIs usan sus `/api/<servicio>/health/ready` (e.g. `/api/contacts/health/ready` y `/api/sales/health/ready` sin prefijo /v1/, alineado con implementación real de Kestrel y tests locales); Web `/healthz`. Assets con hash pueden
 cachearse; index.html no. Nginx escucha8080 como usuario no root. SPA solo devuelve index en rutas
 de navegación, no transforma un404 de `/api/*` en HTML. Backend Kestrel8080, cierre graceful en SIGTERM.
 

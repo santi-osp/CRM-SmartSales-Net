@@ -1,30 +1,85 @@
-<main class="login-page">
-  <section class="login-card" aria-labelledby="login-title">
-    <p class="eyebrow">SmartSales</p>
-    <h1 id="login-title">Ingresa a tu CRM</h1>
-    <p class="intro">Organiza tus contactos y oportunidades en un solo lugar.</p>
+<main class="login-page" id="main-content">
+  <div class="login-layout">
+    <!-- Panel Visual de Marca -->
+    <aside class="brand-panel" aria-hidden="true">
+      <div class="brand-header">
+        <img src="smartsales-mark.svg" width="48" height="48" alt="" class="brand-logo" />
+        <span class="brand-name">Smart<span>Sales</span></span>
+      </div>
 
-    <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
-      <mat-form-field appearance="outline">
-        <mat-label>Correo electrónico</mat-label>
-        <input matInput formControlName="email" type="email" autocomplete="username" />
-        @if (form.controls.email.touched && form.controls.email.invalid) {
-          <mat-error>Escribe un correo válido.</mat-error>
-        }
-      </mat-form-field>
-      <mat-form-field appearance="outline">
-        <mat-label>Contraseña</mat-label>
-        <input matInput formControlName="password" type="password" autocomplete="current-password" />
-        @if (form.controls.password.touched && form.controls.password.invalid) {
-          <mat-error>Escribe tu contraseña.</mat-error>
-        }
-      </mat-form-field>
-      @if (error()) {
-        <p class="error" role="alert">{{ error() }}</p>
-      }
-      <button mat-flat-button type="submit" [disabled]="busy()">
-        {{ busy() ? 'Ingresando…' : 'Ingresar' }}
-      </button>
-    </form>
-  </section>
+      <div class="brand-content">
+        <div class="brand-kicker">Tu Centro de Control Comercial</div>
+        <h2>Conecta cada oportunidad<br />con el resultado correcto.</h2>
+        <p>Gestiona contactos, negocios y seguimientos en un solo espacio. Datos reales, decisiones claras y trabajo en equipo.</p>
+
+        <div class="brand-features">
+          <div class="feature-item">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+            </div>
+            <span>Embudo comercial visual</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </div>
+            <span>Agenda de seguimientos</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">
+              <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </div>
+            <span>Datos protegidos en PostgreSQL</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="brand-footer">© 2026 SmartSales CRM · Diseñado para equipos comerciales</div>
+    </aside>
+
+    <!-- Panel de Login -->
+    <section class="login-form-panel" aria-labelledby="login-title">
+      <div class="mobile-brand">
+        <img src="smartsales-mark.svg" width="40" height="40" alt="" />
+        <span>Smart<span>Sales</span></span>
+      </div>
+
+      <div class="form-inner">
+        <span class="welcome-kicker">Bienvenido de nuevo</span>
+        <h1 id="login-title">Ingresa a tu CRM</h1>
+        <p class="intro">Usa tus credenciales para acceder a tu espacio de trabajo comercial.</p>
+
+        <form [formGroup]="form" (ngSubmit)="submit()" novalidate>
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Correo electrónico</mat-label>
+            <input matInput formControlName="email" type="email" autocomplete="username" />
+            @if (form.controls.email.touched && form.controls.email.invalid) {
+              <mat-error>Escribe un correo válido.</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Contraseña</mat-label>
+            <input matInput formControlName="password" type="password" autocomplete="current-password" />
+            @if (form.controls.password.touched && form.controls.password.invalid) {
+              <mat-error>Escribe tu contraseña.</mat-error>
+            }
+          </mat-form-field>
+
+          @if (error()) {
+            <div class="error-msg" role="alert">{{ error() }}</div>
+          }
+
+          <button mat-flat-button color="primary" class="submit-btn" type="submit" [disabled]="busy()">
+            {{ busy() ? 'Ingresando…' : 'Ingresar a SmartSales' }}
+          </button>
+        </form>
+
+        <div class="security-note">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          <span>Sesión protegida · Acceso exclusivo para usuarios autorizados</span>
+        </div>
+      </div>
+    </section>
+  </div>
 </main>

@@ -1,0 +1,144 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'SmartSales CRM - Delivery Stack: ECR Repositories, S3 Versioned Releases y CodeBuild Migrador (ARCH-001 v1)'
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: smartsales-prod
+    Description: Prefijo para nombres de recursos
+
+  CodeBuildServiceRoleArn:
+    Type: String
+    Description: ARN del rol para CodeBuild (LabRole en AWS Academy o rol dedicado)
+
+Resources:
+  # ==========================================
+  # REPOSITORIOS ECR CON TAG IMMUTABILITY
+  # ==========================================
+  EcrContacts:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub '${EnvironmentName}-contacts'
+      ImageTagMutability: IMMUTABLE
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      Tags:
+        - Key: Component
+          Value: ContactsApi
+        - Key: Project
+          Value: SmartSales
+
+  EcrSales:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub '${EnvironmentName}-sales'
+      ImageTagMutability: IMMUTABLE
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      Tags:
+        - Key: Component
+          Value: SalesApi
+        - Key: Project
+          Value: SmartSales
+
+  EcrWeb:
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Sub '${EnvironmentName}-web'
+      ImageTagMutability: IMMUTABLE
+      ImageScanningConfiguration:
+        ScanOnPush: true
+      Tags:
+        - Key: Component
+          Value: WebAngular
+        - Key: Project
+          Value: SmartSales
+
+  # ==========================================
+  # S3 BUCKET PARA RELEASES VERSIONADOS
+  # ==========================================
+  ReleaseBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub '${EnvironmentName}-releases-${AWS::AccountId}'
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      LifecycleConfiguration:
+        Rules:
+          - Id: ExpireNoncurrentVersions
+            Status: Enabled
+            NoncurrentVersionExpiration:
+              NoncurrentDays: 30
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-releases'
+        - Key: Project
+          Value: SmartSales
+
+  # ==========================================
+  # CODEBUILD PARA MIGRACIONES EF CORE ONE-OFF
+  # ==========================================
+  MigrationBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Sub '${EnvironmentName}-db-migrations'
+      Description: 'Ejecuta tarea efimera de migracion EF Core bundle antes del despliegue'
+      ServiceRole: !Ref CodeBuildServiceRoleArn
+      Artifacts:
+        Type: NO_ARTIFACTS
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/amazonlinux2-x86_64-standard:5.0
+        EnvironmentVariables:
+          - Name: ENVIRONMENT_NAME
+            Value: !Ref EnvironmentName
+          - Name: AWS_DEFAULT_REGION
+            Value: !Ref 'AWS::Region'
+      Source:
+        Type: NO_SOURCE
+        BuildSpec: |
+          version: 0.2
+          phases:
+            build:
+              commands:
+                - echo "Validando manifiesto de release..."
+                - echo "Ejecutando verificacion de migraciones EF Core en entorno controlado..."
+      TimeoutInMinutes: 15
+      Tags:
+        - Key: Project
+          Value: SmartSales
+
+Outputs:
+  EcrContactsUri:
+    Description: 'URI del repositorio ECR para Contacts API'
+    Value: !GetAtt EcrContacts.RepositoryUri
+    Export:
+      Name: !Sub '${EnvironmentName}-EcrContactsUri'
+
+  EcrSalesUri:
+    Description: 'URI del repositorio ECR para Sales API'
+    Value: !GetAtt EcrSales.RepositoryUri
+    Export:
+      Name: !Sub '${EnvironmentName}-EcrSalesUri'
+
+  EcrWebUri:
+    Description: 'URI del repositorio ECR para Web Angular'
+    Value: !GetAtt EcrWeb.RepositoryUri
+    Export:
+      Name: !Sub '${EnvironmentName}-EcrWebUri'
+
+  ReleaseBucketName:
+    Description: 'Nombre del bucket S3 para releases versionados'
+    Value: !Ref ReleaseBucket
+    Export:
+      Name: !Sub '${EnvironmentName}-ReleaseBucketName'

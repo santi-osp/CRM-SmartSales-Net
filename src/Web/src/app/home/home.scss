@@ -1,31 +1,484 @@
-.app-shell { min-height: 100dvh; background: var(--background); }
-header { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 16px clamp(20px, 5vw, 64px); border-bottom: 1px solid var(--border); background: var(--surface); }
-.account { display: flex; align-items: center; gap: 16px; }
-main { max-width: 1440px; margin: auto; padding: 32px clamp(20px, 5vw, 64px); }
-.heading { margin-bottom: 24px; }
-.eyebrow { color: var(--primary); font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
-h1 { margin: 4px 0; }
-.heading p:last-child, .hint { color: var(--muted); }
-.quick-links { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 28px; }
-.filters { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-.filters mat-form-field { min-width: 180px; }
-.hint { margin: -8px 0 24px; font-size: .875rem; }
-.error { color: var(--error); }
-.metrics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 16px; margin-bottom: 24px; }
-.metric, .stage-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 22px; }
-.metric span { display: block; color: var(--muted); }
-.metric strong { display: block; font-size: clamp(1.5rem, 2vw, 2.2rem); margin-top: 12px; overflow-wrap: anywhere; }
-.stage-panel h2 { margin-top: 0; font-size: 1.25rem; }
-table { width: 100%; border-collapse: collapse; }
-th, td { text-align: left; padding: 10px 8px; border-top: 1px solid var(--border); }
-td:nth-child(2) { width: 100px; font-weight: 700; }
-td:last-child { width: 40%; }
-.bar-track { width: 100%; height: 12px; border-radius: 10px; background: #e8efff; overflow: hidden; }
-.bar-track span { display: block; height: 100%; border-radius: 10px; background: var(--primary); }
-@media (max-width: 900px) { .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.dashboard-page {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ===================================================
+   HERO HEADER
+   =================================================== */
+.dashboard-hero {
+  background: var(--sidebar-bg);
+  border-radius: 16px;
+  padding: clamp(24px, 4vw, 36px);
+  color: #FFFFFF;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  flex-wrap: wrap;
+  box-shadow: 0 4px 20px rgba(18, 32, 61, 0.12);
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(47, 214, 176, 0.18);
+    color: #2FD6B0;
+    border: 1px solid rgba(47, 214, 176, 0.35);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 999px;
+    margin-bottom: 8px;
+    letter-spacing: 0.01em;
+  }
+
+  h1 {
+    font-size: clamp(1.5rem, 3vw, 2.1rem);
+    font-weight: 800;
+    color: #FFFFFF;
+    margin: 0 0 8px;
+    letter-spacing: -0.5px;
+  }
+
+  .hero-subtitle {
+    margin: 0;
+    color: #B2C4E3;
+    font-size: 0.9375rem;
+    max-width: 620px;
+    line-height: 1.5;
+  }
+
+  .hero-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .hero-cta-btn {
+    background: #315BFF !important;
+    color: #FFFFFF !important;
+    font-weight: 700;
+    border-radius: 8px;
+    padding: 0 20px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(49, 91, 255, 0.35);
+
+    &:hover {
+      background: #2347DB !important;
+    }
+  }
+
+  .hero-secondary-btn {
+    border-color: rgba(255, 255, 255, 0.25) !important;
+    color: #FFFFFF !important;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 0 18px;
+    height: 44px;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08) !important;
+    }
+  }
+}
+
+/* ===================================================
+   FILTROS CARD
+   =================================================== */
+.filters-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 18px 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+
+  .filters-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+    gap: 12px;
+    flex-wrap: wrap;
+
+    .filters-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .timezone-hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+  }
+
+  .filters-form {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+
+    .filter-field {
+      flex: 1;
+      min-width: 190px;
+      margin-bottom: -16px; // Compensa el padding inferior de mat-form-field
+    }
+
+    .filter-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      height: 56px;
+      margin-bottom: 0;
+    }
+  }
+
+  .error-msg {
+    margin: 12px 0 0;
+    color: var(--error);
+    font-size: 0.875rem;
+    font-weight: 600;
+  }
+}
+
+/* ===================================================
+   KPI CARDS GRID
+   =================================================== */
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+
+  .kpi-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px 22px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(18, 32, 61, 0.04);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+
+    &:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(18, 32, 61, 0.08);
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+    }
+
+    &.kpi-open::before { background: var(--stage-new); }
+    &.kpi-won::before { background: var(--stage-won); }
+    &.kpi-lost::before { background: var(--stage-lost); }
+    &.kpi-amount::before { background: var(--stage-proposal); }
+
+    .kpi-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+
+      .kpi-label {
+        font-size: 0.8125rem;
+        font-weight: 700;
+        color: var(--muted);
+        letter-spacing: 0.01em;
+      }
+
+      .kpi-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        &.open-icon { background: var(--primary-subtle); color: var(--primary); }
+        &.won-icon { background: var(--success-subtle); color: var(--success); }
+        &.lost-icon { background: var(--error-subtle); color: var(--error); }
+        &.amount-icon { background: #F1EEFD; color: var(--stage-proposal); }
+      }
+    }
+
+    .kpi-value {
+      font-size: clamp(1.6rem, 2.2vw, 2.1rem);
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 4px;
+
+      &.amount-value {
+        font-size: clamp(1.2rem, 1.8vw, 1.6rem);
+      }
+    }
+
+    .kpi-caption {
+      font-size: 0.75rem;
+      color: var(--muted);
+      font-weight: 500;
+    }
+  }
+}
+
+/* ===================================================
+   CHARTS GRID
+   =================================================== */
+.charts-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 1px 4px rgba(18, 32, 61, 0.04);
+
+    .card-title-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
+      gap: 12px;
+
+      .card-title {
+        font-size: 1.125rem;
+        font-weight: 700;
+        margin: 0 0 2px;
+      }
+
+      .card-subtitle {
+        font-size: 0.8125rem;
+        color: var(--muted);
+      }
+    }
+
+    .stage-badge-total {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: var(--surface-subtle);
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+
+    .win-rate-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      background: var(--success-subtle);
+      border: 1px solid rgba(11, 158, 135, 0.25);
+      font-size: 0.8125rem;
+
+      .pill-label {
+        color: var(--muted);
+      }
+
+      .pill-value {
+        color: var(--success);
+      }
+
+      .pill-empty {
+        color: var(--muted);
+        font-weight: 600;
+      }
+    }
+
+    .chart-canvas-container {
+      position: relative;
+      height: 260px;
+      width: 100%;
+    }
+  }
+}
+
+/* ===================================================
+   STAGE TABLE CARD
+   =================================================== */
+.stage-table-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  box-shadow: 0 1px 4px rgba(18, 32, 61, 0.04);
+
+  .card-title-row {
+    margin-bottom: 20px;
+
+    .card-title {
+      font-size: 1.125rem;
+      font-weight: 700;
+      margin: 0 0 2px;
+    }
+
+    .card-subtitle {
+      font-size: 0.8125rem;
+      color: var(--muted);
+    }
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+  }
+
+  .crm-table {
+    width: 100%;
+    border-collapse: collapse;
+
+    th, td {
+      padding: 14px 12px;
+      border-top: 1px solid var(--border);
+      font-size: 0.875rem;
+    }
+
+    thead th {
+      border-top: 0;
+      padding-top: 0;
+      font-size: 0.75rem;
+      letter-spacing: 0.01em;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .text-right {
+      text-align: right;
+    }
+
+    .stage-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      color: var(--text);
+
+      .stage-dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+
+        &.dot-new { background: var(--stage-new); }
+        &.dot-contacted { background: var(--stage-contacted); }
+        &.dot-proposal { background: var(--stage-proposal); }
+        &.dot-won { background: var(--stage-won); }
+        &.dot-lost { background: var(--stage-lost); }
+      }
+    }
+
+    .count-cell {
+      width: 100px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .bar-cell {
+      width: 45%;
+
+      .bar-track {
+        width: 100%;
+        height: 10px;
+        background: var(--border-light);
+        border-radius: 999px;
+        overflow: hidden;
+
+        .bar-fill {
+          display: block;
+          height: 100%;
+          border-radius: 999px;
+
+          &.fill-new { background: var(--stage-new); }
+          &.fill-contacted { background: var(--stage-contacted); }
+          &.fill-proposal { background: var(--stage-proposal); }
+          &.fill-won { background: var(--stage-won); }
+          &.fill-lost { background: var(--stage-lost); }
+        }
+      }
+    }
+  }
+}
+
+/* Empty & Loading states */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+
+  .empty-icon {
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+
+  .empty-title {
+    font-size: 1rem;
+    font-weight: 700;
+    margin: 0 0 4px;
+  }
+
+  .empty-text {
+    font-size: 0.875rem;
+    color: var(--muted);
+    margin: 0 0 16px;
+  }
+}
+
+.loading-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--muted);
+
+  .spinner {
+    width: 32px;
+    height: 32px;
+    border: 3px solid var(--border);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    margin: 0 auto 12px;
+    animation: spin 0.8s linear infinite;
+  }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ===================================================
+   RESPONSIVE (TABLET & MOBILE)
+   =================================================== */
+@media (max-width: 1100px) {
+  .kpi-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 850px) {
+  .charts-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 600px) {
-  header { align-items: flex-start; }
-  .account { flex-direction: column; align-items: flex-end; }
-  .metrics { grid-template-columns: 1fr; }
-  td:last-child { width: 30%; }
+  .kpi-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .stage-table-card .crm-table .bar-cell {
+    width: 30%;
+  }
 }

@@ -6,7 +6,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { RouterLink } from '@angular/router';
 import { EMPTY, Subject, catchError, debounceTime, distinctUntilChanged, finalize, map, of, startWith, switchMap } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 import { UserSummary } from '../auth/auth.models';
@@ -18,7 +17,7 @@ import { InteractionPanel } from '../interactions/interaction-panel';
 
 @Component({
   selector: 'app-opportunities-page',
-  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule, RouterLink,
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule,
     InteractionPanel],
   templateUrl: './opportunities-page.html',
   styleUrl: './opportunities-page.scss'
@@ -181,6 +180,10 @@ export class OpportunitiesPage {
   contactLabel(id: string): string { return this.contactNames()[id] ?? `Contacto no disponible (${id})`; }
   ownerLabel(id: string): string { return this.users().find(user => user.id === id)?.displayName ?? id; }
   priorityLabel(value: Priority): string { return ({ High: 'Alta', Medium: 'Media', Low: 'Baja' })[value]; }
+  stageLabel(value: Opportunity['stage']): string {
+    return ({ New: 'Nuevo', Contacted: 'En contacto', Proposal: 'Propuesta',
+      Won: 'Ganada', Lost: 'Perdida' })[value];
+  }
   money(value: number): string { return new Intl.NumberFormat('es-CO', { style: 'currency', currency: 'COP' }).format(value); }
   dateTime(value: string): string { return new Intl.DateTimeFormat('es-CO', {
     dateStyle: 'medium', timeStyle: 'short', timeZone: 'America/Bogota'

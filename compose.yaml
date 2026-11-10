@@ -25,6 +25,7 @@ services:
       Jwt__PrivateKeyPem: ${LOCAL_JWT_PRIVATE_PEM:?Define LOCAL_JWT_PRIVATE_PEM}
       Jwt__KeyId: local-compose
       Demo__Enabled: "true"
+      Demo__Profile: ${DEMO_PROFILE:-Basic}
       Logging__LogLevel__Microsoft.EntityFrameworkCore: Warning
       Seed__Administrator__Email: admin@demo.local
       Seed__Administrator__DisplayName: Administradora Demo
@@ -32,6 +33,12 @@ services:
       Seed__Commercial__Email: comercial@demo.local
       Seed__Commercial__DisplayName: Comercial Demo
       Seed__Commercial__Password: ${LOCAL_COMMERCIAL_PASSWORD:?Define LOCAL_COMMERCIAL_PASSWORD}
+      Seed__Commercial2__Email: comercial2@demo.local
+      Seed__Commercial2__DisplayName: Comercial 2 Demo
+      Seed__Commercial2__Password: ${LOCAL_COMMERCIAL2_PASSWORD:-${LOCAL_COMMERCIAL_PASSWORD}}
+      Seed__Commercial3__Email: comercial3@demo.local
+      Seed__Commercial3__DisplayName: Comercial 3 Demo
+      Seed__Commercial3__Password: ${LOCAL_COMMERCIAL3_PASSWORD:-${LOCAL_COMMERCIAL_PASSWORD}}
     depends_on:
       postgres:
         condition: service_healthy
@@ -48,6 +55,7 @@ services:
       Jwt__KeyId: local-compose
       ContactsBaseUrl: http://contacts:8080
       Demo__Enabled: "true"
+      Demo__Profile: ${DEMO_PROFILE:-Basic}
       Logging__LogLevel__Microsoft.EntityFrameworkCore: Warning
     depends_on:
       postgres:

@@ -1,77 +1,213 @@
-<div class="app-shell">
-  <header>
-    <strong>SmartSales</strong>
-    <div class="account">
-      <span>{{ user()?.displayName }}</span>
-      <button mat-stroked-button type="button" (click)="logout()">Cerrar sesión</button>
+<div class="dashboard-page">
+  <!-- Hero Header -->
+  <section class="dashboard-hero" aria-labelledby="dashboard-title">
+    <div class="hero-content">
+      <div class="hero-badge">Centro de control comercial</div>
+      <h1 id="dashboard-title">Hola, {{ user()?.displayName }}.</h1>
+      <p class="hero-subtitle">
+        Explora el estado actual de las oportunidades filtradas y sus resultados registrados.
+      </p>
     </div>
-  </header>
-  <main>
-    <div class="heading">
-      <p class="eyebrow">Resumen comercial</p>
-      <h1>Dashboard</h1>
-      <p>Estado de las oportunidades con una misma fecha de creación y responsable.</p>
+    <div class="hero-actions">
+      <a mat-flat-button routerLink="/opportunities" class="hero-cta-btn">
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span>Nueva Oportunidad</span>
+      </a>
+      <a mat-stroked-button routerLink="/pipeline" class="hero-secondary-btn">
+        <span>Ver Tablero Kanban</span>
+      </a>
     </div>
-    <nav class="quick-links" aria-label="Secciones">
-      <a mat-stroked-button routerLink="/contacts">Contactos</a>
-      <a mat-stroked-button routerLink="/opportunities">Oportunidades</a>
-      <a mat-stroked-button routerLink="/pipeline">Tablero</a>
-      <a mat-stroked-button routerLink="/agenda">Agenda</a>
-    </nav>
-    <section class="filters" aria-label="Filtros del dashboard">
-      <mat-form-field appearance="outline">
+  </section>
+
+  <!-- Filtros del Dashboard -->
+  <section class="filters-card" aria-label="Filtros del dashboard">
+    <div class="filters-header">
+      <div class="filters-title">
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+        <span>Filtrar Cohorte de Oportunidades</span>
+      </div>
+      <span class="timezone-hint">Zona horaria: Bogotá (UTC-5)</span>
+    </div>
+
+    <div class="filters-form">
+      <mat-form-field appearance="outline" class="filter-field">
         <mat-label>Responsable</mat-label>
         <mat-select [formControl]="owner">
-          <mat-option value="">Todos</mat-option>
+          <mat-option value="">Todos los responsables</mat-option>
           @for (person of users(); track person.id) {
             <mat-option [value]="person.id">{{ person.displayName }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
-      <mat-form-field appearance="outline">
+
+      <mat-form-field appearance="outline" class="filter-field">
         <mat-label>Creada desde</mat-label>
         <input matInput type="date" [formControl]="createdFrom" />
       </mat-form-field>
-      <mat-form-field appearance="outline">
+
+      <mat-form-field appearance="outline" class="filter-field">
         <mat-label>Creada hasta</mat-label>
         <input matInput type="date" [formControl]="createdTo" />
       </mat-form-field>
-      <button mat-flat-button type="button" (click)="apply()">Aplicar</button>
-      <button mat-stroked-button type="button" (click)="clear()">Limpiar</button>
-    </section>
-    <p class="hint">Las fechas son inclusivas en la zona horaria de Bogotá.</p>
-    @if (validationError()) { <p class="error" role="alert">{{ validationError() }}</p> }
-    @if (usersError()) { <p class="error" role="alert">{{ usersError() }}</p> }
-    @if (loading()) { <p role="status">Cargando indicadores…</p> }
-    @if (error()) {
-      <p class="error" role="alert">{{ error() }}</p>
+
+      <div class="filter-actions">
+        <button mat-flat-button color="primary" type="button" (click)="apply()">Aplicar</button>
+        <button mat-stroked-button type="button" (click)="clear()">Limpiar</button>
+      </div>
+    </div>
+    @if (validationError()) {
+      <p class="error-msg" role="alert">{{ validationError() }}</p>
+    }
+  </section>
+
+  @if (loading()) {
+    <div class="loading-state" role="status">
+      <div class="spinner"></div>
+      <p>Cargando métricas comerciales…</p>
+    </div>
+  }
+
+  @if (error()) {
+    <div class="error-card" role="alert">
+      <p>{{ error() }}</p>
       <button mat-stroked-button type="button" (click)="load()">Reintentar</button>
-    }
-    @if (data(); as dashboard) {
-      <section class="metrics" aria-label="Indicadores comerciales">
-        <div class="metric"><span>Abiertas</span><strong>{{ dashboard.openCount }}</strong></div>
-        <div class="metric"><span>Ganadas</span><strong>{{ dashboard.wonCount }}</strong></div>
-        <div class="metric"><span>Perdidas</span><strong>{{ dashboard.lostCount }}</strong></div>
-        <div class="metric"><span>Monto estimado abierto</span><strong>{{ money(dashboard.openEstimatedAmount) }}</strong></div>
-      </section>
-      <section class="stage-panel" aria-labelledby="stage-title">
-        <h2 id="stage-title">Oportunidades por etapa</h2>
-        @if (dashboard.openCount + dashboard.wonCount + dashboard.lostCount === 0) {
-          <p>No hay oportunidades para estos filtros.</p>
-        }
-        <table>
-          <thead><tr><th scope="col">Etapa</th><th scope="col">Cantidad</th><th scope="col">Comparación</th></tr></thead>
-          <tbody>
-            @for (item of dashboard.byStage; track item.stage) {
-              <tr>
-                <th scope="row">{{ stageLabel(item.stage) }}</th>
-                <td>{{ item.count }}</td>
-                <td><div class="bar-track" aria-hidden="true"><span [style.width.%]="barWidth(item.count)"></span></div></td>
-              </tr>
+    </div>
+  }
+
+  @if (data(); as dashboard) {
+    <!-- KPI Cards Grid -->
+    <section class="kpi-grid" aria-label="Indicadores principales">
+      <div class="kpi-card kpi-open">
+        <div class="kpi-header">
+          <span class="kpi-label">Oportunidades Abiertas</span>
+          <div class="kpi-icon open-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+          </div>
+        </div>
+        <div class="kpi-value tabular-nums">{{ dashboard.openCount }}</div>
+        <div class="kpi-caption">En etapas de prospección activa</div>
+      </div>
+
+      <div class="kpi-card kpi-won">
+        <div class="kpi-header">
+          <span class="kpi-label">Oportunidades Ganadas</span>
+          <div class="kpi-icon won-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+        </div>
+        <div class="kpi-value tabular-nums">{{ dashboard.wonCount }}</div>
+        <div class="kpi-caption">Acuerdos cerrados con éxito</div>
+      </div>
+
+      <div class="kpi-card kpi-lost">
+        <div class="kpi-header">
+          <span class="kpi-label">Oportunidades Perdidas</span>
+          <div class="kpi-icon lost-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+          </div>
+        </div>
+        <div class="kpi-value tabular-nums">{{ dashboard.lostCount }}</div>
+        <div class="kpi-caption">Negociaciones desestimadas</div>
+      </div>
+
+      <div class="kpi-card kpi-amount">
+        <div class="kpi-header">
+          <span class="kpi-label">Monto Estimado Abierto</span>
+          <div class="kpi-icon amount-icon">
+            <svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          </div>
+        </div>
+        <div class="kpi-value amount-value tabular-nums">{{ money(dashboard.openEstimatedAmount) }}</div>
+        <div class="kpi-caption">Pipeline en moneda legal (COP)</div>
+      </div>
+    </section>
+
+    <!-- Visual Analytics Grid (Chart.js + Win Ratio) -->
+    <section class="charts-grid" aria-label="Visualizaciones y análisis gráfico">
+      <!-- Doughnut Chart: Distribución del Embudo -->
+      <div class="chart-card">
+        <div class="card-title-row">
+          <div>
+            <h3 class="card-title">Distribución por Etapa</h3>
+            <span class="card-subtitle">Participación porcentual en el embudo</span>
+          </div>
+          <span class="stage-badge-total tabular-nums">{{ dashboard.openCount + dashboard.wonCount + dashboard.lostCount }} Total</span>
+        </div>
+        <div class="chart-canvas-container">
+          <canvas #doughnutCanvas aria-label="Gráfico circular de oportunidades por etapa" role="img"></canvas>
+        </div>
+      </div>
+
+      <!-- Horizontal Bar Chart: Volumen Comercial -->
+      <div class="chart-card">
+        <div class="card-title-row">
+          <div>
+            <h3 class="card-title">Volumen de Oportunidades</h3>
+            <span class="card-subtitle">Comparativo de recuento por etapa</span>
+          </div>
+          <!-- Win Ratio Badge -->
+          <div class="win-rate-pill">
+            <span class="pill-label">Efectividad:</span>
+            @if (winRatio() !== null) {
+              <strong class="pill-value tabular-nums">{{ winRatio() }}%</strong>
+            } @else {
+              <span class="pill-empty">Sin cierres</span>
             }
-          </tbody>
-        </table>
-      </section>
-    }
-  </main>
+          </div>
+        </div>
+        <div class="chart-canvas-container">
+          <canvas #barCanvas aria-label="Gráfico de barras de oportunidades por etapa" role="img"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tabla Detallada Accesible -->
+    <section class="stage-table-card" aria-labelledby="table-title">
+      <div class="card-title-row">
+        <div>
+          <h3 id="table-title" class="card-title">Desglose Detallado por Etapas</h3>
+          <span class="card-subtitle">Cifras exactas y representación visual de la cohorte</span>
+        </div>
+      </div>
+
+      @if (dashboard.openCount + dashboard.wonCount + dashboard.lostCount === 0) {
+        <div class="empty-state">
+          <div class="empty-icon">
+            <svg viewBox="0 0 24 24" width="32" height="32" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          </div>
+          <p class="empty-title">Sin oportunidades registradas</p>
+          <p class="empty-text">No se encontraron oportunidades que coincidan con los filtros aplicados.</p>
+          <a mat-flat-button color="primary" routerLink="/opportunities">Crear Nueva Oportunidad</a>
+        </div>
+      } @else {
+        <div class="table-responsive">
+          <table class="crm-table">
+            <thead>
+              <tr>
+                <th scope="col">Etapa Comercial</th>
+                <th scope="col" class="text-right">Cantidad</th>
+                <th scope="col">Distribución Relativa</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (item of dashboard.byStage; track item.stage) {
+                <tr>
+                  <th scope="row" class="stage-cell">
+                    <span class="stage-dot" [class]="'dot-' + item.stage.toLowerCase()"></span>
+                    <span class="stage-name">{{ stageLabel(item.stage) }}</span>
+                  </th>
+                  <td class="text-right tabular-nums count-cell">{{ item.count }}</td>
+                  <td class="bar-cell">
+                    <div class="bar-track" aria-hidden="true">
+                      <span class="bar-fill" [class]="'fill-' + item.stage.toLowerCase()" [style.width.%]="barWidth(item.count)"></span>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  }
 </div>

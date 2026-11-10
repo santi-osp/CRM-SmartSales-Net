@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using SmartSales.Sales.Application.Opportunities;
@@ -10,6 +11,46 @@ namespace SmartSales.Sales.Application.FollowUps;
 public sealed class FollowUpService(SalesDbContext db, ContactsDirectoryClient directory, TimeProvider clock)
 {
     private static readonly TimeZoneInfo Bogota = TimeZoneInfo.FindSystemTimeZoneById("America/Bogota");
+
+    public async Task<IReadOnlyList<FollowUpResponse>> GetCalendarAsync(string? fromText, string? toText,
+        string? scope, Actor actor, CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(fromText) || !DateOnly.TryParseExact(fromText, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var fromDate))
+            throw Invalid("invalid_from_date", "Fecha inicial obligatoria con formato yyyy-MM-dd.");
+        if (string.IsNullOrWhiteSpace(toText) || !DateOnly.TryParseExact(toText, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var toDate))
+            throw Invalid("invalid_to_date", "Fecha final obligatoria con formato yyyy-MM-dd.");
+        if (fromDate > toDate)
+            throw Invalid("invalid_date_range", "La fecha inicial no puede ser posterior a la fecha final.");
+        if (toDate == DateOnly.MaxValue)
+            throw Invalid("invalid_date_range", "La fecha final debe ser anterior a 9999-12-31.");
+        if (toDate.DayNumber - fromDate.DayNumber > 365)
+            throw Invalid("invalid_date_range", "El rango de fechas no puede superar 365 días.");
+        if (scope is not (null or "Mine" or "All"))
+            throw Invalid("invalid_scope", "Alcance no válido.");
+        if (scope == "All" && actor.Role != "Administrator")
+            throw new FollowUpRequestException(403, "forbidden_scope", "Solo Administrador puede consultar todos.");
+
+        var startUtc = BogotaMidnightUtc(fromDate);
+        var endUtc = BogotaMidnightUtc(toDate.AddDays(1));
+
+        IQueryable<FollowUp> query = db.FollowUps.AsNoTracking()
+            .Where(item => item.ScheduledAt >= startUtc && item.ScheduledAt < endUtc);
+
+        if (scope != "All") query = query.Where(item => item.OwnerUserId == actor.UserId);
+
+        var items = await query.OrderBy(item => item.ScheduledAt).ThenBy(item => item.Id)
+            .Take(501)
+            .Select(item => new FollowUpResponse(item.Id, item.ContactId, item.OpportunityId,
+                item.Subject, item.ScheduledAt, item.OwnerUserId, item.Status, item.CreatedAt,
+                item.CompletedAt, item.CompletedByUserId, item.Version))
+            .ToListAsync(cancellationToken);
+
+        if (items.Count > 500)
+            throw new FollowUpRequestException(413, "calendar_result_limit",
+                "La consulta supera el límite de 500 seguimientos para el calendario. Reduce el rango de fechas.");
+
+        return items;
+    }
 
     public async Task<FollowUpResponse> CreateAsync(FollowUpCreate request, Actor actor,
         CancellationToken cancellationToken)

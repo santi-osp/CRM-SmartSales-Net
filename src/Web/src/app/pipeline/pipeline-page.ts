@@ -8,7 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { catchError, of } from 'rxjs';
 import { UserSummary } from '../auth/auth.models';
 import { ContactsApi } from '../contacts/contacts.api';
@@ -31,6 +31,8 @@ export class PipelinePage {
   private readonly contacts = inject(ContactsApi);
   private readonly dialog = inject(MatDialog);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router, { optional: true });
+  private readonly route = inject(ActivatedRoute, { optional: true });
   private readonly generation: Record<OpenStage, number> = { New: 0, Contacted: 0, Proposal: 0 };
   readonly stages: { value: OpenStage; label: string }[] = [
     { value: 'New', label: 'Nuevo' },
@@ -50,6 +52,17 @@ export class PipelinePage {
   readonly error = signal<string | null>(null);
 
   constructor() {
+    const params = this.route?.snapshot.queryParams;
+    if (params) {
+      if (params['owner']) {
+        this.ownerFilter.setValue(params['owner']);
+        this.appliedOwner.set(params['owner']);
+      }
+      if (params['priority']) {
+        this.priorityFilter.setValue(params['priority']);
+        this.appliedPriority.set(params['priority']);
+      }
+    }
     this.refreshAll();
     this.api.users().pipe(takeUntilDestroyed()).subscribe({
       next: result => this.users.set(result.items),
@@ -106,10 +119,23 @@ export class PipelinePage {
   applyFilters(): void {
     this.appliedOwner.set(this.ownerFilter.value);
     this.appliedPriority.set(this.priorityFilter.value);
+    this.router?.navigate([], {
+      queryParams: {
+        owner: this.ownerFilter.value || null,
+        priority: this.priorityFilter.value || null
+      },
+      queryParamsHandling: 'merge'
+    }).catch(() => {});
     this.refreshAll();
   }
   clearFilters(): void {
-    this.ownerFilter.setValue(''); this.priorityFilter.setValue(''); this.applyFilters();
+    this.ownerFilter.setValue('');
+    this.priorityFilter.setValue('');
+    this.router?.navigate([], {
+      queryParams: { owner: null, priority: null },
+      queryParamsHandling: 'merge'
+    }).catch(() => {});
+    this.applyFilters();
   }
 
   drop(event: CdkDragDrop<OpenStage>): void {

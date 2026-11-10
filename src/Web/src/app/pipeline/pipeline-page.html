@@ -1,70 +1,101 @@
-<div class="page-shell">
-  <header class="topbar">
-    <a routerLink="/" class="brand">SmartSales</a>
-    <nav aria-label="Principal">
-      <a routerLink="/opportunities">Oportunidades</a>
-      <a routerLink="/contacts">Contactos</a>
-      <a routerLink="/">Inicio</a>
-    </nav>
-  </header>
-  <main>
-    <div class="heading">
-      <div>
-        <p class="eyebrow">Ventas</p>
-        <h1>Tablero comercial</h1>
-        <p>Mueve oportunidades entre etapas o ciérralas como ganadas o perdidas.</p>
-      </div>
-      <a mat-flat-button routerLink="/opportunities">Nueva oportunidad</a>
+<div class="pipeline-page">
+  <!-- Encabezado de Página -->
+  <div class="page-header">
+    <div class="header-info">
+      <span class="section-tag">Embudo Comercial</span>
+      <h1>Tablero de Ventas</h1>
+      <p class="subtitle">Mueve oportunidades entre etapas mediante arrastre o teclado, y ciérralas con resultado verificado.</p>
     </div>
+    <div class="header-actions">
+      <a mat-flat-button color="primary" routerLink="/opportunities" class="action-cta">
+        <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        <span>Nueva Oportunidad</span>
+      </a>
+    </div>
+  </div>
 
-    <section class="filters" aria-label="Filtros del tablero">
-      <mat-form-field appearance="outline">
+  <!-- Filtros del Tablero -->
+  <section class="filters-card" aria-label="Filtros del tablero">
+    <div class="filters-row">
+      <mat-form-field appearance="outline" class="filter-field">
         <mat-label>Responsable</mat-label>
         <mat-select [formControl]="ownerFilter">
-          <mat-option value="">Todos</mat-option>
+          <mat-option value="">Todos los responsables</mat-option>
           @for (user of users(); track user.id) {
             <mat-option [value]="user.id">{{ user.displayName }}</mat-option>
           }
         </mat-select>
       </mat-form-field>
-      <mat-form-field appearance="outline">
+
+      <mat-form-field appearance="outline" class="filter-field">
         <mat-label>Prioridad</mat-label>
         <mat-select [formControl]="priorityFilter">
-          <mat-option value="">Todas</mat-option>
+          <mat-option value="">Todas las prioridades</mat-option>
           <mat-option value="High">Alta</mat-option>
           <mat-option value="Medium">Media</mat-option>
           <mat-option value="Low">Baja</mat-option>
         </mat-select>
       </mat-form-field>
-      <button mat-flat-button type="button" (click)="applyFilters()">Filtrar</button>
-      <button mat-stroked-button type="button" (click)="clearFilters()">Limpiar</button>
-      <button mat-stroked-button type="button" (click)="refreshAll()">Actualizar</button>
-    </section>
-    @if (error()) { <p class="error" role="alert">{{ error() }}</p> }
-    <p class="board-hint">Desliza el tablero hacia los lados en pantallas pequeñas. El menú Acciones permite mover con teclado.</p>
 
+      <div class="filter-actions">
+        <button mat-flat-button color="primary" type="button" (click)="applyFilters()">Filtrar</button>
+        <button mat-stroked-button type="button" (click)="clearFilters()">Limpiar</button>
+        <button mat-stroked-button type="button" (click)="refreshAll()" title="Recargar tablero">Actualizar</button>
+      </div>
+    </div>
+    @if (error()) {
+      <p class="error-msg" role="alert">{{ error() }}</p>
+    }
+  </section>
+
+  <p class="board-hint">
+    <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+    Arrastra las tarjetas entre columnas o usa el menú «Acciones» con el teclado. Desplaza horizontalmente en pantallas estrechas.
+  </p>
+
+  <!-- Contenedor del Tablero Kanban -->
+  <div class="board-wrapper">
     <div class="board" cdkDropListGroup aria-label="Etapas activas">
       @for (stage of stages; track stage.value) {
-        <section class="column" [attr.aria-label]="stage.label">
+        <section class="column" [class]="'col-' + stage.value.toLowerCase()" [attr.aria-label]="stage.label">
           <header class="column-heading">
-            <h2>{{ stage.label }}</h2>
-            <span>{{ columns()[stage.value].total }}</span>
+            <div class="heading-left">
+              <span class="column-indicator"></span>
+              <h2>{{ stage.label }}</h2>
+            </div>
+            <span class="counter tabular-nums">{{ columns()[stage.value].total }}</span>
           </header>
-          <div class="drop-zone" cdkDropList [cdkDropListData]="stage.value"
-            (cdkDropListDropped)="drop($event)">
+
+          <div class="drop-zone" cdkDropList [cdkDropListData]="stage.value" (cdkDropListDropped)="drop($event)">
             @for (item of columns()[stage.value].items; track item.id) {
-              <article class="card" cdkDrag [cdkDragData]="item" [cdkDragDisabled]="!!savingId()">
+              <article class="kanban-card" cdkDrag [cdkDragData]="item" [cdkDragDisabled]="!!savingId()">
                 <div class="card-head">
-                  <h3>{{ item.title }}</h3>
-                  <button mat-button type="button" [matMenuTriggerFor]="actions"
-                    [disabled]="!!savingId()" [attr.aria-label]="'Acciones de ' + item.title">Acciones</button>
+                  <h3 class="card-title">{{ item.title }}</h3>
+                  <button mat-icon-button type="button" class="card-menu-btn" [matMenuTriggerFor]="actions"
+                    [disabled]="!!savingId()" [attr.aria-label]="'Acciones de ' + item.title">
+                    <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>
+                  </button>
                 </div>
-                <p>{{ contactLabel(item.contactId) }}</p>
-                <p class="amount">{{ money(item.estimatedAmount) }}</p>
-                <div class="meta">
-                  <span>{{ priorityLabel(item.priority) }}</span>
-                  <span>{{ ownerLabel(item.ownerUserId) }}</span>
+
+                <div class="card-contact">
+                  <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                  <span>{{ contactLabel(item.contactId) }}</span>
                 </div>
+
+                <div class="card-amount tabular-nums">
+                  {{ money(item.estimatedAmount) }}
+                </div>
+
+                <div class="card-footer">
+                  <span class="priority-badge" [class]="'priority-' + item.priority.toLowerCase()">
+                    {{ priorityLabel(item.priority) }}
+                  </span>
+                  <div class="owner-pill" [title]="ownerLabel(item.ownerUserId)">
+                    <div class="owner-avatar">{{ ownerLabel(item.ownerUserId).substring(0, 1) }}</div>
+                    <span class="owner-name">{{ ownerLabel(item.ownerUserId) }}</span>
+                  </div>
+                </div>
+
                 <mat-menu #actions="matMenu">
                   @for (target of stages; track target.value) {
                     @if (target.value !== item.stage) {
@@ -73,25 +104,37 @@
                       </button>
                     }
                   }
-                  <button mat-menu-item type="button" (click)="beginClose(item)">Cerrar oportunidad</button>
+                  <button mat-menu-item type="button" (click)="beginClose(item)">Cerrar oportunidad…</button>
                 </mat-menu>
               </article>
             }
-            @if (columns()[stage.value].loading) { <p role="status">Cargando…</p> }
-            @if (columns()[stage.value].error) {
-              <p class="error" role="alert">No se cargó esta etapa.</p>
-              <button mat-stroked-button type="button" (click)="load(stage.value, true)">Reintentar</button>
+
+            @if (columns()[stage.value].loading) {
+              <div class="column-loading" role="status">Cargando etapa…</div>
             }
+
+            @if (columns()[stage.value].error) {
+              <div class="column-error" role="alert">
+                <p>No se cargó esta etapa.</p>
+                <button mat-stroked-button type="button" (click)="load(stage.value, true)">Reintentar</button>
+              </div>
+            }
+
             @if (!columns()[stage.value].loading && !columns()[stage.value].error && columns()[stage.value].total === 0) {
-              <p class="empty">Sin oportunidades en esta etapa.</p>
+              <div class="empty-column">
+                <p>Sin oportunidades en {{ stage.label }}</p>
+              </div>
             }
           </div>
+
           @if (columns()[stage.value].items.length < columns()[stage.value].total) {
-            <button mat-stroked-button type="button" class="more"
-              (click)="load(stage.value)" [disabled]="columns()[stage.value].loading">Mostrar más</button>
+            <button mat-stroked-button type="button" class="load-more-btn"
+              (click)="load(stage.value)" [disabled]="columns()[stage.value].loading">
+              Mostrar más ({{ columns()[stage.value].items.length }} de {{ columns()[stage.value].total }})
+            </button>
           }
         </section>
       }
     </div>
-  </main>
+  </div>
 </div>

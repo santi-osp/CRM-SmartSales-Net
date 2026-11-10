@@ -125,6 +125,61 @@ public sealed class FollowUpTests
     }
 
     [Fact]
+    public async Task Calendar_returns_all_records_in_bogota_range_without_truncation_and_enforces_scope()
+    {
+        await using var database = new PostgreSqlBuilder("postgres:17").Build();
+        await database.StartAsync();
+        using var rsa = RSA.Create(3072);
+        using var environment = new TestEnvironment(new Dictionary<string, string?>
+        {
+            ["ConnectionStrings__Sales"] = database.GetConnectionString(),
+            ["Jwt__PublicKeyPem"] = rsa.ExportRSAPublicKeyPem(),
+            ["Jwt__KeyId"] = "integration-test",
+            ["ContactsBaseUrl"] = "https://contacts.example.test"
+        });
+        using var factory = new WebApplicationFactory<Program>();
+        using var client = factory.CreateClient();
+        using (var scope = factory.Services.CreateScope())
+        {
+            var db = scope.ServiceProvider.GetRequiredService<SalesDbContext>();
+            await db.Database.MigrateAsync();
+            // Bogotá midnight on 2026-11-09 is 2026-11-09T05:00:00Z
+            for (var index = 0; index < 42; index++)
+            {
+                db.FollowUps.Add(new FollowUp
+                {
+                    Id = Guid.CreateVersion7(), ContactId = ContactId,
+                    Subject = $"Seguimiento {index}",
+                    ScheduledAt = DateTimeOffset.Parse("2026-11-09T05:00:00Z").AddMinutes(index),
+                    OwnerUserId = CommercialId, Status = index % 2 == 0 ? "Pending" : "Completed",
+                    CreatedAt = Now, CompletedAt = index % 2 == 0 ? null : Now,
+                    CompletedByUserId = index % 2 == 0 ? null : CommercialId, Version = 1
+                });
+            }
+            db.FollowUps.Add(new FollowUp
+            {
+                Id = Guid.CreateVersion7(), ContactId = ContactId, Subject = "Fuera del día",
+                ScheduledAt = DateTimeOffset.Parse("2026-11-10T05:00:00Z"),
+                OwnerUserId = CommercialId, Status = "Pending", CreatedAt = Now, Version = 1
+            });
+            await db.SaveChangesAsync();
+        }
+        client.DefaultRequestHeaders.Authorization = Bearer(Issue(rsa, CommercialId, "Commercial"));
+        var calendarPath = $"{Base}/calendar?from=2026-11-09&to=2026-11-09";
+        Assert.Equal(HttpStatusCode.Forbidden, (await client.GetAsync(calendarPath + "&scope=All")).StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, (await client.GetAsync($"{Base}/calendar?from=2026-11-10&to=2026-11-09")).StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, (await client.GetAsync($"{Base}/calendar?from=2026-11-09&to=2027-11-10")).StatusCode);
+        Assert.Equal(HttpStatusCode.BadRequest, (await client.GetAsync($"{Base}/calendar?from=9999-12-31&to=9999-12-31")).StatusCode);
+        var rows = await client.GetFromJsonAsync<List<FollowUpResult>>(calendarPath);
+        Assert.NotNull(rows);
+        Assert.Equal(42, rows.Count); // Exceeds the paginated list's pageSize=20
+        Assert.Equal(42, rows.Select(row => row.Id).Distinct().Count());
+        client.DefaultRequestHeaders.Authorization = Bearer(Issue(rsa, AdminId, "Administrator"));
+        var all = await client.GetFromJsonAsync<List<FollowUpResult>>(calendarPath + "&scope=All");
+        Assert.Equal(42, all?.Count);
+    }
+
+    [Fact]
     public async Task Interactions_validate_and_share_one_record_across_contact_and_opportunity()
     {
         await using var database = new PostgreSqlBuilder("postgres:17").Build();

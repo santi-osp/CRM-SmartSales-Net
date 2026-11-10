@@ -1,0 +1,513 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'SmartSales CRM - Application Stack: ALB, Target Groups IP, ECS Cluster y Servicios Fargate (ARCH-001 v1)'
+
+Parameters:
+  EnvironmentName:
+    Type: String
+    Default: smartsales-prod
+    Description: Prefijo para nombres de recursos
+
+  NetworkStackName:
+    Type: String
+    Default: smartsales-prod-network
+    Description: Nombre del stack de red
+
+  DataStackName:
+    Type: String
+    Default: smartsales-prod-data
+    Description: Nombre del stack de datos
+
+  CertificateArn:
+    Type: String
+    Default: ''
+    Description: ARN del certificado ACM en us-east-1 para HTTPS (dejar vacio para HTTP de desarrollo en lab)
+
+  ExecutionRoleArn:
+    Type: String
+    Description: ARN del rol de ejecucion para ECS (p. ej. LabRole en AWS Academy o smartsales-ecs-execution-role)
+
+  TaskRoleArn:
+    Type: String
+    Description: ARN del rol de tarea para ECS (p. ej. LabRole en AWS Academy o smartsales-ecs-task-role)
+
+  ContactsImage:
+    Type: String
+    Default: 'public.ecr.aws/docker/library/busybox:latest'
+    Description: URI de la imagen de Contacts API con digest inmutable
+
+  SalesImage:
+    Type: String
+    Default: 'public.ecr.aws/docker/library/busybox:latest'
+    Description: URI de la imagen de Sales API con digest inmutable
+
+  WebImage:
+    Type: String
+    Default: 'public.ecr.aws/docker/library/busybox:latest'
+    Description: URI de la imagen Web Nginx con digest inmutable
+
+  ContactsDbConnectionStringSecretArn:
+    Type: String
+    Default: ''
+    Description: ARN del secreto SSM o SecretsManager para la cadena de conexion de Contacts
+
+  SalesDbConnectionStringSecretArn:
+    Type: String
+    Default: ''
+    Description: ARN del secreto SSM o SecretsManager para la cadena de conexion de Sales
+
+  JwtPublicKeySecretArn:
+    Type: String
+    Default: ''
+    Description: ARN del secreto SSM para la clave publica JWT RS256
+
+  JwtPrivateKeySecretArn:
+    Type: String
+    Default: ''
+    Description: ARN del secreto SSM para la clave privada JWT RS256 (solo Contacts)
+
+Conditions:
+  HasCertificate: !Not [!Equals [!Ref CertificateArn, '']]
+  HasSecrets: !Not [!Equals [!Ref ContactsDbConnectionStringSecretArn, '']]
+
+Resources:
+  # ==========================================
+  # ECS CLUSTER Y LOGS
+  # ==========================================
+  ECSCluster:
+    Type: AWS::ECS::Cluster
+    Properties:
+      ClusterName: !Sub '${EnvironmentName}-cluster'
+      CapacityProviders:
+        - FARGATE
+        - FARGATE_SPOT
+      DefaultCapacityProviderStrategy:
+        - CapacityProvider: FARGATE
+          Weight: 1
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-cluster'
+        - Key: Project
+          Value: SmartSales
+
+  ContactsLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/ecs/${EnvironmentName}-contacts'
+      RetentionInDays: 7
+
+  SalesLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/ecs/${EnvironmentName}-sales'
+      RetentionInDays: 7
+
+  WebLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/ecs/${EnvironmentName}-web'
+      RetentionInDays: 7
+
+  # ==========================================
+  # APPLICATION LOAD BALANCER
+  # ==========================================
+  ApplicationLoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      Name: !Sub '${EnvironmentName}-alb'
+      Scheme: internet-facing
+      Type: application
+      Subnets:
+        - Fn::ImportValue: !Sub '${NetworkStackName}-PublicSubnet1'
+        - Fn::ImportValue: !Sub '${NetworkStackName}-PublicSubnet2'
+      SecurityGroups:
+        - Fn::ImportValue: !Sub '${NetworkStackName}-SecurityGroupALB'
+      Tags:
+        - Key: Name
+          Value: !Sub '${EnvironmentName}-alb'
+
+  # Target Groups para Contacts API (Par Blue/Green A y B)
+  TGContactsA:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub '${EnvironmentName}-tg-contacts-a'
+      Port: 8080
+      Protocol: HTTP
+      TargetType: ip
+      VpcId:
+        Fn::ImportValue: !Sub '${NetworkStackName}-VpcId'
+      HealthCheckProtocol: HTTP
+      HealthCheckPort: '8080'
+      HealthCheckPath: /api/contacts/health/ready
+      HealthCheckIntervalSeconds: 15
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 3
+      Matcher:
+        HttpCode: '200'
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: '30'
+
+  TGContactsB:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub '${EnvironmentName}-tg-contacts-b'
+      Port: 8080
+      Protocol: HTTP
+      TargetType: ip
+      VpcId:
+        Fn::ImportValue: !Sub '${NetworkStackName}-VpcId'
+      HealthCheckProtocol: HTTP
+      HealthCheckPort: '8080'
+      HealthCheckPath: /api/contacts/health/ready
+      HealthCheckIntervalSeconds: 15
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 3
+      Matcher:
+        HttpCode: '200'
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: '30'
+
+  # Target Groups para Sales API (Par Blue/Green A y B)
+  TGSalesA:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub '${EnvironmentName}-tg-sales-a'
+      Port: 8080
+      Protocol: HTTP
+      TargetType: ip
+      VpcId:
+        Fn::ImportValue: !Sub '${NetworkStackName}-VpcId'
+      HealthCheckProtocol: HTTP
+      HealthCheckPort: '8080'
+      HealthCheckPath: /api/sales/health/ready
+      HealthCheckIntervalSeconds: 15
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 3
+      Matcher:
+        HttpCode: '200'
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: '30'
+
+  TGSalesB:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub '${EnvironmentName}-tg-sales-b'
+      Port: 8080
+      Protocol: HTTP
+      TargetType: ip
+      VpcId:
+        Fn::ImportValue: !Sub '${NetworkStackName}-VpcId'
+      HealthCheckProtocol: HTTP
+      HealthCheckPort: '8080'
+      HealthCheckPath: /api/sales/health/ready
+      HealthCheckIntervalSeconds: 15
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 3
+      Matcher:
+        HttpCode: '200'
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: '30'
+
+  # Target Group para Web Angular (Nginx)
+  TGWeb:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      Name: !Sub '${EnvironmentName}-tg-web'
+      Port: 8080
+      Protocol: HTTP
+      TargetType: ip
+      VpcId:
+        Fn::ImportValue: !Sub '${NetworkStackName}-VpcId'
+      HealthCheckProtocol: HTTP
+      HealthCheckPort: '8080'
+      HealthCheckPath: /healthz
+      HealthCheckIntervalSeconds: 15
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 2
+      UnhealthyThresholdCount: 3
+      Matcher:
+        HttpCode: '200'
+      TargetGroupAttributes:
+        - Key: deregistration_delay.timeout_seconds
+          Value: '30'
+
+  # Listener HTTP Puerto 80 (Redireccion a HTTPS o forward directo si no hay certificado en lab)
+  ALBListenerHTTP:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      LoadBalancerArn: !Ref ApplicationLoadBalancer
+      Port: 80
+      Protocol: HTTP
+      DefaultActions:
+        - !If
+          - HasCertificate
+          - Type: redirect
+            RedirectConfig:
+              Protocol: HTTPS
+              Port: '443'
+              StatusCode: HTTP_301
+          - Type: forward
+            TargetGroupArn: !Ref TGWeb
+
+  # Listener HTTPS Puerto 443 (o 8443 en lab si no hay ACM)
+  ALBListenerHTTPS:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Condition: HasCertificate
+    Properties:
+      LoadBalancerArn: !Ref ApplicationLoadBalancer
+      Port: 443
+      Protocol: HTTPS
+      Certificates:
+        - CertificateArn: !Ref CertificateArn
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref TGWeb
+
+  # Regla para Contacts API en /api/contacts/*
+  RuleContacts:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn: !If [HasCertificate, !Ref ALBListenerHTTPS, !Ref ALBListenerHTTP]
+      Priority: 10
+      Conditions:
+        - Field: path-pattern
+          PathPatternConfig:
+            Values:
+              - '/api/contacts/*'
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref TGContactsA
+
+  # Regla para Sales API en /api/sales/*
+  RuleSales:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      ListenerArn: !If [HasCertificate, !Ref ALBListenerHTTPS, !Ref ALBListenerHTTP]
+      Priority: 20
+      Conditions:
+        - Field: path-pattern
+          PathPatternConfig:
+            Values:
+              - '/api/sales/*'
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref TGSalesA
+
+  # ==========================================
+  # TASK DEFINITIONS (FARGATE 0.25 vCPU / 512 MiB)
+  # ==========================================
+  ContactsTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub '${EnvironmentName}-contacts'
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: '256'
+      Memory: '512'
+      ExecutionRoleArn: !Ref ExecutionRoleArn
+      TaskRoleArn: !Ref TaskRoleArn
+      ContainerDefinitions:
+        - Name: contacts-api
+          Image: !Ref ContactsImage
+          Essential: true
+          PortMappings:
+            - ContainerPort: 8080
+              Protocol: tcp
+          Environment:
+            - Name: ASPNETCORE_ENVIRONMENT
+              Value: Production
+            - Name: ASPNETCORE_URLS
+              Value: 'http://+:8080'
+            - Name: DOTNET_SYSTEM_GLOBALIZATION_INVARIANT
+              Value: 'false'
+            - Name: Jwt__KeyId
+              Value: smartsales-prod-key
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref ContactsLogGroup
+              awslogs-region: !Ref 'AWS::Region'
+              awslogs-stream-prefix: contacts
+
+  SalesTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub '${EnvironmentName}-sales'
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: '256'
+      Memory: '512'
+      ExecutionRoleArn: !Ref ExecutionRoleArn
+      TaskRoleArn: !Ref TaskRoleArn
+      ContainerDefinitions:
+        - Name: sales-api
+          Image: !Ref SalesImage
+          Essential: true
+          PortMappings:
+            - ContainerPort: 8080
+              Protocol: tcp
+          Environment:
+            - Name: ASPNETCORE_ENVIRONMENT
+              Value: Production
+            - Name: ASPNETCORE_URLS
+              Value: 'http://+:8080'
+            - Name: DOTNET_SYSTEM_GLOBALIZATION_INVARIANT
+              Value: 'false'
+            - Name: ContactsBaseUrl
+              Value: !Sub 'http://${ApplicationLoadBalancer.DNSName}'
+            - Name: Jwt__KeyId
+              Value: smartsales-prod-key
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref SalesLogGroup
+              awslogs-region: !Ref 'AWS::Region'
+              awslogs-stream-prefix: sales
+
+  WebTaskDefinition:
+    Type: AWS::ECS::TaskDefinition
+    Properties:
+      Family: !Sub '${EnvironmentName}-web'
+      NetworkMode: awsvpc
+      RequiresCompatibilities:
+        - FARGATE
+      Cpu: '256'
+      Memory: '512'
+      ExecutionRoleArn: !Ref ExecutionRoleArn
+      TaskRoleArn: !Ref TaskRoleArn
+      ContainerDefinitions:
+        - Name: web-app
+          Image: !Ref WebImage
+          Essential: true
+          PortMappings:
+            - ContainerPort: 8080
+              Protocol: tcp
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref WebLogGroup
+              awslogs-region: !Ref 'AWS::Region'
+              awslogs-stream-prefix: web
+
+  # ==========================================
+  # SERVICIOS ECS
+  # ==========================================
+  ContactsService:
+    Type: AWS::ECS::Service
+    DependsOn: RuleContacts
+    Properties:
+      ServiceName: !Sub '${EnvironmentName}-contacts'
+      Cluster: !Ref ECSCluster
+      TaskDefinition: !Ref ContactsTaskDefinition
+      LaunchType: FARGATE
+      DesiredCount: 1
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 100
+        DeploymentCircuitBreaker:
+          Enable: true
+          Rollback: true
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          Subnets:
+            - Fn::ImportValue: !Sub '${NetworkStackName}-PublicSubnet1'
+            - Fn::ImportValue: !Sub '${NetworkStackName}-PublicSubnet2'
+          SecurityGroups:
+            - Fn::ImportValue: !Sub '${NetworkStackName}-SecurityGroupFargate'
+      LoadBalancers:
+        - ContainerName: contacts-api
+          ContainerPort: 8080
+          TargetGroupArn: !Ref TGContactsA
+
+  SalesService:
+    Type: AWS::ECS::Service
+    DependsOn: RuleSales
+    Properties:
+      ServiceName: !Sub '${EnvironmentName}-sales'
+      Cluster: !Ref ECSCluster
+      TaskDefinition: !Ref SalesTaskDefinition
+      LaunchType: FARGATE
+      DesiredCount: 1
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 100
+        DeploymentCircuitBreaker:
+          Enable: true
+          Rollback: true
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          Subnets:
+            - Fn::ImportValue: !Sub '${NetworkStackName}-PublicSubnet1'
+            - Fn::ImportValue: !Sub '${NetworkStackName}-PublicSubnet2'
+          SecurityGroups:
+            - Fn::ImportValue: !Sub '${NetworkStackName}-SecurityGroupFargate'
+      LoadBalancers:
+        - ContainerName: sales-api
+          ContainerPort: 8080
+          TargetGroupArn: !Ref TGSalesA
+
+  WebService:
+    Type: AWS::ECS::Service
+    Properties:
+      ServiceName: !Sub '${EnvironmentName}-web'
+      Cluster: !Ref ECSCluster
+      TaskDefinition: !Ref WebTaskDefinition
+      LaunchType: FARGATE
+      DesiredCount: 1
+      DeploymentConfiguration:
+        MaximumPercent: 200
+        MinimumHealthyPercent: 100
+      NetworkConfiguration:
+        AwsvpcConfiguration:
+          AssignPublicIp: ENABLED
+          Subnets:
+            - Fn::ImportValue: !Sub '${NetworkStackName}-PublicSubnet1'
+            - Fn::ImportValue: !Sub '${NetworkStackName}-PublicSubnet2'
+          SecurityGroups:
+            - Fn::ImportValue: !Sub '${NetworkStackName}-SecurityGroupFargate'
+      LoadBalancers:
+        - ContainerName: web-app
+          ContainerPort: 8080
+          TargetGroupArn: !Ref TGWeb
+
+Outputs:
+  AlbDnsName:
+    Description: 'Nombre DNS del Application Load Balancer'
+    Value: !GetAtt ApplicationLoadBalancer.DNSName
+    Export:
+      Name: !Sub '${EnvironmentName}-AlbDnsName'
+
+  ClusterName:
+    Description: 'Nombre del cluster ECS'
+    Value: !Ref ECSCluster
+    Export:
+      Name: !Sub '${EnvironmentName}-ClusterName'
+
+  ContactsServiceName:
+    Description: 'Nombre del servicio Contacts'
+    Value: !GetAtt ContactsService.Name
+    Export:
+      Name: !Sub '${EnvironmentName}-ContactsServiceName'
+
+  SalesServiceName:
+    Description: 'Nombre del servicio Sales'
+    Value: !GetAtt SalesService.Name
+    Export:
+      Name: !Sub '${EnvironmentName}-SalesServiceName'
+
+  WebServiceName:
+    Description: 'Nombre del servicio Web'
+    Value: !GetAtt WebService.Name
+    Export:
+      Name: !Sub '${EnvironmentName}-WebServiceName'

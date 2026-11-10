@@ -1,4 +1,7 @@
-param([switch]$Down)
+param(
+    [switch]$Down,
+    [ValidateSet('Basic', 'Showcase')][string]$DemoProfile = 'Basic'
+)
 
 $ErrorActionPreference = 'Stop'
 $workspace = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path
@@ -8,6 +11,7 @@ $privateKeyPath = Join-Path $localState 'jwt-private.pem'
 $publicKeyPath = Join-Path $localState 'jwt-public.pem'
 $openssl = 'C:\Program Files\Git\usr\bin\openssl.exe'
 $environmentNames = @('LOCAL_DB_PASSWORD', 'LOCAL_ADMIN_PASSWORD', 'LOCAL_COMMERCIAL_PASSWORD',
+    'LOCAL_COMMERCIAL2_PASSWORD', 'LOCAL_COMMERCIAL3_PASSWORD', 'DEMO_PROFILE',
     'LOCAL_JWT_PRIVATE_PEM', 'LOCAL_JWT_PUBLIC_PEM')
 $previous = @{}
 
@@ -32,9 +36,26 @@ try {
             database = New-RandomPassword
             administrator = New-RandomPassword
             commercial = New-RandomPassword
+            commercial2 = New-RandomPassword
+            commercial3 = New-RandomPassword
         }
         [IO.File]::WriteAllText($secretsPath, ($secrets | ConvertTo-Json),
             [Text.UTF8Encoding]::new($false))
+    } else {
+        $existingSecrets = Get-Content -LiteralPath $secretsPath -Raw | ConvertFrom-Json
+        $modified = $false
+        if (-not $existingSecrets.commercial2) {
+            $existingSecrets | Add-Member -MemberType NoteProperty -Name 'commercial2' -Value (New-RandomPassword)
+            $modified = $true
+        }
+        if (-not $existingSecrets.commercial3) {
+            $existingSecrets | Add-Member -MemberType NoteProperty -Name 'commercial3' -Value (New-RandomPassword)
+            $modified = $true
+        }
+        if ($modified) {
+            [IO.File]::WriteAllText($secretsPath, ($existingSecrets | ConvertTo-Json),
+                [Text.UTF8Encoding]::new($false))
+        }
     }
     if (-not (Test-Path $privateKeyPath) -or -not (Test-Path $publicKeyPath)) {
         if (-not (Test-Path $openssl)) { throw 'Se necesita OpenSSL de Git para crear claves locales.' }
@@ -46,6 +67,9 @@ try {
         LOCAL_DB_PASSWORD = $secrets.database
         LOCAL_ADMIN_PASSWORD = $secrets.administrator
         LOCAL_COMMERCIAL_PASSWORD = $secrets.commercial
+        LOCAL_COMMERCIAL2_PASSWORD = if ($secrets.commercial2) { $secrets.commercial2 } else { $secrets.commercial }
+        LOCAL_COMMERCIAL3_PASSWORD = if ($secrets.commercial3) { $secrets.commercial3 } else { $secrets.commercial }
+        DEMO_PROFILE = $DemoProfile
         LOCAL_JWT_PRIVATE_PEM = Get-Content -LiteralPath $privateKeyPath -Raw -Encoding ascii
         LOCAL_JWT_PUBLIC_PEM = Get-Content -LiteralPath $publicKeyPath -Raw -Encoding ascii
     }
@@ -85,8 +109,15 @@ try {
             }
             if (-not $ready) { throw "No respondió salud: $path" }
         }
-        Write-Output 'SmartSales local listo en http://127.0.0.1:8088'
-        Write-Output "Cuentas: admin@demo.local y comercial@demo.local; contraseñas en $secretsPath"
+        Write-Output "SmartSales local listo en http://127.0.0.1:8088 (Perfil: $DemoProfile)"
+        if ($DemoProfile -eq 'Showcase') {
+            Write-Output "Cuentas Showcase: admin@demo.local, comercial@demo.local, comercial2@demo.local, comercial3@demo.local"
+            Write-Output "Totales Showcase: 4 usuarios, 60 contactos, 100 oportunidades, 120 seguimientos, 150 interacciones."
+        } else {
+            Write-Output "Cuentas Basic: admin@demo.local y comercial@demo.local"
+            Write-Output "Totales Basic: 2 usuarios, 8 contactos, 8 oportunidades, 3 seguimientos, 3 interacciones."
+        }
+        Write-Output "Contraseñas en $secretsPath (ignorado por Git)"
     } finally { Pop-Location }
 } finally {
     foreach ($name in $environmentNames) {

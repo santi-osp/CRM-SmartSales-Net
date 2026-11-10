@@ -14,6 +14,11 @@ export class FollowUpsApi {
     return this.http.get<FollowUpPage>(this.base, { params });
   }
 
+  calendar(from: string, to: string, scope: 'Mine' | 'All'): Observable<FollowUp[]> {
+    const params = new HttpParams().set('from', from).set('to', to).set('scope', scope);
+    return this.http.get<FollowUp[]>(`${this.base}/calendar`, { params });
+  }
+
   create(body: { contactId: string; opportunityId: string | null; subject: string;
     scheduledAt: string }): Observable<FollowUp> {
     return this.http.post<FollowUp>(this.base, body);

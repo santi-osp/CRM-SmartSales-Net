@@ -6,7 +6,6 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { RouterLink } from '@angular/router';
 import { EMPTY, Subject, finalize, merge, switchMap, tap, debounceTime, distinctUntilChanged, startWith, map, catchError } from 'rxjs';
 import { ApiProblem, Contact, ContactSource, ContactType, ContactWrite, Page } from './contact.models';
 import { ContactsApi } from './contacts.api';
@@ -14,7 +13,7 @@ import { InteractionPanel } from '../interactions/interaction-panel';
 
 @Component({
   selector: 'app-contacts-page',
-  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule, RouterLink,
+  imports: [ReactiveFormsModule, MatButtonModule, MatFormFieldModule, MatInputModule, MatSelectModule,
     InteractionPanel],
   templateUrl: './contacts-page.html',
   styleUrl: './contacts-page.scss'

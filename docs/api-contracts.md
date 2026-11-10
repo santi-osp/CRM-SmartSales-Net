@@ -104,6 +104,7 @@ primeras 100 filas como si fueran el conjunto completo. Cerradas se consultan po
 |---|---|---|---|
 | POST S/follow-ups | `{contactId,opportunityId:uuid|null,subject,scheduledAt}` | FollowUp Pending, responsable sub, 201 | HU05 |
 | GET S/follow-ups | `bucket:Overdue\|Today\|Upcoming\|Completed`, `scope:Mine\|All=Mine`, paginación | Page<FollowUp>; All solo Admin, Commercial→403 | HU05 |
+| GET S/follow-ups/calendar | `from:yyyy-MM-dd`, `to:yyyy-MM-dd`, `scope:Mine\|All=Mine` | List<FollowUp> orden scheduledAt ASC,id; rango max 365 días; >500 items→413; All solo Admin, Commercial→403 | HU05, ADR-13 |
 | GET S/follow-ups/{id} | UUID | FollowUp solo propietario o Admin | HU05 |
 | POST S/follow-ups/{id}/complete | `{version}` | Completa propio o Admin; 200 con FollowUp | HU05 |
 | POST S/interactions | `{contactId,opportunityId:uuid|null,type,occurredAt,summary}` | Interaction, autor sub, 201 | HU06 |

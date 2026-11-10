@@ -1,86 +1,201 @@
-<div class="page-shell">
-  <header class="topbar">
-    <a routerLink="/" class="brand">SmartSales</a>
-    <nav aria-label="Principal"><a routerLink="/pipeline">Tablero</a><a routerLink="/opportunities">Oportunidades</a><a routerLink="/contacts">Contactos</a><a routerLink="/">Inicio</a></nav>
-  </header>
-  <main>
-    <div class="heading">
-      <p class="eyebrow">Actividad</p>
-      <h1>Agenda de seguimientos</h1>
-      <p>Los horarios se muestran en Bogotá. Programa el próximo contacto y marca lo realizado.</p>
+<div class="agenda-page">
+  <!-- Encabezado de Página -->
+  <div class="page-header">
+    <div class="header-info">
+      <span class="section-tag">Gestión Temporal</span>
+      <h1>Agenda de Seguimientos</h1>
+      <p class="subtitle">Programa llamadas, reuniones y compromisos comerciales en la hora legal de Bogotá (UTC-5).</p>
     </div>
-    <div class="workspace">
-      <section class="agenda-panel" aria-labelledby="agenda-title">
-        <div class="section-head">
-          <h2 id="agenda-title">Seguimientos</h2>
-          <button mat-stroked-button type="button" (click)="load()">Actualizar</button>
+
+    <!-- Controles de Modo de Vista y Alcance -->
+    <div class="header-controls">
+      <!-- Toggle Vista Calendario / Lista -->
+      <div class="view-toggle" role="group" aria-label="Modo de visualización">
+        <button type="button" class="toggle-btn" [class.active]="viewMode() === 'Calendar'" (click)="toggleViewMode('Calendar')">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span>Calendario</span>
+        </button>
+        <button type="button" class="toggle-btn" [class.active]="viewMode() === 'List'" (click)="toggleViewMode('List')">
+          <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+          <span>Lista</span>
+        </button>
+      </div>
+
+      <!-- Scope Filter (Admin) -->
+      @if (isAdmin()) {
+        <div class="scope-toggle" role="group" aria-label="Alcance">
+          <button type="button" class="scope-btn" [class.active]="scope() === 'Mine'" (click)="selectScope('Mine')">Mis Seguimientos</button>
+          <button type="button" class="scope-btn" [class.active]="scope() === 'All'" (click)="selectScope('All')">Todo el Equipo</button>
         </div>
-        <div class="tabs" role="group" aria-label="Categoría de agenda">
-          @for (choice of buckets; track choice.value) {
-            <button mat-stroked-button type="button" [attr.aria-pressed]="bucket() === choice.value"
-              [class.active]="bucket() === choice.value" (click)="selectBucket(choice.value)">{{ choice.label }}</button>
-          }
-        </div>
-        @if (isAdmin()) {
-          <div class="scope" role="group" aria-label="Alcance">
-            <button mat-button type="button" [attr.aria-pressed]="scope() === 'Mine'" (click)="selectScope('Mine')">Mis seguimientos</button>
-            <button mat-button type="button" [attr.aria-pressed]="scope() === 'All'" (click)="selectScope('All')">Todo el equipo</button>
+      }
+    </div>
+  </div>
+
+  <div class="workspace-grid">
+    <!-- PANEL PRINCIPAL (CALENDARIO O LISTA) -->
+    <section class="main-panel">
+      <!-- MODO CALENDARIO -->
+      @if (viewMode() === 'Calendar') {
+        <div class="calendar-card">
+          <div class="calendar-legend" aria-label="Leyenda de colores de eventos">
+            <span class="legend-item"><span class="legend-dot dot-overdue"></span>Vencido</span>
+            <span class="legend-item"><span class="legend-dot dot-today"></span>Hoy</span>
+            <span class="legend-item"><span class="legend-dot dot-upcoming"></span>Próximo</span>
+            <span class="legend-item"><span class="legend-dot dot-completed"></span>Completado</span>
           </div>
-        }
-        @if (loading()) { <p role="status">Cargando agenda…</p> }
-        @if (listError()) {
-          <p class="error" role="alert">{{ listError() }}</p>
-          <button mat-stroked-button type="button" (click)="load()">Reintentar</button>
-        }
-        @if (!loading() && !listError() && page()?.items?.length === 0) {
-          <p class="empty">No hay seguimientos en esta categoría.</p>
-        }
-        @if (!loading() && !listError()) {
-          <ul class="follow-list">
-            @for (item of page()?.items ?? []; track item.id) {
-              <li>
-                <div>
-                  <strong>{{ item.subject }}</strong>
-                  <p>{{ contactLabel(item.contactId) }} · {{ dateTime(item.scheduledAt) }}</p>
-                  @if (item.opportunityId) { <small>Oportunidad vinculada</small> }
-                  @if (item.completedAt) { <small>Completado: {{ dateTime(item.completedAt) }}</small> }
-                </div>
-                @if (item.status === 'Pending') {
-                  <button mat-flat-button type="button" (click)="complete(item)"
-                    [disabled]="!!completingId()">{{ completingId() === item.id ? 'Guardando…' : 'Completar' }}</button>
-                }
-              </li>
-            }
-          </ul>
-          @if (page() && page()!.totalCount > 0) {
-            <div class="pagination">
-              <span>Página {{ pageNumber() }} · {{ page()!.totalCount }} registros</span>
-              <div>
-                <button mat-stroked-button type="button" (click)="previous()" [disabled]="pageNumber() === 1">Anterior</button>
-                <button mat-stroked-button type="button" (click)="next()" [disabled]="pageNumber() * 20 >= page()!.totalCount">Siguiente</button>
-              </div>
+
+          @if (calendarLoading()) {
+            <div class="calendar-loading" role="status">
+              <span>Actualizando calendario…</span>
             </div>
           }
-        }
-      </section>
 
-      <section class="form-panel" aria-labelledby="new-title">
-        <h2 id="new-title">Nuevo seguimiento</h2>
-        <form [formGroup]="form" (ngSubmit)="save()" novalidate>
-          <mat-form-field appearance="outline">
+          @if (calendarError()) {
+            <div class="calendar-error-msg" role="alert">
+              {{ calendarError() }}
+              <button mat-stroked-button type="button" (click)="loadCalendar(visibleFrom, visibleTo)">Reintentar</button>
+            </div>
+          }
+
+          <div class="fullcalendar-wrapper">
+            <full-calendar #calendar [options]="calendarOptions"></full-calendar>
+          </div>
+        </div>
+      }
+
+      <!-- MODO LISTA -->
+      @if (viewMode() === 'List') {
+        <div class="list-card">
+          <div class="list-tabs" role="group" aria-label="Categorías de agenda">
+            @for (choice of buckets; track choice.value) {
+              <button type="button" class="tab-btn" [class.active]="bucket() === choice.value"
+                [attr.aria-pressed]="bucket() === choice.value" (click)="selectBucket(choice.value)">
+                {{ choice.label }}
+              </button>
+            }
+          </div>
+
+          @if (loading()) {
+            <p class="status-msg" role="status">Cargando seguimientos…</p>
+          }
+
+          @if (listError()) {
+            <div class="error-msg" role="alert">
+              <p>{{ listError() }}</p>
+              <button mat-stroked-button type="button" (click)="load()">Reintentar</button>
+            </div>
+          }
+
+          @if (!loading() && !listError() && page()?.items?.length === 0) {
+            <div class="empty-state">
+              <p>No hay seguimientos en la categoría {{ bucket() }}.</p>
+            </div>
+          }
+
+          @if (!loading() && !listError() && (page()?.items?.length ?? 0) > 0) {
+            <ul class="follow-list">
+              @for (item of page()?.items ?? []; track item.id) {
+                <li class="follow-item" [class.item-completed]="item.status === 'Completed'">
+                  <div class="item-content">
+                    <strong class="item-subject">{{ item.subject }}</strong>
+                    <div class="item-meta">
+                      <span class="item-contact">{{ contactLabel(item.contactId) }}</span>
+                      <span class="meta-separator">·</span>
+                      <span class="item-date tabular-nums">{{ dateTime(item.scheduledAt) }}</span>
+                    </div>
+                    @if (item.completedAt) {
+                      <span class="item-completed-badge">Completado: {{ dateTime(item.completedAt) }}</span>
+                    }
+                  </div>
+                  @if (item.status === 'Pending') {
+                    <button mat-flat-button color="primary" class="complete-btn" type="button"
+                      (click)="complete(item)" [disabled]="!!completingId()">
+                      {{ completingId() === item.id ? 'Guardando…' : 'Completar' }}
+                    </button>
+                  }
+                </li>
+              }
+            </ul>
+
+            @if (page() && page()!.totalCount > 0) {
+              <div class="pagination">
+                <span class="tabular-nums">Página {{ pageNumber() }} · {{ page()!.totalCount }} registros</span>
+                <div class="pagination-buttons">
+                  <button mat-stroked-button type="button" (click)="previous()" [disabled]="pageNumber() === 1">Anterior</button>
+                  <button mat-stroked-button type="button" (click)="next()" [disabled]="pageNumber() * 20 >= page()!.totalCount">Siguiente</button>
+                </div>
+              </div>
+            }
+          }
+        </div>
+      }
+    </section>
+
+    <!-- PANEL LATERAL: FORMULARIO Y DETALLES -->
+    <aside class="side-panel">
+      <!-- Modal / Detalle de Evento Seleccionado -->
+      @if (selectedEvent(); as event) {
+        <div class="event-detail-card" role="dialog" aria-labelledby="detail-event-title">
+          <div class="detail-header">
+            <span class="detail-badge" [class]="'badge-' + event.status.toLowerCase()">
+              {{ event.status === 'Completed' ? 'Completado' : 'Pendiente' }}
+            </span>
+            <button type="button" class="close-detail-btn" (click)="closeEventDetail()" aria-label="Cerrar detalle">
+              <svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <h3 id="detail-event-title" class="detail-subject">{{ event.subject }}</h3>
+          <dl class="detail-list">
+            <div>
+              <dt>Contacto</dt>
+              <dd>{{ contactLabel(event.contactId) }}</dd>
+            </div>
+            <div>
+              <dt>Fecha y Hora</dt>
+              <dd class="tabular-nums">{{ dateTime(event.scheduledAt) }}</dd>
+            </div>
+            @if (event.completedAt) {
+              <div>
+                <dt>Fecha de Finalización</dt>
+                <dd class="tabular-nums">{{ dateTime(event.completedAt) }}</dd>
+              </div>
+            }
+          </dl>
+          @if (event.status === 'Pending') {
+            <button mat-flat-button color="primary" class="detail-action-btn" type="button"
+              (click)="completeSelectedEvent()" [disabled]="!!completingId()">
+              {{ completingId() === event.id ? 'Guardando…' : 'Marcar como Completado' }}
+            </button>
+          }
+        </div>
+      }
+
+      <!-- Formulario de Nuevo Seguimiento -->
+      <div class="form-card">
+        <div class="form-header">
+          <h2 class="form-title">Programar Seguimiento</h2>
+          <span class="form-subtitle">Selecciona un contacto y asigna fecha en Bogotá</span>
+        </div>
+
+        <form [formGroup]="form" (ngSubmit)="save()" novalidate class="followup-form">
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>Buscar contacto</mat-label>
-            <input matInput [formControl]="contactQuery" autocomplete="off" />
+            <input matInput [formControl]="contactQuery" autocomplete="off" placeholder="Escribe para buscar…" />
           </mat-form-field>
-          <mat-form-field appearance="outline">
+
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>Contacto</mat-label>
             <mat-select formControlName="contactId">
               @for (contact of contactChoices(); track contact.id) {
-                <mat-option [value]="contact.id">{{ contact.name }} · {{ contact.email || contact.phone }}</mat-option>
+                <mat-option [value]="contact.id">{{ contact.name }}</mat-option>
               }
             </mat-select>
-            @if (form.controls.contactId.touched && form.controls.contactId.invalid) { <mat-error>Selecciona un contacto.</mat-error> }
+            @if (form.controls.contactId.touched && form.controls.contactId.invalid) {
+              <mat-error>Selecciona un contacto.</mat-error>
+            }
           </mat-form-field>
-          <mat-form-field appearance="outline">
+
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>Oportunidad (opcional)</mat-label>
             <mat-select formControlName="opportunityId" [disabled]="!form.controls.contactId.value">
               <mat-option value="">Sin oportunidad</mat-option>
@@ -89,24 +204,32 @@
               }
             </mat-select>
           </mat-form-field>
-          @if (opportunityError()) { <p class="error" role="alert">{{ opportunityError() }}</p> }
-          @if (opportunityChoices().length < opportunityTotal()) {
-            <button mat-stroked-button type="button" (click)="moreOpportunities()">Más oportunidades</button>
-          }
-          <mat-form-field appearance="outline">
-            <mat-label>Asunto</mat-label>
-            <input matInput formControlName="subject" maxlength="160" />
-            @if (form.controls.subject.touched && form.controls.subject.invalid) { <mat-error>Escribe un asunto de máximo 160 caracteres.</mat-error> }
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Asunto del seguimiento</mat-label>
+            <input matInput formControlName="subject" maxlength="160" placeholder="Ej. Llamar para resolver dudas de propuesta" />
+            @if (form.controls.subject.touched && form.controls.subject.invalid) {
+              <mat-error>Escribe un asunto de máximo 160 caracteres.</mat-error>
+            }
           </mat-form-field>
-          <mat-form-field appearance="outline">
+
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>Fecha y hora (Bogotá)</mat-label>
             <input matInput formControlName="scheduledLocal" type="datetime-local" />
-            @if (form.controls.scheduledLocal.touched && form.controls.scheduledLocal.invalid) { <mat-error>Indica fecha y hora.</mat-error> }
+            @if (form.controls.scheduledLocal.touched && form.controls.scheduledLocal.invalid) {
+              <mat-error>Indica fecha y hora válidas.</mat-error>
+            }
           </mat-form-field>
-          @if (actionError()) { <p class="error" role="alert">{{ actionError() }}</p> }
-          <button mat-flat-button type="submit" [disabled]="saving()">{{ saving() ? 'Guardando…' : 'Programar seguimiento' }}</button>
+
+          @if (actionError()) {
+            <p class="error-text" role="alert">{{ actionError() }}</p>
+          }
+
+          <button mat-flat-button color="primary" class="submit-btn" type="submit" [disabled]="saving()">
+            {{ saving() ? 'Guardando…' : 'Programar Seguimiento' }}
+          </button>
         </form>
-      </section>
-    </div>
-  </main>
+      </div>
+    </aside>
+  </div>
 </div>

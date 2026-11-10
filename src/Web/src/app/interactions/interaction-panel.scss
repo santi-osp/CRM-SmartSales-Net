@@ -9,4 +9,5 @@ mat-form-field { width: 100%; }
 .timeline li::before { content: ''; position: absolute; left: -24px; top: 4px; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); }
 .timeline p { margin: 4px 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 .timeline small { color: var(--muted); }
+.empty-hint { color: var(--muted); font-size: 0.875rem; margin: 12px 0; }
 .pagination { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
