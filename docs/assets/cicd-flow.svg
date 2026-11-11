@@ -1,0 +1,120 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 480" width="100%" height="100%">
+  <defs>
+    <linearGradient id="flowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="35%" stop-color="#2563eb"/>
+      <stop offset="70%" stop-color="#7c3aed"/>
+      <stop offset="100%" stop-color="#059669"/>
+    </linearGradient>
+
+    <filter id="cardGlow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity="0.35"/>
+    </filter>
+  </defs>
+
+  <style>
+    .title-text { font-family: 'Inter', -apple-system, sans-serif; font-weight: 800; font-size: 20px; fill: #ffffff; }
+    .step-num { font-family: 'Inter', -apple-system, sans-serif; font-weight: 800; font-size: 14px; fill: #38bdf8; }
+    .step-title { font-family: 'Inter', -apple-system, sans-serif; font-weight: 700; font-size: 15px; fill: #ffffff; }
+    .step-desc { font-family: 'Inter', -apple-system, sans-serif; font-weight: 500; font-size: 12px; fill: #94a3b8; }
+    .step-detail { font-family: 'Courier New', monospace; font-size: 11px; fill: #cbd5e1; }
+    .badge-ok { font-family: 'Inter', -apple-system, sans-serif; font-weight: 700; font-size: 11px; fill: #10b981; }
+  </style>
+
+  <!-- Background -->
+  <rect width="1100" height="480" rx="16" fill="#0b0f19"/>
+
+  <!-- Title Header -->
+  <text x="50" y="55" class="title-text">Canalización de Entrega Continua Blue/Green (AWS CodePipeline &amp; CodeDeploy)</text>
+  <text x="50" y="80" class="step-desc">Ciclo de vida probado con 0 tiempo de inactividad, gobernanza ManualGate y rollback automático.</text>
+
+  <!-- Flow Line Bar -->
+  <rect x="50" y="110" width="1000" height="4" rx="2" fill="url(#flowGrad)"/>
+
+  <!-- Stage 1: Source CodeCommit + ECR -->
+  <g transform="translate(50, 140)" filter="url(#cardGlow)">
+    <rect width="220" height="290" rx="10" fill="#1e293b" stroke="#0284c7" stroke-width="1.2"/>
+    <rect width="220" height="36" rx="10" fill="#0369a1"/>
+    <text x="15" y="24" class="step-title">1. Stage: Source</text>
+
+    <text x="15" y="60" class="step-num">ACTION 1A</text>
+    <text x="15" y="78" class="step-title" font-size="13">AWS CodeCommit</text>
+    <text x="15" y="96" class="step-desc">Repo: smartsales-deployment</text>
+    <text x="15" y="112" class="step-desc">Branch: dev</text>
+    <text x="15" y="128" class="step-detail">taskdef.json, appspec.yaml</text>
+
+    <line x1="15" y1="145" x2="205" y2="145" stroke="#334155" stroke-width="1"/>
+
+    <text x="15" y="170" class="step-num">ACTION 1B</text>
+    <text x="15" y="188" class="step-title" font-size="13">Amazon ECR</text>
+    <text x="15" y="206" class="step-desc">Repo: smartsales-sales</text>
+    <text x="15" y="222" class="step-desc">Tag: demo-02</text>
+    <text x="15" y="238" class="step-detail">sha256:d321c4d8...</text>
+
+    <rect x="15" y="252" width="190" height="24" rx="4" fill="#022c22"/>
+    <text x="25" y="268" class="badge-ok">✓ Output Artifacts Ready</text>
+  </g>
+
+  <!-- Stage 2: Manual Approval -->
+  <g transform="translate(310, 140)" filter="url(#cardGlow)">
+    <rect width="220" height="290" rx="10" fill="#1e293b" stroke="#7c3aed" stroke-width="1.2"/>
+    <rect width="220" height="36" rx="10" fill="#6d28d9"/>
+    <text x="15" y="24" class="step-title">2. Stage: Approval</text>
+
+    <text x="15" y="65" class="step-num" fill="#c084fc">ACTION 2</text>
+    <text x="15" y="85" class="step-title" font-size="13">ManualGate (Aprobación)</text>
+    <text x="15" y="110" class="step-desc">Puerta de control gobernada:</text>
+    <text x="15" y="130" class="step-desc">• Validación de digest ECR</text>
+    <text x="15" y="150" class="step-desc">• Verificación de Blue healthy</text>
+    <text x="15" y="170" class="step-desc">• Confirmación de presupuesto</text>
+    <text x="15" y="190" class="step-desc">• Token único de aprobación</text>
+
+    <rect x="15" y="225" width="190" height="50" rx="6" fill="#1e1b4b" stroke="#4338ca"/>
+    <text x="25" y="245" class="step-desc" fill="#a5b4fc">Aprobación del Dueño:</text>
+    <text x="25" y="262" class="badge-ok" fill="#38bdf8">✓ Status: Approved</text>
+  </g>
+
+  <!-- Stage 3: CodeDeploy ECS -->
+  <g transform="translate(570, 140)" filter="url(#cardGlow)">
+    <rect width="230" height="290" rx="10" fill="#1e293b" stroke="#2563eb" stroke-width="1.2"/>
+    <rect width="230" height="36" rx="10" fill="#1d4ed8"/>
+    <text x="15" y="24" class="step-title">3. Stage: CodeDeploy</text>
+
+    <text x="15" y="65" class="step-num" fill="#60a5fa">ACTION 3</text>
+    <text x="15" y="85" class="step-title" font-size="13">CodeDeployToECS</text>
+    <text x="15" y="110" class="step-desc">Estrategia: Blue/Green</text>
+    <text x="15" y="130" class="step-desc">Config: ECSAllAtOnce</text>
+
+    <text x="15" y="160" class="step-desc">• Crea TaskSet Green/Blue</text>
+    <text x="15" y="180" class="step-desc">• Espera Health Check OK</text>
+    <text x="15" y="200" class="step-desc">• Conmuta tráfico en ALB</text>
+    <text x="15" y="220" class="step-desc">• Espera terminación (5m)</text>
+
+    <rect x="15" y="252" width="200" height="24" rx="4" fill="#022c22"/>
+    <text x="25" y="268" class="badge-ok">✓ Deployment Succeeded</text>
+  </g>
+
+  <!-- Stage 4: ECS & ALB Verification -->
+  <g transform="translate(840, 140)" filter="url(#cardGlow)">
+    <rect width="210" height="290" rx="10" fill="#1e293b" stroke="#10b981" stroke-width="1.2"/>
+    <rect width="210" height="36" rx="10" fill="#059669"/>
+    <text x="15" y="24" class="step-title">4. Producción Verificada</text>
+
+    <text x="15" y="65" class="step-num" fill="#34d399">RESULTADO</text>
+    <text x="15" y="85" class="step-title" font-size="13">Zero Downtime</text>
+
+    <text x="15" y="115" class="step-desc">TaskSet: PRIMARY (1/1)</text>
+    <text x="15" y="135" class="step-desc">TaskDef: sales-lab:4</text>
+    <text x="15" y="155" class="step-desc">TG: smartsales-sales-blue</text>
+    <text x="15" y="175" class="step-desc">HTTP Listener: 9002 (100%)</text>
+
+    <line x1="15" y1="195" x2="195" y2="195" stroke="#334155" stroke-width="1"/>
+
+    <text x="15" y="215" class="step-desc" fill="#38bdf8">Headers Verificados:</text>
+    <text x="15" y="233" class="step-detail">X-SmartSales-Lab-Revision</text>
+    <text x="15" y="249" class="step-detail" fill="#10b981">demo-02</text>
+
+    <rect x="15" y="258" width="180" height="22" rx="4" fill="#064e3b"/>
+    <text x="25" y="273" class="badge-ok">✓ 100% Validado</text>
+  </g>
+</svg>

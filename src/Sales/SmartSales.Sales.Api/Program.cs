@@ -47,6 +47,11 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 app.UseExceptionHandler();
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Append("X-SmartSales-Lab-Revision", "demo-02");
+    await next();
+});
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapGet("/api/sales/health/live", () => Results.Ok(new { status = "healthy" }));
@@ -54,6 +59,7 @@ app.MapGet("/api/sales/health/ready", async (SalesDbContext db, CancellationToke
     await db.Database.CanConnectAsync(cancellationToken)
         ? Results.Ok(new { status = "ready" })
         : Results.StatusCode(StatusCodes.Status503ServiceUnavailable));
+app.MapGet("/api/sales/health/version", () => Results.Ok(new { service = "sales", version = "1.1.0-lab", revision = "demo-02" }));
 if (app.Environment.IsDevelopment())
     app.MapOpenApi("/api/sales/openapi/{documentName}.json");
 app.MapOpportunityEndpoints();

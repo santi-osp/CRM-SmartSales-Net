@@ -1,0 +1,160 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 680" width="100%" height="100%">
+  <defs>
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0b132b"/>
+      <stop offset="100%" stop-color="#1c2541"/>
+    </linearGradient>
+
+    <linearGradient id="vpcGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#1e293b" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#0f172a" stop-opacity="0.9"/>
+    </linearGradient>
+
+    <linearGradient id="albGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6"/>
+      <stop offset="100%" stop-color="#1d4ed8"/>
+    </linearGradient>
+
+    <linearGradient id="ecsGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+
+    <linearGradient id="dbGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0284c7"/>
+      <stop offset="100%" stop-color="#0369a1"/>
+    </linearGradient>
+
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="6" stdDeviation="8" flood-color="#000" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <style>
+    .header-text { font-family: 'Inter', -apple-system, sans-serif; font-weight: 800; font-size: 20px; fill: #ffffff; }
+    .subheader-text { font-family: 'Inter', -apple-system, sans-serif; font-weight: 500; font-size: 13px; fill: #94a3b8; }
+    .box-title { font-family: 'Inter', -apple-system, sans-serif; font-weight: 700; font-size: 15px; fill: #ffffff; }
+    .box-desc { font-family: 'Inter', -apple-system, sans-serif; font-weight: 500; font-size: 12px; fill: #cbd5e1; }
+    .port-badge { font-family: 'Courier New', monospace; font-weight: 700; font-size: 11px; fill: #38bdf8; }
+    .line-label { font-family: 'Inter', -apple-system, sans-serif; font-weight: 600; font-size: 11px; fill: #94a3b8; }
+  </style>
+
+  <!-- Canvas Background -->
+  <rect width="1100" height="680" rx="16" fill="#030712"/>
+
+  <!-- AWS Cloud Border Container -->
+  <rect x="30" y="30" width="1040" height="620" rx="12" fill="url(#cloudGrad)" stroke="#334155" stroke-width="1.5"/>
+  <text x="60" y="65" class="header-text">AWS Cloud (Region: us-east-1 · Account: 842082548997)</text>
+  <text x="60" y="85" class="subheader-text">SmartSales CRM — Arquitectura de Producción y Laboratorio Blue/Green</text>
+
+  <!-- VPC Container -->
+  <rect x="50" y="110" width="760" height="515" rx="10" fill="url(#vpcGrad)" stroke="#475569" stroke-dasharray="6,4" stroke-width="1.2"/>
+  <text x="70" y="135" class="box-title" fill="#cbd5e1">Amazon VPC: vpc-000f80dc156467458 (10.0.0.0/16)</text>
+  <text x="70" y="152" class="box-desc">Subnets: subnet-09537ad7f957673d2 (us-east-1a) &amp; subnet-01611707fcb81ee49 (us-east-1b)</text>
+
+  <!-- ALB Section -->
+  <g transform="translate(80, 180)" filter="url(#shadow)">
+    <rect width="210" height="420" rx="10" fill="#1e293b" stroke="#3b82f6" stroke-width="1.5"/>
+    <rect width="210" height="45" rx="10" fill="url(#albGrad)"/>
+    <text x="15" y="28" class="box-title">Application Load Balancer</text>
+    <text x="15" y="65" class="line-label">DNS: smartsales-alb-lab</text>
+
+    <!-- Listener 80 -->
+    <rect x="15" y="85" width="180" height="65" rx="6" fill="#0f172a" stroke="#334155"/>
+    <text x="25" y="105" class="port-badge">PORT 80 (HTTP LIVE)</text>
+    <text x="25" y="122" class="box-desc">/  → smartsales-web-live</text>
+    <text x="25" y="138" class="box-desc">/api/* → Live APIs TG</text>
+
+    <!-- Listener 9001 / 9101 -->
+    <rect x="15" y="165" width="180" height="75" rx="6" fill="#0f172a" stroke="#10b981"/>
+    <text x="25" y="185" class="port-badge" fill="#34d399">PORT 9001 / 9101 (CONTACTS)</text>
+    <text x="25" y="202" class="box-desc">Prod: smartsales-contacts-green</text>
+    <text x="25" y="218" class="box-desc">Test: smartsales-contacts-blue</text>
+    <text x="25" y="232" class="line-label" fill="#10b981">Zero-Downtime Blue/Green</text>
+
+    <!-- Listener 9002 / 9102 -->
+    <rect x="15" y="255" width="180" height="75" rx="6" fill="#0f172a" stroke="#0ea5e9"/>
+    <text x="25" y="275" class="port-badge" fill="#38bdf8">PORT 9002 / 9102 (SALES)</text>
+    <text x="25" y="292" class="box-desc">Prod: smartsales-sales-blue</text>
+    <text x="25" y="308" class="box-desc">Test: smartsales-sales-green</text>
+    <text x="25" y="322" class="line-label" fill="#38bdf8">Revision: demo-02</text>
+
+    <!-- Status Badge -->
+    <rect x="15" y="345" width="180" height="50" rx="6" fill="#022c22" stroke="#059669"/>
+    <circle cx="30" cy="370" r="5" fill="#10b981"/>
+    <text x="45" y="374" class="box-desc" fill="#6ee7b7">Todos los Target Groups</text>
+    <text x="45" y="388" class="line-label" fill="#34d399">STATUS: HEALTHY (200)</text>
+  </g>
+
+  <!-- ECS Fargate Cluster -->
+  <g transform="translate(340, 180)" filter="url(#shadow)">
+    <rect width="445" height="420" rx="10" fill="#1e293b" stroke="#f59e0b" stroke-width="1.5"/>
+    <rect width="445" height="45" rx="10" fill="url(#ecsGrad)"/>
+    <text x="20" y="28" class="box-title">Amazon ECS Cluster: smartsales-lab-cluster (Fargate)</text>
+
+    <!-- Service 1: Web Live -->
+    <g transform="translate(20, 65)">
+      <rect width="405" height="60" rx="6" fill="#0f172a" stroke="#475569"/>
+      <text x="15" y="24" class="box-title" font-size="14">smartsales-web-live (1/1 Running)</text>
+      <text x="15" y="44" class="box-desc">Angular 22 Standalone SPA · Nginx Reverse Proxy · Port 8080</text>
+    </g>
+
+    <!-- Service 2: Contacts Live + CD Lab -->
+    <g transform="translate(20, 135)">
+      <rect width="405" height="80" rx="6" fill="#0f172a" stroke="#10b981"/>
+      <text x="15" y="24" class="box-title" font-size="14">smartsales-contacts-cd-lab (1/1 Running · PRIMARY)</text>
+      <text x="15" y="44" class="box-desc">TaskDef: smartsales-contacts-lab:3 (Fargate 0.5 vCPU / 1 GB)</text>
+      <text x="15" y="64" class="line-label" fill="#34d399">ASP.NET Core .NET 10 · JWT RS256 Issuer · Rate Limiting</text>
+    </g>
+
+    <!-- Service 3: Sales Live + CD Lab -->
+    <g transform="translate(20, 225)">
+      <rect width="405" height="85" rx="6" fill="#0f172a" stroke="#0ea5e9"/>
+      <text x="15" y="24" class="box-title" font-size="14">smartsales-sales-cd-lab (1/1 Running · PRIMARY)</text>
+      <text x="15" y="44" class="box-desc">TaskDef: smartsales-sales-lab:4 (Fargate 0.5 vCPU / 1 GB)</text>
+      <text x="15" y="62" class="box-desc" fill="#38bdf8">Image: smartsales-sales:demo-02 (T9 Code Change Desplegado)</text>
+      <text x="15" y="78" class="line-label" fill="#7dd3fc">Headers: X-SmartSales-Lab-Revision: demo-02 · Health/Version</text>
+    </g>
+
+    <!-- Live Services Box -->
+    <g transform="translate(20, 320)">
+      <rect width="405" height="80" rx="6" fill="#0f172a" stroke="#64748b"/>
+      <text x="15" y="22" class="box-title" font-size="13">Servicios Live en Producción (Intactos)</text>
+      <text x="15" y="42" class="box-desc">smartsales-contacts-live (1/1 Running · Revision 2)</text>
+      <text x="15" y="62" class="box-desc">smartsales-sales-live (1/1 Running · Revision 2)</text>
+    </g>
+  </g>
+
+  <!-- External Neon PostgreSQL DB -->
+  <g transform="translate(830, 220)" filter="url(#shadow)">
+    <rect width="220" height="340" rx="10" fill="#1e293b" stroke="#0284c7" stroke-width="1.5"/>
+    <rect width="220" height="45" rx="10" fill="url(#dbGrad)"/>
+    <text x="15" y="28" class="box-title">Neon Serverless DB</text>
+
+    <!-- Host Details -->
+    <text x="15" y="75" class="line-label">HOST (us-east-2):</text>
+    <text x="15" y="92" class="box-desc" font-size="11">ep-floral-glitter-bdtlg3c4</text>
+
+    <rect x="15" y="115" width="190" height="90" rx="6" fill="#0f172a" stroke="#334155"/>
+    <text x="25" y="135" class="box-title" font-size="13">contacts_db</text>
+    <text x="25" y="153" class="box-desc">Users (Administrador /</text>
+    <text x="25" y="169" class="box-desc">Comerciales Demo)</text>
+    <text x="25" y="187" class="line-label" fill="#38bdf8">60 Contactos Showcase</text>
+
+    <rect x="15" y="220" width="190" height="95" rx="6" fill="#0f172a" stroke="#334155"/>
+    <text x="25" y="240" class="box-title" font-size="13">sales_db</text>
+    <text x="25" y="258" class="box-desc">100 Oportunidades</text>
+    <text x="25" y="274" class="box-desc">120 Seguimientos</text>
+    <text x="25" y="292" class="line-label" fill="#38bdf8">150 Interacciones Comerciales</text>
+  </g>
+
+  <!-- Connective Arrows -->
+  <g stroke="#38bdf8" stroke-width="1.5" fill="none" opacity="0.7">
+    <!-- ALB to ECS -->
+    <path d="M290 280 L340 280" marker-end="url(#arrow)"/>
+    <path d="M290 380 L340 380" marker-end="url(#arrow)"/>
+    <!-- ECS to DB -->
+    <path d="M785 300 L830 300" stroke="#0ea5e9" stroke-dasharray="4,3"/>
+    <path d="M785 410 L830 410" stroke="#0ea5e9" stroke-dasharray="4,3"/>
+  </g>
+</svg>
