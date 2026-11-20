@@ -1,0 +1,22 @@
+
+# SmartSales CRM - GitHub + Azure DevOps
+# Primera prueba de integracion continua
+
+trigger: none
+pr: none
+
+pool:
+  name: Default
+
+steps:
+- checkout: self
+  displayName: 'Descargar CRM desde GitHub'
+
+- powershell: |
+    Write-Host "Integracion GitHub + Azure DevOps"
+    Write-Host "Repositorio: $(Build.Repository.Name)"
+    Write-Host "Rama: $(Build.SourceBranch)"
+    git log -1 --oneline
+    Get-ChildItem "$(Build.SourcesDirectory)" |
+      Select-Object Name
+  displayName: 'Verificar repositorio del CRM'
